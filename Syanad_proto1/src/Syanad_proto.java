@@ -121,6 +121,7 @@ public class Syanad_proto extends JFrame implements ActionListener{
 		Syanad_Frame.getContentPane().add(lblDate);
 						
 		
+		
 		/*
 		//**constructs and initiates the buttons**/		
 		//**for New Game**//
@@ -206,3 +207,88 @@ public class Syanad_proto extends JFrame implements ActionListener{
 	}
 	
 }
+
+class Course	//ang weird ng spelling
+{
+	private String course_name;	//o course code?
+	private String description;
+	private String course_ID;	//o ito yung course code?
+	private int section;
+	private int units;
+	
+	public Course( )	//limot ko na constructor
+	{
+		genCourseID();
+	}
+	
+	private void setCourseName( String name )
+	{
+		course_name = name;
+	}
+	
+	private void genCourseID( )
+	{
+		Integer temp = new Integer( (int)Math.abs(Math.random()) );
+		course_ID = temp.toString();
+	}
+	
+	private String getCourseID( )
+	{
+		return course_ID;
+	}
+
+	private String getCourseName()
+	{
+		return course_name;
+	}
+	
+	private void setDescription( String desc )
+	{
+		description = desc;
+	}
+	
+	private String getDescription()
+	{
+		return description;
+	}
+	
+	
+}
+
+class Teacher
+{
+	private String teacher_ID;
+	private String first_name;
+	private String middle_name;
+	private String last_name;
+	private int current_load;
+	private static final int TOTAL_LOAD = 15;	//for teh lulz... but not sure if needed
+												//value is just a sample
+	public Teacher( String f_name, String mi, String l_name)
+	{
+		first_name = f_name;
+		middle_name = mi;
+		last_name = l_name;
+	}
+	//tinamad na ko gumawa get set methods nito
+}
+
+class Student
+{
+	private String student_ID;
+	private String first_name;
+	private String middle_name;
+	private String last_name;
+	private int units;					//not sure
+	private static final int TOTAL_LOAD = 15;	//for teh lulz... but not sure if needed
+												//value is just a sample
+	public Student( String f_name, String mi, String l_name)
+	{
+		first_name = f_name;
+		middle_name = mi;
+		last_name = l_name;
+	}
+	//wala pang get set methods at genStudentID
+}
+
+//class Registrar/attendance ?
