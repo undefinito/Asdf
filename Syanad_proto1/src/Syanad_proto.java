@@ -1,24 +1,15 @@
 import java.awt.EventQueue;
-import javax.swing.JFrame;
-import javax.swing.JButton;
+
+import javax.swing.*;
+
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.AbstractButton;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.ImageIcon;
 import java.awt.Color;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import java.awt.Canvas;
-import javax.swing.JTextPane;
-import javax.swing.JEditorPane;
 import java.awt.Dialog.ModalityType;
 import java.awt.Toolkit;
 import java.awt.Font;
-import javax.swing.JDialog;
-import javax.swing.border.EmptyBorder;
 import java.awt.Dialog.ModalExclusionType;
 
 @SuppressWarnings("serial")
@@ -37,6 +28,16 @@ public class Syanad_proto extends JFrame implements ActionListener{
     private JLabel lblDate_tag;
     private JLabel lblProf_tag;
     private JLabel lblSection_tag;
+    //LIST CONSTANT TAGS
+    private JLabel lblClassList_tag;
+    private JLabel lblTimein_tag;
+    private JLabel lblID_num_tag;
+    private JLabel lblStudent_name_tag;
+    //Lists
+    private JList<String/*Student*/> lstClassList;
+    private JList<String/*Student*/> lstTimein;
+    private JList<String/*Student*/> lstID_num;
+    private JList<String/*Student*/> lstStudent_name;
     
     
     public static void main(String[] args) {
@@ -63,7 +64,7 @@ public class Syanad_proto extends JFrame implements ActionListener{
 		Syanad_Frame.setTitle("Anti Truancy System");
 //		Syanad_Frame.setIconImage(Toolkit.getDefaultToolkit().getImage("image file name"));
 		//Above line sets the icon when running
-		Syanad_Frame.setBounds(100, 100, 582, 344); //Size of frame
+		Syanad_Frame.setBounds(100, 100, 582, 400); //Size of frame
 		Syanad_Frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Syanad_Frame.getContentPane().setLayout(null);
 		draw(); 								//Draws the GUI
@@ -76,12 +77,12 @@ public class Syanad_proto extends JFrame implements ActionListener{
 		//TAGS
 		//"Course Code : " sets the placement and adds to the content pane
 		this.lblCourseCode_tag = new JLabel("Course Code : ");
-		lblCourseCode_tag.setBounds(10, 10, 600, 30);
+		lblCourseCode_tag.setBounds(10, 10, 100, 30);
 		Syanad_Frame.getContentPane().add(lblCourseCode_tag);
 
 		//"Section : " sets the placement and adds to the content pane
 		this.lblSection_tag = new JLabel("Section : ");
-		lblSection_tag.setBounds(10, 30, 630, 30);
+		lblSection_tag.setBounds(10, 30, 100, 30);
 		Syanad_Frame.getContentPane().add(lblSection_tag);
 		
 		//"Professor : " sets the placement and adds to the content pane
@@ -99,104 +100,65 @@ public class Syanad_proto extends JFrame implements ActionListener{
 		//"<Course Code> " sets the placement and adds to the content pane
 		//Query for Label text
 		this.lblCourseCode = new JLabel("<Course Code>");
-		lblCourseCode.setBounds(100, 10, 552, 30);
+		lblCourseCode.setBounds(100, 10, 300, 30);
 		Syanad_Frame.getContentPane().add(lblCourseCode);
 		
 		//"<Section>" sets the placement and adds to the content pane
 		//Query for Label text
 		this.lblSection = new JLabel("<Section number>");
-		lblSection.setBounds(100, 30, 582, 30);
+		lblSection.setBounds(100, 30, 300, 30);
 		Syanad_Frame.getContentPane().add(lblSection);
 		
 		//"<Professor name> " sets the placement and adds to the content pane
 		//Query for Label text
 		this.lblProf = new JLabel("<Professor name>");
-		lblProf.setBounds(390, 10, 582, 30); //Fix positioning
+		lblProf.setBounds(390, 10, 300, 30); //Fix positioning
 		Syanad_Frame.getContentPane().add(lblProf);
 		
 		//"<Date_today>" sets the placement and adds to the content pane
 		//Query for Label text
 		this.lblDate = new JLabel("<Date today>");
-		lblDate.setBounds(390, 30, 582, 30);
+		lblDate.setBounds(390, 30, 300, 30);
 		Syanad_Frame.getContentPane().add(lblDate);
-						
+		
+		//LISTS + LABELS
+		//List of Students // Status of attended or not
+		this.lstClassList = new JList<String/*Students*/>();
+		lstClassList.setBounds(30, 100, 100, 240);
+		Syanad_Frame.getContentPane().add(lstClassList);
+		
+		this.lblClassList_tag = new JLabel("Classlist");
+		lblClassList_tag.setBounds(30, 30, 100, 90);
+		Syanad_Frame.getContentPane().add(lblClassList_tag);
 		
 		
-		/*
-		//**constructs and initiates the buttons**/		
-		//**for New Game**//
-		/*
-		this.btnNewGame = new JButton("New Game");															
-		btnNewGame.addActionListener(this);
-		btnNewGame.setBounds(420, 22, 120, 35);
-		frmBlackjack.getContentPane().add(btnNewGame);
-		//**for Bet**/
-		/*
-		this.btnBet = new JButton("Bet");							
-		btnBet.setEnabled(false);
-		btnBet.addActionListener(this);
-		btnBet.setBounds(420, 68, 120, 35);
-		frmBlackjack.getContentPane().add(btnBet);
-		//**for Hit**/
-		/*
-		this.btnHit = new JButton("Hit");							
-		btnHit.setEnabled(false);
-		btnHit.addActionListener(this);
-		btnHit.setBounds(420, 160, 120, 35);
-		frmBlackjack.getContentPane().add(btnHit);
-		//**for Stand**/
-		/*
-		this.btnStand = new JButton("Stand");						
-		btnStand.setEnabled(false);
-		btnStand.addActionListener(this);
-		btnStand.setBounds(420, 206, 120, 35);
-		frmBlackjack.getContentPane().add(btnStand);
-		//**for Leave**/
-		/*
-		this.btnLeave = new JButton("Leave");						
-		btnLeave.addActionListener(this);
-		btnLeave.setBounds(420, 252, 120, 35);
-		frmBlackjack.getContentPane().add(btnLeave);
-		//**end initiation of buttons**/
+		//Time In
+		this.lstTimein = new JList<String/*Students*/>();
+		lstTimein.setBounds(155, 100, 100, 240);
+		Syanad_Frame.getContentPane().add(lstTimein);
 		
-		//**initiates the labels and text fields**//
-		//**Cash label**//
-		/*
-		JLabel lblCash = new JLabel("Cash");
-		lblCash.setBounds(10, 237, 32, 14);
-		frmBlackjack.getContentPane().add(lblCash);
+		this.lblTimein_tag = new JLabel("Time In");
+		lblTimein_tag.setBounds(155, 30, 100, 90);
+		Syanad_Frame.getContentPane().add(lblTimein_tag);
 		
-		//**text feild of actual cash**/
-		/*
-		this.CashInHand = new JTextField("0");
-		CashInHand.setEditable(false);									//you cannot input in the text field
-		CashInHand.setBounds(49, 234, 86, 20);
-		frmBlackjack.getContentPane().add(CashInHand);
-		CashInHand.setColumns(10);
+		//ID Number
+		this.lstID_num = new JList<String/*Students*/>();
+		lstID_num.setBounds(280, 100, 100,240);
+		Syanad_Frame.getContentPane().add(lstID_num);
 		
-		//**bet Label**/
-		/*
-		JLabel lblBet = new JLabel("Bet");
-		lblBet.setBounds(282, 237, 32, 14);
-		frmBlackjack.getContentPane().add(lblBet);
-		
-		//**text field for the bet amount**/
-		/*
-		this.Bet = new JTextField();
-		Bet.setEditable(false);											//you cannot input in the text field
-		Bet.setBounds(324, 234, 86, 20);
-		frmBlackjack.getContentPane().add(Bet);
-		Bet.setColumns(10);
-		
-		
-		//**This label indicates what is happening in the game**/
-		/*
-		this.lblMessage = new JLabel("Welcome to BlackJack");
-		lblMessage.setHorizontalAlignment(SwingConstants.CENTER);
-		lblMessage.setBounds(49, 275, 367, 20);
-		frmBlackjack.getContentPane().add(lblMessage);
+		this.lblID_num_tag = new JLabel("ID number");
+		lblID_num_tag.setBounds(280, 30, 100, 90);
+		Syanad_Frame.getContentPane().add(lblID_num_tag);
 
-		*/
+		//Student name
+		this.lstStudent_name = new JList<String/*Students*/>();
+		lstStudent_name.setBounds(405, 100, 100,240);
+		Syanad_Frame.getContentPane().add(lstStudent_name);
+		
+		this.lblStudent_name_tag = new JLabel("Student name");
+		lblStudent_name_tag.setBounds(405, 30, 100, 90);
+		Syanad_Frame.getContentPane().add(lblStudent_name_tag);
+	    				
 	}																	//end draw		
 
 	
@@ -207,88 +169,3 @@ public class Syanad_proto extends JFrame implements ActionListener{
 	}
 	
 }
-
-class Course	//ang weird ng spelling
-{
-	private String course_name;	//o course code?
-	private String description;
-	private String course_ID;	//o ito yung course code?
-	private int section;
-	private int units;
-	
-	public Course( )	//limot ko na constructor
-	{
-		genCourseID();
-	}
-	
-	private void setCourseName( String name )
-	{
-		course_name = name;
-	}
-	
-	private void genCourseID( )
-	{
-		Integer temp = new Integer( (int)Math.abs(Math.random()) );
-		course_ID = temp.toString();
-	}
-	
-	private String getCourseID( )
-	{
-		return course_ID;
-	}
-
-	private String getCourseName()
-	{
-		return course_name;
-	}
-	
-	private void setDescription( String desc )
-	{
-		description = desc;
-	}
-	
-	private String getDescription()
-	{
-		return description;
-	}
-	
-	
-}
-
-class Teacher
-{
-	private String teacher_ID;
-	private String first_name;
-	private String middle_name;
-	private String last_name;
-	private int current_load;
-	private static final int TOTAL_LOAD = 15;	//for teh lulz... but not sure if needed
-												//value is just a sample
-	public Teacher( String f_name, String mi, String l_name)
-	{
-		first_name = f_name;
-		middle_name = mi;
-		last_name = l_name;
-	}
-	//tinamad na ko gumawa get set methods nito
-}
-
-class Student
-{
-	private String student_ID;
-	private String first_name;
-	private String middle_name;
-	private String last_name;
-	private int units;					//not sure
-	private static final int TOTAL_LOAD = 15;	//for teh lulz... but not sure if needed
-												//value is just a sample
-	public Student( String f_name, String mi, String l_name)
-	{
-		first_name = f_name;
-		middle_name = mi;
-		last_name = l_name;
-	}
-	//wala pang get set methods at genStudentID
-}
-
-//class Registrar/attendance ?
