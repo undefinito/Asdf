@@ -1,16 +1,6 @@
-import java.awt.EventQueue;
-
+import java.awt.*;
 import javax.swing.*;
-
-import java.awt.BorderLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.Color;
-import java.awt.Canvas;
-import java.awt.Dialog.ModalityType;
-import java.awt.Toolkit;
-import java.awt.Font;
-import java.awt.Dialog.ModalExclusionType;
+import java.awt.event.*;
 
 @SuppressWarnings("serial")
 public class Syanad_proto extends JFrame implements ActionListener{
