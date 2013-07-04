@@ -1,4 +1,4 @@
-
+//Author : Nedbie Amoranto
 public class Course	//ang weird ng spelling
 {
 	private String course_name;	//o course code?

@@ -1,6 +1,6 @@
-
-class Student
-{
+//Author : Nedbie Amoranto
+class Student{
+	
 	private String student_ID;
 	private String first_name;
 	private String middle_name;

@@ -2,6 +2,8 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 
+
+//Author : Carlo Carabeo
 @SuppressWarnings("serial")
 public class Syanad_proto extends JFrame implements ActionListener{
 	
