@@ -1,5 +1,5 @@
 //Author : Nedbie Amoranto
-class Teacher
+public class Teacher
 {
 	private String teacher_ID;
 	private String first_name;
