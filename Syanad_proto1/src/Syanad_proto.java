@@ -7,6 +7,9 @@ import java.awt.event.*;
 @SuppressWarnings("serial")
 public class Syanad_proto extends JFrame implements ActionListener{
 	
+	//For database
+	private java_sql js = new java_sql();
+	
 	//Variable declarations
 	//Frame for interface
 	private JFrame Syanad_Frame;
