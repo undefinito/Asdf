@@ -17,7 +17,7 @@ CREATE TABLE Teacher
 	teacher_ID		char(12)		UNIQUE	NOT NULL,
 	first_name		varchar(20)			NOT NULL,
 	last_name		varchar(20)			NOT NULL,
-	middle_initial	varchar(3)				NOT NULL,
+	middle_initial	varchar(3)						 ,
 	teacher_load	varchar(2)				NOT NULL,
 PRIMARY KEY(teacher_ID)
 )
@@ -43,7 +43,7 @@ CREATE TABLE Student
 	student_ID		char(12)		UNIQUE	NOT NULL,
 	first_name		varchar(20)			NOT NULL,
 	last_name		varchar(20)			NOT NULL,
-	middle_initial	varchar(3)				NOT NULL,
+	middle_initial	varchar(3)						 ,
 PRIMARY KEY(student_ID)
 )
 ENGINE = INNODB;
