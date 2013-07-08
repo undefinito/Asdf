@@ -14,7 +14,7 @@ USE syanad2;				-- specify what db to query into
 
 CREATE TABLE Teacher
 (
-	teacher_ID		char(12)	UNIQUE	NOT NULL,
+	teacher_ID		char(12)		UNIQUE	NOT NULL,
 	first_name		varchar(20)			NOT NULL,
 	last_name		varchar(20)			NOT NULL,
 	middle_initial	varchar(3)				NOT NULL,
@@ -40,10 +40,10 @@ ENGINE = INNODB;
 
 CREATE TABLE Student
 (
-	student_ID		char(12)	UNIQUE	NOT NULL,
+	student_ID		char(12)		UNIQUE	NOT NULL,
 	first_name		varchar(20)			NOT NULL,
 	last_name		varchar(20)			NOT NULL,
-	middle_initial		varchar(20)			NOT NULL,
+	middle_initial	varchar(3)				NOT NULL,
 PRIMARY KEY(student_ID)
 )
 ENGINE = INNODB;
