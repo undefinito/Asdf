@@ -53,9 +53,9 @@ ENGINE = INNODB;
 CREATE TABLE Attendance
 (
 	student_ID	char(12)	NOT NULL,
-	teacher_ID	varchar(12)	NOT NULL,
+	teacher_ID	char(12)	NOT NULL,
 	course_ID	varchar(12)	NOT NULL,
-	time_in		timestamp()	NOT NULL,
+	time_in		timestamp	NOT NULL,
 	status		enum('late', 'absent', 'present'),
 PRIMARY KEY(course_ID),
 FOREIGN KEY(student_ID) REFERENCES Student(student_ID),
