@@ -29,11 +29,11 @@ public class Syanad_proto extends JFrame implements ActionListener{
     private JLabel lblID_num_tag;
     private JLabel lblStudent_name_tag;
     //Lists
-    private JList<String/*Student*/> lstClassList;
-    private JList<String/*Student*/> lstTimein;
-    private JList<String/*Student*/> lstID_num;
-    private JList<String/*Student*/> lstStudent_name;
-    
+    //private JList<String/*Student*/> lstClassList;
+    //private JList<String/*Student*/> lstTimein;
+    //private JList<String/*Student*/> lstID_num;
+    //private JList<String/*Student*/> lstStudent_name;
+    private JList<String/*Student*/> lstAttendance;
     
     public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -118,43 +118,86 @@ public class Syanad_proto extends JFrame implements ActionListener{
 		
 		//LISTS + LABELS
 		//List of Students // Status of attended or not
-		this.lstClassList = new JList<String/*Students*/>();
+		this.lstAttendance = new JList<String>();
+		lstAttendance.setBounds(30, 100, 450, 240);
+		Syanad_Frame.getContentPane().add(lstAttendance);
+		
+		listItems(lstAttendance);
+		
+		//LABELS
+		this.lblStudent_name_tag = new JLabel("Student name");
+		lblStudent_name_tag.setBounds(30, 30, 100, 90);
+		Syanad_Frame.getContentPane().add(lblStudent_name_tag);
+
+		this.lblID_num_tag = new JLabel("ID number");
+		lblID_num_tag.setBounds(155, 30, 100, 90);
+		Syanad_Frame.getContentPane().add(lblID_num_tag);
+		
+		this.lblTimein_tag = new JLabel("Time In");
+		lblTimein_tag.setBounds(280, 30, 100, 90);
+		Syanad_Frame.getContentPane().add(lblTimein_tag);
+		
+		//this.lblClassList_tag = new JLabel("Classlist");
+		//lblClassList_tag.setBounds(405, 30, 100, 90);
+		//Syanad_Frame.getContentPane().add(lblClassList_tag);
+		
+		
+		/*
+		this.lstClassList = new JList<String>();
 		lstClassList.setBounds(30, 100, 100, 240);
 		Syanad_Frame.getContentPane().add(lstClassList);
 		
-		this.lblClassList_tag = new JLabel("Classlist");
-		lblClassList_tag.setBounds(30, 30, 100, 90);
-		Syanad_Frame.getContentPane().add(lblClassList_tag);
 		
 		
 		//Time In
-		this.lstTimein = new JList<String/*Students*/>();
+		this.lstTimein = new JList<String>();
 		lstTimein.setBounds(155, 100, 100, 240);
 		Syanad_Frame.getContentPane().add(lstTimein);
 		
-		this.lblTimein_tag = new JLabel("Time In");
-		lblTimein_tag.setBounds(155, 30, 100, 90);
-		Syanad_Frame.getContentPane().add(lblTimein_tag);
 		
 		//ID Number
-		this.lstID_num = new JList<String/*Students*/>();
+		this.lstID_num = new JList<String>();
 		lstID_num.setBounds(280, 100, 100,240);
 		Syanad_Frame.getContentPane().add(lstID_num);
 		
-		this.lblID_num_tag = new JLabel("ID number");
-		lblID_num_tag.setBounds(280, 30, 100, 90);
-		Syanad_Frame.getContentPane().add(lblID_num_tag);
+
 
 		//Student name
-		this.lstStudent_name = new JList<String/*Students*/>();
+		this.lstStudent_name = new JList<String>();
 		lstStudent_name.setBounds(405, 100, 100,240);
 		Syanad_Frame.getContentPane().add(lstStudent_name);
 		
-		this.lblStudent_name_tag = new JLabel("Student name");
-		lblStudent_name_tag.setBounds(405, 30, 100, 90);
-		Syanad_Frame.getContentPane().add(lblStudent_name_tag);
+		
+		*/
 	    				
-	}																	//end draw		
+	}																	//end draw
+	
+	private void listItems(JList<String> lstAttendance){
+		/*	
+		 * //Constructs all students
+		 * for(i=0; i<numOfStudents; i++){
+		 * 		i=js.query(<queryClasslist>);
+		 * 		Student x[i] = new Student(js.name[i], js.course[i].....);
+		 *  }
+		 *  
+		 *  String[] str;
+		 *  //Sets strings from all students
+		 *  for(i=0; i<numOfStudents; i++){  
+		 * 		str[i] = x[i].getName() + x[i].getCourse().....;
+		 * 
+		 *  }
+		 *  
+		 *  //generated to from netbeans minodify ko ng konti di ko sure kung gagana
+		 *  //pero add items sya sa list
+		 *  lstTimein.setModel(new javax.swing.AbstractListModel() {
+         *  public int getSize() { return strings.length; }
+         *  public Object getElementAt(int i) { return str[i]; }
+         *	});
+		 * 
+		 * 
+		 */
+		
+	}
 
 	
     
