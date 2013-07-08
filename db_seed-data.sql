@@ -15,7 +15,7 @@ INSERT INTO Teacher (teacher_ID, first_name, last_name, middle_initial, teacher_
 	( '200317418201', 'Christine', 'Gendrano', 'A', '11' ),
 	( '200317412203', 'Ver', 'Ramos', 'C', '14' ),
 	( '200517413404', 'Jordan', 'Deja', 'B', '13' ),
-	( '200717412412', 'Consuelo', 'Santos', 'B', '12' )
+	( '200717412412', 'Consuelo', 'Santos', 'B', '12' ),
 	( '200717411111', 'Michelle', 'Ching', 'D', '12' )
 	;
 	
@@ -56,7 +56,7 @@ INSERT INTO Course (course_id, course_name, description, class_section, units)
 
 INSERT INTO Attendance (course_id, student_id, teacher_id, time_in, status)
 	VALUES
-	('201312344321', '201107408872', '200717411111', '', 'absent')
-	('201312344321', '201007407586', '200717411111', '', 'present')
+	('201312344321', '201107408872', '200717411111', '', 'absent'),
+	('201312344321', '201007407586', '200717411111', '', 'present'),
 	('201312344321', '201007407225', '200717411111', '', 'late')
 	;
