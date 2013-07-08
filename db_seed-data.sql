@@ -1,6 +1,6 @@
---Author: Amoranto, Nedbie Francis F.
---201007407225
---SYANAD2	-	anti-truancy system
+-- Author: Amoranto, Nedbie Francis F.
+-- 201007407225
+-- SYANAD2	-	anti-truancy system
 
 /*\
 		POPULATION OF TABLES USING SAMPLE DATA
