@@ -12,33 +12,33 @@ public class Course	//ang weird ng spelling
 		genCourseID();
 	}
 	
-	private void setCourseName( String name )
+	public void setCourseName( String name )
 	{
 		course_name = name;
 	}
 	
-	private void genCourseID( )
+	public void genCourseID( )
 	{
 		Integer temp = new Integer( (int)Math.abs(Math.random()) );
 		course_ID = temp.toString();
 	}
 	
-	private String getCourseID( )
+	public String getCourseID( )
 	{
 		return course_ID;
 	}
 
-	private String getCourseName()
+	public String getCourseName()
 	{
 		return course_name;
 	}
 	
-	private void setDescription( String desc )
+	public void setDescription( String desc )
 	{
 		description = desc;
 	}
 	
-	private String getDescription()
+	public String getDescription()
 	{
 		return description;
 	}
