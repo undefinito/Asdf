@@ -57,7 +57,6 @@ CREATE TABLE Attendance
 	course_ID	varchar(12)	NOT NULL,
 	time_in		timestamp	NOT NULL,
 	status		enum('late', 'absent', 'present'),
-PRIMARY KEY(course_ID),
 FOREIGN KEY(student_ID) REFERENCES Student(student_ID),
 FOREIGN KEY(teacher_ID) REFERENCES Teacher(teacher_ID),
 FOREIGN KEY(course_ID) REFERENCES Course(course_ID)
