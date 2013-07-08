@@ -1,0 +1,13 @@
+Open Eclipse
+
+Select Project
+
+Java Build Path
+
+Libraries
+
+Add External JARs
+
+add Driver
+
+Ok
