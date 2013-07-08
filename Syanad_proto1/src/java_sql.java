@@ -14,7 +14,7 @@ public class java_sql {
 	private final String driverLoc = "com.mysql.jdbc.Driver";
 	private final String URL = "jdbc:mysql://" + location + port + "/" + DBName;
 
-	public void connect(){//maybe private
+	private void connect(){//maybe private
 		//COMMENTED OUT
 		//for debugging db connections
 		try {
@@ -45,4 +45,30 @@ public class java_sql {
 		}*/
 		//END CONNECTION
 	}
+	
+	public String[] query(String q){//hindi dapat to void
+		String[] str;
+		str = new String[30];
+		int i=0;
+		connect();
+		if(con != null){
+		//Testing of Queries
+		try { 
+				statement = con.createStatement();// creates an object used for sending sql statements to the database
+				resultSet = statement.executeQuery(q);// receives the result set of the querty
+					while(resultSet.next()){//display result for each item in the result set
+						str[i] = (resultSet.getString(1) + " " + resultSet.getString(2));
+						i++;
+					}
+				//Close connections
+				resultSet.close();
+				statement.close();
+				con.close();
+			} catch (Exception e){
+				e.printStackTrace();
+			} 
+		}
+		return str;
+	}
+	
 }

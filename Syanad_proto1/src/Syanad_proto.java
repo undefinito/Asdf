@@ -24,7 +24,7 @@ public class Syanad_proto extends JFrame implements ActionListener{
     private JLabel lblProf_tag;
     private JLabel lblSection_tag;
     //LIST CONSTANT TAGS
-    private JLabel lblClassList_tag;
+    //private JLabel lblClassList_tag;
     private JLabel lblTimein_tag;
     private JLabel lblID_num_tag;
     private JLabel lblStudent_name_tag;
