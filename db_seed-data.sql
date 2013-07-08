@@ -11,5 +11,8 @@
 INSERT INTO teacher (teacher_ID, first_name, last_name, middle_initial, teacher_load)
 	VALUES
 	( '200307418380', 'Alain', 'Encarnacion', 'C', '12' ),
-	( '20030741820', 'Pamcee', 'Amoranto', 'P', '10' ),
+	( '200607418128', 'Pamcee', 'Amoranto', 'P', '10' ),
+	( '200307418201', 'Christine', 'Gendrano', 'A', '10' ),
+	( '200307412203', 'Ver', 'Ramos', 'C', '10' ),
+	( '200507413404', 'Ver', 'Ramos', 'C', '10' ),
 	;
