@@ -1,10 +1,11 @@
 import java.sql.*;
 
-public class java_sql {
+public class Java_sql
+{
 	
-	Connection con = null;	//variable for the connection
-	Statement statement = null;//object for making sql statements
-	ResultSet resultSet = null;//object that receives sql results
+	public Connection con;	//variable for the connection
+	public Statement statement;//object for making sql statements
+	public ResultSet resultSet;//object that receives sql results
 	
 	private final String user = "root";
 	private final String pass = "password";
@@ -14,6 +15,13 @@ public class java_sql {
 	private final String driverLoc = "com.mysql.jdbc.Driver";
 	private final String URL = "jdbc:mysql://" + location + port + "/" + DBName;
 
+	public Java_sql( )
+	{
+		con = null;
+		statement = null;
+		resultSet = null;
+	}
+	
 	private void connect(){//maybe private
 		//COMMENTED OUT
 		//for debugging db connections
@@ -46,7 +54,7 @@ public class java_sql {
 		//END CONNECTION
 	}
 	
-	public String[] query(String q){//hindi dapat to void
+	private String[] query(String q){//hindi dapat to void
 		String[] str;
 		str = new String[30];
 		int i=0;
@@ -57,7 +65,7 @@ public class java_sql {
 				statement = con.createStatement();// creates an object used for sending sql statements to the database
 				resultSet = statement.executeQuery(q);// receives the result set of the querty
 					while(resultSet.next()){//display result for each item in the result set
-						str[i] = (resultSet.getString(1) + " " + resultSet.getString(2));
+						str[i] = (resultSet.getString(1) + " " + resultSet.getString(2));	//column
 						i++;
 					}
 				//Close connections

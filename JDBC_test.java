@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class JDBC_test {
 	public static void main(String args[]){
-		Connection con = null;	//variable for the connection
+		Connection con = new Connection() ;	//variable for the connection
 		Statement statement = null;//object for making sql statements
 		ResultSet resultSet = null;//object that receives sql results
 		

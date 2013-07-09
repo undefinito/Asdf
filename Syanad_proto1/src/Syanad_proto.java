@@ -6,36 +6,41 @@ import java.awt.event.*;
 //Author : Carlo Carabeo
 @SuppressWarnings("serial")
 public class Syanad_proto extends JFrame implements ActionListener{
-	
+
 	//For database
-	private java_sql js = new java_sql();
+	Java_sql js = new Java_sql();
 	
 	//Variable declarations
 	//Frame for interface
 	private JFrame Syanad_Frame;
+	
 	//Labels
     private JLabel lblCourseCode;
     private JLabel lblDate;
     private JLabel lblProf;
     private JLabel lblSection;
+    
     //Constant Tags
     private JLabel lblCourseCode_tag;
+    private JLabel lblClassList_tag;
     private JLabel lblDate_tag;
     private JLabel lblProf_tag;
     private JLabel lblSection_tag;
+    
     //LIST CONSTANT TAGS
     //private JLabel lblClassList_tag;
     private JLabel lblTimein_tag;
     private JLabel lblID_num_tag;
     private JLabel lblStudent_name_tag;
-    //Lists
-    //private JList<String/*Student*/> lstClassList;
-    //private JList<String/*Student*/> lstTimein;
-    //private JList<String/*Student*/> lstID_num;
-    //private JList<String/*Student*/> lstStudent_name;
-    private JList<String/*Student*/> lstAttendance;
     
-    public static void main(String[] args) {
+    //Lists
+    private JList<String/*Student*/> lstClassList;
+    private JList<String/*Student*/> lstTimein;
+    private JList<String/*Student*/> lstID_num;
+    private JList<String/*Student*/> lstStudent_name;
+    private JList<String/*Student*/> lstAttendance;
+
+	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -52,6 +57,7 @@ public class Syanad_proto extends JFrame implements ActionListener{
     
 	public Syanad_proto() { //Starts the frame constructor for window and initiates values
 		init();
+		
 	}
 	
 	public void init() {						//Initiates the Frame for the GUI
@@ -132,17 +138,17 @@ public class Syanad_proto extends JFrame implements ActionListener{
 		this.lblID_num_tag = new JLabel("ID number");
 		lblID_num_tag.setBounds(155, 30, 100, 90);
 		Syanad_Frame.getContentPane().add(lblID_num_tag);
-		
+
 		this.lblTimein_tag = new JLabel("Time In");
 		lblTimein_tag.setBounds(280, 30, 100, 90);
 		Syanad_Frame.getContentPane().add(lblTimein_tag);
 		
-		//this.lblClassList_tag = new JLabel("Classlist");
-		//lblClassList_tag.setBounds(405, 30, 100, 90);
-		//Syanad_Frame.getContentPane().add(lblClassList_tag);
+		this.lblClassList_tag = new JLabel("Classlist");
+		lblClassList_tag.setBounds(405, 30, 100, 90);
+		Syanad_Frame.getContentPane().add(lblClassList_tag);
 		
 		
-		/*
+		
 		this.lstClassList = new JList<String>();
 		lstClassList.setBounds(30, 100, 100, 240);
 		Syanad_Frame.getContentPane().add(lstClassList);
@@ -168,34 +174,43 @@ public class Syanad_proto extends JFrame implements ActionListener{
 		Syanad_Frame.getContentPane().add(lstStudent_name);
 		
 		
-		*/
+	
 	    				
 	}																	//end draw
 	
 	private void listItems(JList<String> lstAttendance){
-		/*	
-		 * //Constructs all students
-		 * for(i=0; i<numOfStudents; i++){
-		 * 		i=js.query(<queryClasslist>);
-		 * 		Student x[i] = new Student(js.name[i], js.course[i].....);
-		 *  }
-		 *  
-		 *  String[] str;
-		 *  //Sets strings from all students
-		 *  for(i=0; i<numOfStudents; i++){  
-		 * 		str[i] = x[i].getName() + x[i].getCourse().....;
-		 * 
-		 *  }
-		 *  
-		 *  //generated to from netbeans minodify ko ng konti di ko sure kung gagana
-		 *  //pero add items sya sa list
-		 *  lstTimein.setModel(new javax.swing.AbstractListModel() {
-         *  public int getSize() { return strings.length; }
-         *  public Object getElementAt(int i) { return str[i]; }
-         *	});
-		 * 
-		 * 
-		 */
+		
+		Student[] x;
+		int numOfStudents;
+		 //Constructs all students
+		for(int i=0; i<numOfStudents; i++){
+				i=js.query("SELECT * FROM Attendance");
+				x[i] = new Student(js.name[i], js.course[i]);
+		  }
+		  
+		  String[] str;
+		  //Sets strings from all students
+		  for(i=0; i<numOfStudents; i++){  
+		 		str[i] = x[i].getName() + x[i].getCourse().....;
+		 
+		  }
+		  
+		  //generated to from netbeans minodify ko ng konti di ko sure kung gagana
+		  //pero add items sya sa list
+		  lstTimein.setModel(new javax.swing.AbstractListModel() {
+			  public int getSize()
+			  {
+				  return strings.length;
+			  }
+			  public Object getElementAt(int i)
+			  {
+				  return str[i];
+			  }
+        	}
+		  );
+		 
+		 
+		 
 		
 	}
 
