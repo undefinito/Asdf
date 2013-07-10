@@ -6,42 +6,58 @@ public class Course	//ang weird ng spelling
 	private String course_ID;	//o ito yung course code?
 	private int section;
 	private int units;
+	private int totalNumSections=0;	//ito yung kung ilan sections meron
 	
-	public Course( )	//limot ko na constructor
+	public Course( String name )	//constructor
 	{
+		setCourseName(name);
 		genCourseID();
+		setSection();
 	}
 	
-	public void setCourseName( String name )
+	private void setSection()
+	{
+		section = totalNumSections++;	//new section for course is added
+	}
+	
+	private void setCourseName( String name )
 	{
 		course_name = name;
 	}
 	
-	public void genCourseID( )
+	private void genCourseID( )
 	{
-		Integer temp = new Integer( (int)Math.abs(Math.random()) );
-		course_ID = temp.toString();
+		Double temp = new Double( (int)Math.abs(Math.random()) );
+		
+		while(temp.doubleValue() <= 99999999999.0)	//if ID generated has less than 12 digits
+		{
+			if(temp.doubleValue() > 99999999999.0)
+			{
+				course_ID = temp.toString();
+			}
+		}
 	}
 	
-	public String getCourseID( )
+	private String getCourseID( )
 	{
 		return course_ID;
 	}
 
-	public String getCourseName()
+	private String getCourseName()
 	{
 		return course_name;
 	}
 	
-	public void setDescription( String desc )
+	private void setDescription( String desc )
 	{
 		description = desc;
 	}
 	
-	public String getDescription()
+	private String getDescription()
 	{
 		return description;
 	}
+	
 	
 	
 }
