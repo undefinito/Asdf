@@ -1,6 +1,6 @@
 import java.sql.*;
 
-public class Java_sql
+public class java_sql
 {
 	
 	public Connection con;	//variable for the connection
@@ -15,7 +15,7 @@ public class Java_sql
 	private final String driverLoc = "com.mysql.jdbc.Driver";
 	private final String URL = "jdbc:mysql://" + location + port + "/" + DBName;
 
-	public Java_sql( )
+	public java_sql( )
 	{
 		con = null;
 		statement = null;
