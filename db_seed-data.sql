@@ -21,25 +21,25 @@ INSERT INTO Teacher (teacher_ID, first_name, last_name, middle_initial, teacher_
 	
 --	STUDENT	----------------
 
-INSERT INTO Student (student_id, first_name, middle_initial, last_name)
+INSERT INTO Student (student_id, first_name, middle_initial, last_name, year_level, deg_prog)
 	VALUES
-	('201207411967', 'Jose', 'K', 'Abalos II'),
-	('201207412399', 'Ria Angela', 'P', 'Alejar'),
-	('201207412038', 'Ramon Paolo', 'H', 'Alfar'),
-	('201007407775', 'Angelo Pio', 'A', 'Bleza'),
-	('201007407874', 'Anna Karenina', 'R', 'Casupang'),
-	('201007407388', 'Denniel', 'G', 'De Las Alas'),
-	('201007407333', 'Mary Christine', 'H', 'Fojas'),
-	('201007407559', 'Keisha Erika', 'W', 'Garcia'),
-	('201007407360', 'Reginald', 'E', 'Hizon'),
-	('201007408341', 'Abigal Ann', 'T', 'Manguinao'),
-	('201007407883', 'Danna Cozette', 'H', 'Raymundo'),
-	('201007407252', 'Krizia Nicole', 'A', 'Villanueva'),
-	('200907405895', 'Francisco Rigelo IV', 'H', 'Adriano'),
-	('200907406209', 'Mark Prince John', 'L', 'Agustin'),
-	('201007407225', 'Nedbie Francis', 'F', 'Amoranto'),
-	('201007407586', 'Carlo Eliczar', 'B', 'Carabeo'),
-	('201107408872', 'Nikki', 'Q', 'DEborJA')
+	('201207411967', 'Jose', 'K', 'Abalos II', '2'),
+	('201207412399', 'Ria Angela', 'P', 'Alejar', '2'),
+	('201207412038', 'Ramon Paolo', 'H', 'Alfar', '2'),
+	('201007407775', 'Angelo Pio', 'A', 'Bleza', '4'),
+	('201007407874', 'Anna Karenina', 'R', 'Casupang', '4'),
+	('201007407388', 'Denniel', 'G', 'De Las Alas', '4'),
+	('201007407333', 'Mary Christine', 'H', 'Fojas', '4'),
+	('201007407559', 'Keisha Erika', 'W', 'Garcia', '4'),
+	('201007407360', 'Reginald', 'E', 'Hizon', '4'),
+	('201007408341', 'Abigal Ann', 'T', 'Manguinao', '4'),
+	('201007407883', 'Danna Cozette', 'H', 'Raymundo', '4'),
+	('201007407252', 'Krizia Nicole', 'A', 'Villanueva', '4'),
+	('200907405895', 'Francisco Rigelo IV', 'H', 'Adriano', 'terminal'),
+	('200907406209', 'Mark Prince John', 'L', 'Agustin', 'terminal'),
+	('201007407225', 'Nedbie Francis', 'F', 'Amoranto', '4'),
+	('201007407586', 'Carlo Eliczar', 'B', 'Carabeo', '4'),
+	('201107408872', 'Nikki', 'Q', 'DEborJA', '3')
 	;
 	
 --	COURSE	-----------------
@@ -54,9 +54,9 @@ INSERT INTO Course (course_id, course_name, description, class_section, units)
 	
 --	ATTENDANCE	-------------
 
-INSERT INTO Attendance (course_id, student_id, teacher_id, time_in, status)
+INSERT INTO Attendance (course_id, student_id, teacher_id, time_in, status, class_type)
 	VALUES
-	('201312344321', '201107408872', '200717411111', '2022-02-25 02:40:22', 'absent'),
-	('201312344321', '201007407586', '200717411111', '2022-02-25 01:01:01', 'present'),
-	('201312344321', '201007407225', '200717411111', '2022-02-25 01:34:03', 'late')
+	('201312344321', '201107408872', '200717411111', '2022-02-25 02:40:22', 'absent', 'regular'),
+	('201312344321', '201007407586', '200717411111', '2022-02-25 01:01:01', 'present', 'regular'),
+	('201312344321', '201007407225', '200717411111', '2022-02-25 01:34:03', 'late', 'regular')
 	;

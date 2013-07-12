@@ -44,6 +44,8 @@ CREATE TABLE Student
 	first_name		varchar(20)			NOT NULL,
 	last_name		varchar(20)			NOT NULL,
 	middle_initial	varchar(3)						 ,
+	year_level		enum('1', '2', '3', '4', 'terminal') NOT NULL,
+	deg_prog		enum('BSCS', 'BSIS', 'BSBAOM', 'ABCA', 'BSECE', 'BSIE', 'BSCOE')	NOT NULL,
 PRIMARY KEY(student_ID)
 )
 ENGINE = INNODB;
@@ -57,6 +59,7 @@ CREATE TABLE Attendance
 	course_ID	varchar(12)	NOT NULL,
 	time_in		timestamp	NOT NULL,
 	status		enum('late', 'absent', 'present'),
+	class_type	enum('regular', 'makeup', 'alternative'),
 FOREIGN KEY(student_ID) REFERENCES Student(student_ID),
 FOREIGN KEY(teacher_ID) REFERENCES Teacher(teacher_ID),
 FOREIGN KEY(course_ID) REFERENCES Course(course_ID)
