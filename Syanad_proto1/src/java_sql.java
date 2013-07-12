@@ -54,9 +54,9 @@ public class java_sql
 		//END CONNECTION
 	}
 	
-	private String[] query(String q){//hindi dapat to void
-		String[] str;
-		str = new String[30];
+	public String[][] query(String q){//hindi dapat to void
+		String[][] str;
+		str = new String[30][5];
 		int i=0;
 		connect();
 		if(con != null){
@@ -65,7 +65,10 @@ public class java_sql
 				statement = con.createStatement();// creates an object used for sending sql statements to the database
 				resultSet = statement.executeQuery(q);// receives the result set of the querty
 					while(resultSet.next()){//display result for each item in the result set
-						str[i] = (resultSet.getString(1) + " " + resultSet.getString(2));	//column
+						str[i][0] = resultSet.getString(1);//student id
+						str[i][1] = resultSet.getString(2);//fname
+						str[i][2] = resultSet.getString(3);//lastname
+						str[i][3] = resultSet.getString(4);//middle initial
 						i++;
 					}
 				//Close connections

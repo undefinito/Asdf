@@ -1,5 +1,7 @@
 import java.awt.*;
+
 import javax.swing.*;
+
 import java.awt.event.*;
 
 
@@ -181,17 +183,18 @@ public class Syanad_proto extends JFrame implements ActionListener{
 	private void listItems(JList<String> lstAttendance){
 		
 		Student[] x;
-		int numOfStudents;
+		int numOfStudents = 17;
+		String[][] temp = new String[30][5];
 		 //Constructs all students
 		for(int i=0; i<numOfStudents; i++){
-				i=js.query("SELECT * FROM Attendance");
-				x[i] = new Student(js.name[i], js.course[i]);
+				temp=js.query("SELECT * FROM students");
+				x[i] = new Student(temp[i][0], temp[i][1], temp[i][2], temp[i][3]);
 		  }
 		  
 		  String[] str;
 		  //Sets strings from all students
-		  for(i=0; i<numOfStudents; i++){  
-		 		str[i] = x[i].getName() + x[i].getCourse().....;
+		  for(int i=0; i<numOfStudents; i++){  
+			  str[i] = x[i].getStudentID() + x[i].getFirstName() + x[i].getLastName() + x[i].getMiddleInitial();
 		 
 		  }
 		  
