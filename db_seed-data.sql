@@ -23,23 +23,23 @@ INSERT INTO Teacher (teacher_ID, first_name, last_name, middle_initial, teacher_
 
 INSERT INTO Student (student_id, first_name, middle_initial, last_name, year_level, deg_prog)
 	VALUES
-	('201207411967', 'Jose', 'K', 'Abalos II', '2'),
-	('201207412399', 'Ria Angela', 'P', 'Alejar', '2'),
-	('201207412038', 'Ramon Paolo', 'H', 'Alfar', '2'),
-	('201007407775', 'Angelo Pio', 'A', 'Bleza', '4'),
-	('201007407874', 'Anna Karenina', 'R', 'Casupang', '4'),
-	('201007407388', 'Denniel', 'G', 'De Las Alas', '4'),
-	('201007407333', 'Mary Christine', 'H', 'Fojas', '4'),
-	('201007407559', 'Keisha Erika', 'W', 'Garcia', '4'),
-	('201007407360', 'Reginald', 'E', 'Hizon', '4'),
-	('201007408341', 'Abigal Ann', 'T', 'Manguinao', '4'),
-	('201007407883', 'Danna Cozette', 'H', 'Raymundo', '4'),
-	('201007407252', 'Krizia Nicole', 'A', 'Villanueva', '4'),
-	('200907405895', 'Francisco Rigelo IV', 'H', 'Adriano', 'terminal'),
-	('200907406209', 'Mark Prince John', 'L', 'Agustin', 'terminal'),
-	('201007407225', 'Nedbie Francis', 'F', 'Amoranto', '4'),
-	('201007407586', 'Carlo Eliczar', 'B', 'Carabeo', '4'),
-	('201107408872', 'Nikki', 'Q', 'DEborJA', '3')
+	('201207411967', 'Jose', 'K', 'Abalos II', '2', 'BSIE'),
+	('201207412399', 'Ria Angela', 'P', 'Alejar', '2', 'ABCA'),
+	('201207412038', 'Ramon Paolo', 'H', 'Alfar', '2', 'ABCA'),
+	('201007407775', 'Angelo Pio', 'A', 'Bleza', '4', 'ABCA'),
+	('201007407874', 'Anna Karenina', 'R', 'Casupang', '4', 'ABCA'),
+	('201007407388', 'Denniel', 'G', 'De Las Alas', '4', 'ABCA'),
+	('201007407333', 'Mary Christine', 'H', 'Fojas', '4', 'ABCA'),
+	('201007407559', 'Keisha Erika', 'W', 'Garcia', '4', 'ABCA'),
+	('201007407360', 'Reginald', 'E', 'Hizon', '4', 'ABCA'),
+	('201007408341', 'Abigal Ann', 'T', 'Manguinao', '4', 'ABCA'),
+	('201007407883', 'Danna Cozette', 'H', 'Raymundo', '4', 'ABCA'),
+	('201007407252', 'Krizia Nicole', 'A', 'Villanueva', '4', 'ABCA'),
+	('200907405895', 'Francisco Rigelo IV', 'H', 'Adriano', 'terminal', 'ABCA'),
+	('200907406209', 'Mark Prince John', 'L', 'Agustin', 'terminal', 'ABCA'),
+	('201007407225', 'Nedbie Francis', 'F', 'Amoranto', '4', 'BSCS'),
+	('201007407586', 'Carlo Eliczar', 'B', 'Carabeo', '4', 'BSCS'),
+	('201107408872', 'Nikki', 'Q', 'DEborJA', '3', 'BSCS')
 	;
 	
 --	COURSE	-----------------
