@@ -25,7 +25,7 @@ public class Course	//ang weird ng spelling
 		course_name = name;
 	}
 	
-	private void genCourseID( )
+	private void genCourseID( ) //other way
 	{
 		Double temp = new Double( (int)Math.abs(Math.random()) );
 		

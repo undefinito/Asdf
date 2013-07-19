@@ -182,7 +182,7 @@ public class Syanad_proto extends JFrame implements ActionListener{
 	
 	private void listItems(JList<String> lstAttendance){
 		
-		Student[] x;
+		Student[] x = null;
 		int numOfStudents = 17;
 		String[][] temp = new String[30][5];
 		 //Constructs all students

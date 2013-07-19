@@ -7,9 +7,6 @@ public class Student{
 	private String last_name;
 	private String deg_prog;	//degree program OR course
 	private int year_level;
-	private int batch;			//what year first enrolled
-	private int units;					//not sure
-	private static final int TOTAL_LOAD = 15;	//for teh lulz... but not sure if needed
 												//value is just a sample
 	public Student( String ID, String f_name, String mi, String l_name)
 	{
@@ -38,8 +35,25 @@ public class Student{
 	{
 		return middle_name;
 	}
+        
+        public void setDegProg( String dp )
+        {
+            deg_prog = dp;
+        }
 	
-}
-	
+        public String getDegProg( )
+        {
+            return deg_prog;
+        }
+        
+        public void setYearLevel( int year )
+        {
+            year_level = year;
+        }
+        
+        public int getYearLevel( )
+        {
+            return year_level;
+        }
 
-//class Registrar/attendance ?
+}
