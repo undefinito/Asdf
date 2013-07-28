@@ -55,31 +55,56 @@ public class java_sql
 	}
 	
 	public String[][] query(String q){//hindi dapat to void
-		String[][] str;
-		str = new String[30][5];
-		int i=0;
+		String[][] st = new String[5][5];
+		
+                int i=0;
+                int numOfColumns;   //number of columns of resultSet
+                
 		connect();
-		if(con != null){
+		
+                if(con != null){
 		//Testing of Queries
 		try { 
 				statement = con.createStatement();// creates an object used for sending sql statements to the database
 				resultSet = statement.executeQuery(q);// receives the result set of the querty
-					while(resultSet.next()){//display result for each item in the result set
-						str[i][0] = resultSet.getString(1);//student id
-						str[i][1] = resultSet.getString(2);//fname
-						str[i][2] = resultSet.getString(3);//lastname
-						str[i][3] = resultSet.getString(4);//middle initial
-						i++;
+				
+                                //<editor-fold defaultstate="collapsed" desc="get number of columns">
+                                
+                                //get metadata to count resulting columns
+                                ResultSetMetaData rsmd = resultSet.getMetaData();
+                                
+                                //get the number of columns
+                                numOfColumns = rsmd.getColumnCount();
+                                
+                                //</editor-fold>
+                                
+                                 //makes the matrix dynamic
+                                String[][] str = new String[30][numOfColumns+1]; //get only the first thirty rows
+  
+                                    while(resultSet.next()){//display result for each item in the result set
+					
+                                        //makes the matrix dynamic
+                                        //get each attribute for row i
+                                        for(int j = 1; j<numOfColumns+1; j++)
+                                        {
+                                                str[i][j-1] = resultSet.getString(j);//student id 
 					}
+                                        
+                                        i++;//next row in resultSet matrix
+                                    }
 				//Close connections
 				resultSet.close();
 				statement.close();
 				con.close();
+                                
+                                st = str;
+                                
 			} catch (Exception e){
 				e.printStackTrace();
 			} 
 		}
-		return str;
+                
+                return st;
 	}
 	
 }

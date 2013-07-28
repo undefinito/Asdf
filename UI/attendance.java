@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package anti.truancy;
 
 /**
  *
@@ -13,6 +12,10 @@ public class attendance extends javax.swing.JFrame {
     /**
      * Creates new form attendance
      */
+    
+    //java-sql connector
+    java_sql js = new java_sql();
+   
     public attendance() {
         initComponents();
     }
@@ -44,6 +47,61 @@ public class attendance extends javax.swing.JFrame {
 
         attSheet.setAutoCreateRowSorter(true);
         attSheet.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        temp = js.query("SELECT * FROM attendance");
+
+        for(int cnt = 0; cnt < temp[0].length; cnt++)
+        {
+            tIn[cnt]    = temp[cnt][3].substring(11,16);
+            tOut[cnt]   = temp[cnt][4].substring(11,16);
+        }
+
+        attSheet.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {"8:00", "9:30", "201107410001", "Sue", "Mary", "BSIE"},
+                {"8:07", "9:31", "201207410002", "Doe", "John", "BSECE"},
+                {"8:31", "9:28", "201007400003", "Tamad", "Juan", "BSIS"},
+                {"8:01", "", "201107400004", "Wayne", "Bruce", "BSCS"},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "IN", "OUT", "ID", "Last Name", "First Name", "Major"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         attSheet.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {"8:00", "9:30", "201107410001", "Sue", "Mary", "BSIE"},
@@ -96,15 +154,21 @@ public class attendance extends javax.swing.JFrame {
         attSheet.getColumnModel().getColumn(0).setMinWidth(40);
         attSheet.getColumnModel().getColumn(0).setPreferredWidth(40);
         attSheet.getColumnModel().getColumn(0).setMaxWidth(40);
+        attSheet.getColumnModel().getColumn(0).setHeaderValue("IN");
         attSheet.getColumnModel().getColumn(1).setMinWidth(40);
         attSheet.getColumnModel().getColumn(1).setPreferredWidth(40);
         attSheet.getColumnModel().getColumn(1).setMaxWidth(40);
+        attSheet.getColumnModel().getColumn(1).setHeaderValue("OUT");
         attSheet.getColumnModel().getColumn(2).setMinWidth(110);
         attSheet.getColumnModel().getColumn(2).setPreferredWidth(110);
         attSheet.getColumnModel().getColumn(2).setMaxWidth(110);
+        attSheet.getColumnModel().getColumn(2).setHeaderValue("ID");
+        attSheet.getColumnModel().getColumn(3).setHeaderValue("Last Name");
+        attSheet.getColumnModel().getColumn(4).setHeaderValue("First Name");
         attSheet.getColumnModel().getColumn(5).setMinWidth(50);
         attSheet.getColumnModel().getColumn(5).setPreferredWidth(50);
         attSheet.getColumnModel().getColumn(5).setMaxWidth(50);
+        attSheet.getColumnModel().getColumn(5).setHeaderValue("Major");
 
         profName.setText("PROF NAME");
 
@@ -259,6 +323,7 @@ public class attendance extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
     private void dateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_dateButtonActionPerformed
@@ -321,6 +386,16 @@ public class attendance extends javax.swing.JFrame {
     private javax.swing.JButton absentB;
     private javax.swing.JToolBar attBar;
     private javax.swing.JTable attSheet;
+    ////<editor-fold defaultstate="collapsed" desc="strings to be displayed">
+
+    //</editor-fold>
+    private String[] tIn;
+    private String[] tOut;
+    private String fName;
+    private String lName;
+    private String major;
+
+    private String[][] temp = new String[30][5];
     private javax.swing.JLabel courseCode;
     private javax.swing.JButton dateButton;
     private javax.swing.JButton excusedB;

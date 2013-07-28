@@ -59,7 +59,14 @@ public class Syanad_proto extends JFrame implements ActionListener{
     
 	public Syanad_proto() { //Starts the frame constructor for window and initiates values
 		init();
-		
+                String[][] temp = js.query("SELECT * FROM attendance");
+                String[] tIn = new String[30];
+                
+                for(int cnt = 0; cnt < temp.length; cnt++)
+                {
+                    tIn[cnt]    = temp[cnt][3].substring(11,16);
+                }
+                System.out.println(tIn[0]);
 	}
 	
 	public void init() {						//Initiates the Frame for the GUI
