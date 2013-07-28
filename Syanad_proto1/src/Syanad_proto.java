@@ -182,16 +182,17 @@ public class Syanad_proto extends JFrame implements ActionListener{
 	
 	private void listItems(JList<String> lstAttendance){
 		
-		Student[] x = null;
+		
 		int numOfStudents = 17;
-		String[][] temp = new String[30][5];
+                Student[] x = new Student[numOfStudents];
+		String[][] temp = new String[30][6];
 		 //Constructs all students
 		for(int i=0; i<numOfStudents; i++){
-				temp=js.query("SELECT * FROM students");
+				temp=js.query("SELECT * FROM student");
 				x[i] = new Student(temp[i][0], temp[i][1], temp[i][2], temp[i][3]);
 		  }
-		  
-		  String[] str;
+                
+		  String[] str = new String[numOfStudents];
 		  //Sets strings from all students
 		  for(int i=0; i<numOfStudents; i++){  
 			  str[i] = x[i].getStudentID() + x[i].getFirstName() + x[i].getLastName() + x[i].getMiddleInitial();
@@ -200,17 +201,17 @@ public class Syanad_proto extends JFrame implements ActionListener{
 		  
 		  //generated to from netbeans minodify ko ng konti di ko sure kung gagana
 		  //pero add items sya sa list
-		  lstTimein.setModel(new javax.swing.AbstractListModel() {
-			  public int getSize()
-			  {
-				  return strings.length;
-			  }
-			  public Object getElementAt(int i)
-			  {
-				  return str[i];
-			  }
-        	}
-		  );
+//		  lstTimein.setModel(new javax.swing.AbstractListModel() {
+//			  public int getSize()
+//			  {
+//				  return strings.length;
+//			  }
+//			  public Object getElementAt(int i)
+//			  {
+//				  return str[i];
+//			  }
+//        	}
+//		  );
 		 
 		 
 		 
