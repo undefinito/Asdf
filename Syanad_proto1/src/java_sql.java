@@ -1,4 +1,5 @@
 import java.sql.*;
+import java.util.*;
 
 public class java_sql
 {
@@ -53,18 +54,37 @@ public class java_sql
 		}*/
 		//END CONNECTION
 	}
+        
+        private int getNumRows()
+        {
+            int size = 0;
+            try {
+                resultSet.last();
+                size = resultSet.getRow();
+                resultSet.beforeFirst();
+            }
+            catch(Exception ex) {
+                return 0;
+            }
+            return size;
+        }
 	
-	public String[][] query(String q){//hindi dapat to void
-		String[][] st = new String[5][5];
-		
+       
+	public String[][]query(String q)
+        {
+            //ArrayList of arrays(of Strings) yo dawg
+            String[][] st ={{""}};
+                
                 int i=0;
                 int numOfColumns;   //number of columns of resultSet
+                int numOfRows;      //number of rows of resultSet
                 
-		connect();
+                connect();
 		
-                if(con != null){
+                if(con != null)
+                {
 		//Testing of Queries
-		try { 
+                    try { 
 				statement = con.createStatement();// creates an object used for sending sql statements to the database
 				resultSet = statement.executeQuery(q);// receives the result set of the querty
 				
@@ -76,28 +96,32 @@ public class java_sql
                                 //get the number of columns
                                 numOfColumns = rsmd.getColumnCount();
                                 
+                                numOfRows = getNumRows();
+                                
                                 //</editor-fold>
                                 
-                                 //makes the matrix dynamic
-                                String[][] str = new String[30][numOfColumns+1]; //get only the first thirty rows
-  
-                                    while(resultSet.next()){//display result for each item in the result set
-					
-                                        //makes the matrix dynamic
-                                        //get each attribute for row i
-                                        for(int j = 1; j<numOfColumns+1; j++)
-                                        {
-                                                str[i][j-1] = resultSet.getString(j);//student id 
-					}
-                                        
-                                        i++;//next row in resultSet matrix
+//                               for debugging
+//                               System.out.println(numOfColumns);
+//                               System.out.println(numOfRows);
+                               
+                                String[][] temps = new String[numOfRows][numOfColumns];
+                                while(resultSet.next())
+                                {
+                                    //iterate through columns
+                                    for(int j = 0; j<numOfColumns; j++)
+                                    {
+                                       temps[i][j] = resultSet.getString(j+1);
                                     }
+                                    
+                                    i++;//next row in resultSet matrix
+                                }
+                                
 				//Close connections
 				resultSet.close();
 				statement.close();
 				con.close();
                                 
-                                st = str;
+                               st = temps;
                                 
 			} catch (Exception e){
 				e.printStackTrace();
