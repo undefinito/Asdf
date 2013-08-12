@@ -7,6 +7,8 @@
  *
  * @author Nikki-Pc
  */
+import java.awt.Color;
+import java.awt.Component;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -50,11 +52,14 @@ public class attendance extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        setPreferredSize(new java.awt.Dimension(600, 300));
+        setResizable(false);
+        
         attSheet.setAutoCreateRowSorter(true);
         attSheet.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 // </editor-fold>    
         
-        //for date
+        //for getting current date
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date current_date = new Date();
         
@@ -95,6 +100,10 @@ public class attendance extends javax.swing.JFrame {
         subjName    = new String[subjtemp.length];
         attSubjID   = new String[attemp.length];
         
+        //current IDs
+        profIDNow = "200717411111";
+        subjIDNow = "201312344321";
+        
 // <editor-fold defaultstate="collapsed" desc="for debugging">
         //debugging   ----- array lengths
         System.out.println("attemp has " + attemp.length + " rows");
@@ -112,14 +121,15 @@ public class attendance extends javax.swing.JFrame {
 //        </editor-fold>
         
         //dimensions of table
-        erows = attemp.length;
+        erows = countCurrentSubject("201312344321");
         ecols = attemp[0].length;
         
-        //save queried  strings for display
+//         <editor-fold defaultstate="collapsed" desc="save queried  strings for display">
+        
 //        attendance query
         for(int cnt = 0; cnt < attemp.length; cnt++)
         {
-            tIn[cnt]        = attemp[cnt][3];
+            tIn[cnt]        = convertMiToSt(attemp[cnt][3]);
        
             tOut[cnt]       ="";
             
@@ -157,10 +167,15 @@ public class attendance extends javax.swing.JFrame {
             subjName[cnt]   = subjtemp[cnt][1];
         }
         
-        //current professor
-        profNow = getProf("200717411111");
+//        </editor-fold>
         
-//        // <editor-fold defaultstate="collapsed" desc="for debugging">
+        //current professor
+        profNow = getProf(profIDNow);
+        
+        //current class
+        subjNow = getSubj(subjIDNow);
+       
+//         <editor-fold defaultstate="collapsed" desc="for debugging">
 //        for(int x = 0; x < attemp.length; x++)
 //        {
 //            System.out.println(tIn[x]);
@@ -177,8 +192,15 @@ public class attendance extends javax.swing.JFrame {
 //        }
 //        // </editor-fold>
 
+        
+//         <editor-fold defaultstate="collapsed" desc="optional">
         int extrarows = 0;
-//        if(erows)
+        //adds empty rows to display
+//        if(erows<13)
+//        {
+//            extrarows = 13 - erows;
+//        }
+//        </editor-fold>
         
         Object[][] tempEntries = new Object[erows + extrarows][ecols];
                 
@@ -214,41 +236,44 @@ public class attendance extends javax.swing.JFrame {
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
+            
+            @Override
+            public boolean isCellEditable(int row, int column) {
+               
+                return false;
+            }
         });
+        
         attSheet.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(attSheet);
-        attSheet.getColumnModel().getColumn(0).setMinWidth(40);
+        attSheet.getColumnModel().getColumn(0).setResizable(false);
         attSheet.getColumnModel().getColumn(0).setPreferredWidth(40);
-        attSheet.getColumnModel().getColumn(0).setMaxWidth(40);
-        attSheet.getColumnModel().getColumn(0).setHeaderValue("IN");
-        attSheet.getColumnModel().getColumn(1).setMinWidth(40);
+        attSheet.getColumnModel().getColumn(1).setResizable(false);
         attSheet.getColumnModel().getColumn(1).setPreferredWidth(40);
-        attSheet.getColumnModel().getColumn(1).setMaxWidth(40);
-        attSheet.getColumnModel().getColumn(1).setHeaderValue("OUT");
-        attSheet.getColumnModel().getColumn(2).setMinWidth(110);
-        attSheet.getColumnModel().getColumn(2).setPreferredWidth(110);
-        attSheet.getColumnModel().getColumn(2).setMaxWidth(110);
-        attSheet.getColumnModel().getColumn(2).setHeaderValue("ID");
-        attSheet.getColumnModel().getColumn(3).setHeaderValue("Last Name");
-        attSheet.getColumnModel().getColumn(4).setHeaderValue("First Name");
-        attSheet.getColumnModel().getColumn(5).setMinWidth(50);
+        attSheet.getColumnModel().getColumn(2).setResizable(false);
+        attSheet.getColumnModel().getColumn(2).setMinWidth(75);
+        attSheet.getColumnModel().getColumn(3).sizeWidthToFit();
+        attSheet.getColumnModel().getColumn(3).setResizable(false);
+        attSheet.getColumnModel().getColumn(4).sizeWidthToFit();
+        attSheet.getColumnModel().getColumn(4).setResizable(false);
+        attSheet.getColumnModel().getColumn(5).sizeWidthToFit();
+        attSheet.getColumnModel().getColumn(5).setResizable(false);
         attSheet.getColumnModel().getColumn(5).setPreferredWidth(50);
-        attSheet.getColumnModel().getColumn(5).setMaxWidth(50);
-        attSheet.getColumnModel().getColumn(5).setHeaderValue("Major");
-
+        
         profName.setText(profNow);
 
         courseCode.setText(subjNow);
 
         section.setText("S" + subjSec);
 
-        dateButton.setText("MM/DD/YYYY");
+         dateButton.setText("MM/DD/YYYY");
         dateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 dateButtonActionPerformed(evt);
             }
         });
 
+        attBar.setFloatable(false);
         attBar.setRollover(true);
 
         absentB.setBackground(new java.awt.Color(255, 0, 0));
@@ -339,8 +364,8 @@ public class attendance extends javax.swing.JFrame {
         });
 
         searchButton.setText("Go");
-        
-                javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -385,6 +410,7 @@ public class attendance extends javax.swing.JFrame {
                 .addGap(13, 13, 13)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
+
 // </editor-fold>
         pack();
     }
@@ -399,10 +425,13 @@ public class attendance extends javax.swing.JFrame {
         // TODO add your handling code here:
     }                                       
 
-    private void lateBActionPerformed(java.awt.event.ActionEvent evt) {                                      
+    private void lateBActionPerformed(java.awt.event.ActionEvent evt) {
+        
+    }                                      
         // TODO add your handling code here:
-    }                                     
-
+        
+    
+    
     private void presentBActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
     }                                        
@@ -413,8 +442,128 @@ public class attendance extends javax.swing.JFrame {
 
     private void searchBarActionPerformed(java.awt.event.ActionEvent evt) {                                          
         // TODO add your handling code here:
+        
     }                                         
     //</editor-fold>
+    
+    private int countCurrentSubject(String cursubj)
+    {
+        int count=0;
+        
+        for(int x=0;x<attemp.length;x++)
+        {
+            if(cursubj.equals(attemp[x][2]))
+            {
+                count++;
+            }
+        }
+        
+     return count;
+    }
+    
+    private String convertMiToSt(String military)
+    {
+        military = military.substring(11,16);
+        char[] temp = military.toCharArray();
+        
+        String timeState = ""; //whether AM or PM
+        
+        //conversion to standard time 12 HOUR FORMAT
+        switch(temp[0])
+        {
+            case '0':
+                //if 0000 -> 0059
+                if(temp[1] == '0')
+                {
+                    temp[0] = '1';
+                    temp[1] = '2';
+                }
+                
+                timeState = "AM";
+                
+                break;
+                
+            case '1':
+                //if 1300+
+                if(temp[1] > '2')
+                {
+                    temp[0] = '0';  //fist digit is 0
+                    
+                    //second digit is temp[1]
+                    switch(temp[1])
+                    {
+                        case '3': temp[1] = '1'; break;
+                        case '4': temp[1] = '2'; break;
+                        case '5': temp[1] = '3'; break;
+                        case '6': temp[1] = '4'; break;
+                        case '7': temp[1] = '5'; break;
+                        case '8': temp[1] = '6'; break;
+                        case '9': temp[1] = '7'; break;
+                    }
+                    
+                    timeState = "PM";
+                }
+                else
+                {
+                    timeState = "AM";
+                }
+                
+                break;
+            
+            case '2': 
+                //20-2100
+                if(temp[1] == '1' || temp[1] =='0')
+                {
+                    temp[0] = '0';
+                }
+                else //22-2300
+                {
+                    temp[0] = '1';
+                }
+                
+                switch(temp[1])
+                {
+                    case '0': temp[1] = '8'; break;
+                    case '1': temp[1] = '9'; break;
+                    case '2': temp[1] = '0'; break;
+                    case '3': temp[1] = '1'; break;
+                }
+                
+                timeState = "PM";
+            
+        }
+        
+        military = new String(temp) + " " + timeState;
+        
+//        System.out.print(military);
+        
+        return military;
+    }
+    
+    private String getSubj(String subj)
+    {
+        int IDindex = -1;
+        
+        for(int x=0; x<subjtemp.length; x++)
+        {
+            if(subjtemp[x][0].equals(subj))
+            {
+                IDindex = x;
+            }
+        }
+        
+         if(IDindex > -1)
+        {
+//           current section
+           subjSec = subjtemp[IDindex][4];
+            
+           return subjtemp[IDindex][1];
+        }
+        else
+        {
+            return "";
+        }
+    }
     
     //This should get prof's full name according to login credentials
     private String getProf(String login)
@@ -434,7 +583,7 @@ public class attendance extends javax.swing.JFrame {
         if(IDindex > -1)
         {
 //            System.out.println(protemp[IDindex][1] + protemp[IDindex][2]);
-            return protemp[IDindex][1] + " " + protemp[IDindex][2];
+            return protemp[IDindex][2] + ", " + protemp[IDindex][1] + " " + protemp[IDindex][3] + ".";
         }
         else
         {
@@ -544,6 +693,7 @@ public class attendance extends javax.swing.JFrame {
             }
         });
     }
+    
     // Variables declaration - do not modify                     
     private javax.swing.JButton absentB;
     private javax.swing.JToolBar attBar;
@@ -551,7 +701,7 @@ public class attendance extends javax.swing.JFrame {
     private javax.swing.JTable attSheet;
     ////<editor-fold defaultstate="collapsed" desc="strings to be displayed">
 
-    //</editor-fold>
+
     private String[] tIn;           //time in
     private String[] tOut;          //time out
     private String[] studID;        //student ID
@@ -565,19 +715,24 @@ public class attendance extends javax.swing.JFrame {
     private String[] attSubjID;
     private String[] subjID;
     private String[] subjName;
-    
-    private String[][] protemp;     //professors
-    private String[][] subjtemp;    //subjects
-    private String[][] attemp;      //attendance
-    private String[][] stemp;       //students
-
     private String profNow = "PROF NAME";         //current professor in class
     private String subjNow = "OF COURSE";         //current subject undergoing
     private String subjSec = "100";         //section of current class
     
+//</editor-fold>
+
+    private String profIDNow;       //ID of current prof
+    private String subjIDNow;       //ID of current subject
+   
+    private String[][] protemp;     //professors
+    private String[][] subjtemp;    //subjects
+    private String[][] attemp;      //attendance
+    private String[][] stemp;       //students
+    
     private int ocy;    //object count y
     private int erows;    //total row of entries
     private int ecols;    //total column of entries
+    
     private javax.swing.JLabel courseCode;
     private javax.swing.JButton dateButton;
     private javax.swing.JButton excusedB;
