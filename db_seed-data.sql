@@ -26,7 +26,7 @@ INSERT INTO `teacher` (`teacher_ID`, `first_name`, `last_name`, `middle_initial`
 ('200717411321', 'Tyrion', 'Lannister', 'C', '11'),
 ('200717411541', 'Margery', 'Tyrell', 'D', '9'),
 ('200717411112', 'Sandor', 'Clegane', 'L', '10'),
-('200717411321', 'Gregor', 'Clegane', 'J', '10'),
+('200717411323', 'Gregor', 'Clegane', 'J', '10'),
 ('200717414111', 'Random', 'Person', 'P', '6'),
 ('200717412412', 'Consuelo', 'Santos', 'B', '12');
 	
