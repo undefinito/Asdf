@@ -8,49 +8,76 @@
 
 --	TEACHER	---------------
 
-INSERT INTO Teacher (teacher_ID, first_name, last_name, middle_initial, teacher_load)
-	VALUES
-	( '200317418380', 'Alain', 'Encarnacion', 'C', '12' ),
-	( '200617418128', 'Pamcee', 'Amoranto', 'P', '10' ),
-	( '200317418201', 'Christine', 'Gendrano', 'A', '11' ),
-	( '200317412203', 'Ver', 'Ramos', 'C', '14' ),
-	( '200517413404', 'Jordan', 'Deja', 'B', '13' ),
-	( '200717412412', 'Consuelo', 'Santos', 'B', '12' ),
-	( '200717411111', 'Michelle', 'Ching', 'D', '12' )
-	;
+INSERT INTO `teacher` (`teacher_ID`, `first_name`, `last_name`, `middle_initial`, `teacher_load`) VALUES
+('200317412203', 'Ver', 'Ramos', 'C', '14'),
+('200317418201', 'Christine', 'Gendrano', 'A', '11'),
+('200317418380', 'Alain', 'Encarnacion', 'C', '12'),
+('200517413404', 'Jordan', 'Deja', 'B', '13'),
+('200617418128', 'Pamcee', 'Amoranto', 'P', '10'),
+('200717411111', 'Michelle', 'Ching', 'D', '12'),
+('200717412223', 'Jaime', 'Lannister', 'S', '6'),
+('200717411123', 'Faceless', 'Void', 'A', '6'),
+('200717411415', 'Anon', 'Mus', 'Y', '9'),
+('200717411122', 'Oberyn', 'Martel', 'G', '6'),
+('200717411134', 'Aegon', 'Tragareyen', 'H', '8'),
+('200717411000', 'Ellaria', 'Sand', 'Q', '10'),
+('200717418765', 'Jon', 'Snow', 'W', '11'),
+('200717411234', 'Robb', 'Stark', 'X', '14'),
+('200717411321', 'Tyrion', 'Lannister', 'C', '11'),
+('200717411541', 'Margery', 'Tyrell', 'D', '9'),
+('200717411112', 'Sandor', 'Clegane', 'L', '10'),
+('200717411321', 'Gregor', 'Clegane', 'J', '10'),
+('200717414111', 'Random', 'Person', 'P', '6'),
+('200717412412', 'Consuelo', 'Santos', 'B', '12');
 	
 --	STUDENT	----------------
 
-INSERT INTO Student (student_id, first_name, middle_initial, last_name, year_level, deg_prog)
-	VALUES
-	('201207411967', 'Jose', 'K', 'Abalos II', '2', 'BSIE'),
-	('201207412399', 'Ria Angela', 'P', 'Alejar', '2', 'ABCA'),
-	('201207412038', 'Ramon Paolo', 'H', 'Alfar', '2', 'ABCA'),
-	('201007407775', 'Angelo Pio', 'A', 'Bleza', '4', 'ABCA'),
-	('201007407874', 'Anna Karenina', 'R', 'Casupang', '4', 'ABCA'),
-	('201007407388', 'Denniel', 'G', 'De Las Alas', '4', 'ABCA'),
-	('201007407333', 'Mary Christine', 'H', 'Fojas', '4', 'ABCA'),
-	('201007407559', 'Keisha Erika', 'W', 'Garcia', '4', 'ABCA'),
-	('201007407360', 'Reginald', 'E', 'Hizon', '4', 'ABCA'),
-	('201007408341', 'Abigal Ann', 'T', 'Manguinao', '4', 'ABCA'),
-	('201007407883', 'Danna Cozette', 'H', 'Raymundo', '4', 'ABCA'),
-	('201007407252', 'Krizia Nicole', 'A', 'Villanueva', '4', 'ABCA'),
-	('200907405895', 'Francisco Rigelo IV', 'H', 'Adriano', 'terminal', 'ABCA'),
-	('200907406209', 'Mark Prince John', 'L', 'Agustin', 'terminal', 'ABCA'),
-	('201007407225', 'Nedbie Francis', 'F', 'Amoranto', '4', 'BSCS'),
-	('201007407586', 'Carlo Eliczar', 'B', 'Carabeo', '4', 'BSCS'),
-	('201107408872', 'Nikki', 'Q', 'DEborJA', '3', 'BSCS')
-	;
+INSERT INTO `student` (`student_ID`, `first_name`, `last_name`, `middle_initial`, `year_level`, `deg_prog`) VALUES
+('200907405895', 'Francisco Rigelo IV', 'Adriano', 'H', 'terminal', 'ABCA'),
+('200907406209', 'Mark Prince John', 'Agustin', 'L', 'terminal', 'ABCA'),
+('201007407225', 'Nedbie Francis', 'Amoranto', 'F', '4', 'BSCS'),
+('201007407252', 'Krizia Nicole', 'Villanueva', 'A', '4', 'ABCA'),
+('201007407333', 'Mary Christine', 'Fojas', 'H', '4', 'ABCA'),
+('201007407360', 'Reginald', 'Hizon', 'E', '4', 'ABCA'),
+('201007407388', 'Denniel', 'De Las Alas', 'G', '4', 'ABCA'),
+('201007407559', 'Keisha Erika', 'Garcia', 'W', '4', 'ABCA'),
+('201007407586', 'Carlo Eliczar', 'Carabeo', 'B', '4', 'BSCS'),
+('201007407775', 'Angelo Pio', 'Bleza', 'A', '4', 'ABCA'),
+('201007407874', 'Anna Karenina', 'Casupang', 'R', '4', 'ABCA'),
+('201007407883', 'Danna Cozette', 'Raymundo', 'H', '4', 'ABCA'),
+('201007408341', 'Abigal Ann', 'Manguinao', 'T', '4', 'ABCA'),
+('201107408872', 'Nikki', 'DEborJA', 'Q', '3', 'BSCS'),
+('201207411967', 'Jose', 'Abalos II', 'K', '2', 'BSIE'),
+('201207412038', 'Ramon Paolo', 'Alfar', 'H', '2', 'ABCA'),
+('201207412022', 'Joffrey', 'Baratheon', 'L', '2', 'ABCA'),
+('201207412051', 'Petyr', 'Baelish', 'L', '2', 'BSOM'),
+('201207412055', 'Tywin', 'Lannister', 'A', '2', 'BSECE'),
+('201207412399', 'Ria Angela', 'Alejar', 'P', '2', 'ABCA');
 	
 --	COURSE	-----------------
 
-INSERT INTO Course (course_id, course_name, description, class_section, units)
-	VALUES
-	('201312344321', 'SYANAD2', 'Systems Analysis and Development 2', '1', '3'),
-	('201312362789', 'COMSYOR', 'Computer Systems Organization', '1', '3'),
-	('201387654321', 'ANDPRO', 'Android Programming', '1', '3'),
-	('201387654322', 'ANDPROL', 'Android Programming', '2', '3')
-	;
+INSERT INTO `course` (`course_ID`, `course_name`, `description`, `class_section`, `units`) VALUES
+('201312344321', 'SYANAD2', 'Systems Analysis and Development 2', '1', '3'),
+('201312362789', 'COMSYOR', 'Computer Systems Organization', '1', '3'),
+('201387654321', 'ANDPRO', 'Android Programming', '1', '3'),
+('201387654322', 'ANDPROL', 'Android Programming', '2', '3'),
+('201387654323', 'FILIONE', 'Filipino Literature', '1', '3'),
+('201387654324', 'COMPARC', 'Computer Architecture', '1', '3'),
+('201387654325', 'ANALCOM', 'Analog communications', '1', '3'),
+('201387654326', 'SOFTMET', 'Methods of Software development', '1', '3'),
+('201387654327', 'SOFTMAN', 'Software Management', '1', '3'),
+('201387654328', 'CMPROG1', 'Computer Programming 1', '1', '3'),
+('201387654329', 'DISTRU', 'Discrete Structures', '1', '3'),
+('201387654330', 'CALCU1', 'Differential Calculus', '1', '3'),
+('201387654331', 'CALCU2', 'Integral Calculus', '1', '3'),
+('201387654332', 'DIFEQUA', 'Differential Equations', '1', '3'),
+('201387654333', 'LINALGE', 'Linear Algebra', '1', '3'),
+('201387654334', 'SWIDLEC', 'Switching curcuits and Logic gates', '1', '3'),
+('201387654335', 'SWIDLAB', 'Switching curcuits and Logic gates', '1', '3'),
+('201387654336', 'DATBASE', 'Database', '1', '3'),
+('201387654337', 'DATAMAN', 'Database Management', '1', '3'),
+('201387654338', 'WEBDEVE', 'Website development', '1', '3');
+
 	
 --	ATTENDANCE	-------------
 
