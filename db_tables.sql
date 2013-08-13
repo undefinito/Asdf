@@ -65,3 +65,16 @@ FOREIGN KEY(teacher_ID) REFERENCES Teacher(teacher_ID),
 FOREIGN KEY(course_ID) REFERENCES Course(course_ID)
 )
 ENGINE = INNODB;
+
+-- ----------------------------------------------
+
+CREATE TABLE classlist
+(
+teacher_id    char(12)   NOT NULL,
+course_id     char(12)   NOT NULL,
+student_id    char(12)   NOT NULL,
+FOREIGN KEY(student_ID) REFERENCES Student(student_ID),
+FOREIGN KEY(teacher_ID) REFERENCES Teacher(teacher_ID),
+FOREIGN KEY(course_ID) REFERENCES Course(course_ID)
+)
+ENGINE = INNODB;
