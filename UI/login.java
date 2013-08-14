@@ -139,6 +139,9 @@ public class login extends javax.swing.JFrame {
                 new login().setVisible(true);
             }
         });
+
+        user = usernameField.getText();       
+        
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -148,4 +151,7 @@ public class login extends javax.swing.JFrame {
     private javax.swing.JTextField usernameField;
     private javax.swing.JLabel usernameLabel;
     // End of variables declaration//GEN-END:variables
+
+    private String user;
+    private String pass;
 }
