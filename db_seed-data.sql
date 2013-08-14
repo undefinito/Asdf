@@ -8,27 +8,27 @@
 
 --	TEACHER	---------------
 
-INSERT INTO `teacher` (`teacher_ID`, `first_name`, `last_name`, `middle_initial`, `teacher_load`) VALUES
-('200317412203', 'Ver', 'Ramos', 'C', '14'),
-('200317418201', 'Christine', 'Gendrano', 'A', '11'),
-('200317418380', 'Alain', 'Encarnacion', 'C', '12'),
-('200517413404', 'Jordan', 'Deja', 'B', '13'),
-('200617418128', 'Pamcee', 'Amoranto', 'P', '10'),
-('200717411111', 'Michelle', 'Ching', 'D', '12'),
-('200717412223', 'Jaime', 'Lannister', 'S', '6'),
-('200717411123', 'Faceless', 'Void', 'A', '6'),
-('200717411415', 'Anon', 'Mus', 'Y', '9'),
-('200717411122', 'Oberyn', 'Martel', 'G', '6'),
-('200717411134', 'Aegon', 'Tragareyen', 'H', '8'),
-('200717411000', 'Ellaria', 'Sand', 'Q', '10'),
-('200717418765', 'Jon', 'Snow', 'W', '11'),
-('200717411234', 'Robb', 'Stark', 'X', '14'),
-('200717411321', 'Tyrion', 'Lannister', 'C', '11'),
-('200717411541', 'Margery', 'Tyrell', 'D', '9'),
-('200717411112', 'Sandor', 'Clegane', 'L', '10'),
-('200717411323', 'Gregor', 'Clegane', 'J', '10'),
-('200717414111', 'Random', 'Person', 'P', '6'),
-('200717412412', 'Consuelo', 'Santos', 'B', '12');
+INSERT INTO `teacher` (`teacher_ID`, `first_name`, `last_name`, `middle_initial`, `teacher_load`, `password`) VALUES
+('200317412203', 'Ver', 'Ramos', 'C', '14', 'pass'),
+('200317418201', 'Christine', 'Gendrano', 'A', '11', 'pass'),
+('200317418380', 'Alain', 'Encarnacion', 'C', '12', 'pass'),
+('200517413404', 'Jordan', 'Deja', 'B', '13', 'pass'),
+('200617418128', 'Pamcee', 'Amoranto', 'P', '10', 'pass'),
+('200717411111', 'Michelle', 'Ching', 'D', '12', 'pass'),
+('200717412223', 'Jaime', 'Lannister', 'S', '6', 'pass'),
+('200717411123', 'Faceless', 'Void', 'A', '6', 'pass'),
+('200717411415', 'Anon', 'Mus', 'Y', '9', 'pass'),
+('200717411122', 'Oberyn', 'Martel', 'G', '6', 'pass'),
+('200717411134', 'Aegon', 'Tragareyen', 'H', '8', 'pass'),
+('200717411000', 'Ellaria', 'Sand', 'Q', '10', 'pass'),
+('200717418765', 'Jon', 'Snow', 'W', '11', 'pass'),
+('200717411234', 'Robb', 'Stark', 'X', '14', 'pass'),
+('200717411321', 'Tyrion', 'Lannister', 'C', '11', 'pass'),
+('200717411541', 'Margery', 'Tyrell', 'D', '9', 'pass'),
+('200717411112', 'Sandor', 'Clegane', 'L', '10', 'pass'),
+('200717411323', 'Gregor', 'Clegane', 'J', '10', 'pass'),
+('200717414111', 'Random', 'Person', 'P', '6', 'pass'),
+('200717412412', 'Consuelo', 'Santos', 'B', '12', 'pass');
 	
 --	STUDENT	----------------
 

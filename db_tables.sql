@@ -19,6 +19,7 @@ CREATE TABLE Teacher
 	last_name		varchar(20)			NOT NULL,
 	middle_initial	varchar(3)						 ,
 	teacher_load	varchar(2)				NOT NULL,
+	password		varchar(30)			NOT NULL,
 PRIMARY KEY(teacher_ID)
 )
 ENGINE = INNODB;
