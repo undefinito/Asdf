@@ -4,6 +4,16 @@
  */
 package anti.truancy;
 
+import java.awt.BorderLayout;
+import java.awt.Dialog.ModalityType;
+
+import javax.swing.AbstractButton;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
 /**
  *
  * @author Nikki-Pc
@@ -109,7 +119,7 @@ public class login extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) {    	
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -140,18 +150,56 @@ public class login extends javax.swing.JFrame {
             }
         });
 
-        user = usernameField.getText();       
+        user = usernameField.getText();
+        pass = passwordField.getText();
+        String q = "SELECT * FROM teacher WHERE teacher_ID = '" + user + "' ";
+        x = js.query(q);
+        
+        if(x!=null){
+        	//ID exist
+        	if(pass == x[0][5]){
+        		//GO TO TEACHER PAKING ATTENDANCE
+        	}
+        	else{
+    			JDialog y = new JDialog();
+    			y.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+    			y.setVisible(true);
+    			y.setModalityType(ModalityType.APPLICATION_MODAL);
+    			y.setBounds(250, 250, 181, 108);
+    		
+    			//Constructs the panel for betting
+    			JPanel contentPanel1 = new JPanel();
+    			y.getContentPane().setLayout(new BorderLayout());
+    			contentPanel1.setBorder(new EmptyBorder(5, 5, 5, 5));
+    			y.getContentPane().add(contentPanel1, BorderLayout.CENTER);
+    			contentPanel1.setLayout(null);
+    			JButton btn_Ok = new JButton("OK");	
+    			JLabel lblMessage = new JLabel("Login Error");
+    			lblMessage.setBounds(10, 11, 76, 14);
+        	}
+        }
+        
+        /*
+         * switch(user){
+         * 	admin : checkPass();
+         * 			openTeacherAttend();
+         * 	prof : checkPass();
+         * 			openStudAttend();
+         * }
+         */
         
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JPasswordField passwordField;
-    private javax.swing.JLabel passwordLabel;
     private javax.swing.JLabel title;
-    private javax.swing.JTextField usernameField;
     private javax.swing.JLabel usernameLabel;
+    private javax.swing.JLabel passwordLabel;
+    private static javax.swing.JPasswordField passwordField;
+    private static javax.swing.JTextField usernameField;
     // End of variables declaration//GEN-END:variables
 
-    private String user;
-    private String pass;
+    private static String user;
+    private static String pass;
+    static java_sql js = new java_sql();
+    private static String x[][]; 
 }
