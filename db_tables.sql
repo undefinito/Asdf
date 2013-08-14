@@ -37,7 +37,7 @@ CREATE TABLE Course
 	units			char(1)									NOT NULL,
 	sched_day		enum('M', 'T', 'W', 'TH', 'F', 'S')		NOT NULL,
 	sched_room		enum('W401', 'W402', 'W403', 'W404', 'W410', 'W411', 'W412', 'W413', 'W414', 'E401', 'E402', 'E403', 'E404', 'E405', 'E409', 'E410', 'E411', 'E412', 'E413', 'E414', 'ELAB-A', 'ELAB-B', 'E208', 'FACRM', 'ENGFACRM')				NOT NULL,
-	sched_time		
+	sched_time		char(11)								NOT NULL,
 PRIMARY KEY(course_ID)
 )
 ENGINE = INNODB;
