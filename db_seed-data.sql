@@ -57,32 +57,32 @@ INSERT INTO `student` (`student_ID`, `first_name`, `last_name`, `middle_initial`
 	
 --	COURSE	-----------------
 
-INSERT INTO `course` (`course_ID`, `course_name`, `description`, `class_section`, `units`, `sched_day`, `sched_room`) VALUES
-('201312344321', 'SYANAD2', 'Systems Analysis and Development 2', '1', '3'),
-('201312362789', 'COMSYOR', 'Computer Systems Organization', '1', '3'),
-('201387654321', 'ANDPRO', 'Android Programming', '1', '3'),
-('201387654322', 'ANDPROL', 'Android Programming', '2', '3'),
-('201387654323', 'FILIONE', 'Filipino Literature', '1', '3'),
-('201387654324', 'COMPARC', 'Computer Architecture', '1', '3'),
-('201387654325', 'ANALCOM', 'Analog communications', '1', '3'),
-('201387654326', 'SOFTMET', 'Methods of Software development', '1', '3'),
-('201387654327', 'SOFTMAN', 'Software Management', '1', '3'),
-('201387654328', 'CMPROG1', 'Computer Programming 1', '1', '3'),
-('201387654329', 'DISTRU', 'Discrete Structures', '1', '3'),
-('201387654330', 'CALCU1', 'Differential Calculus', '1', '3'),
-('201387654331', 'CALCU2', 'Integral Calculus', '1', '3'),
-('201387654332', 'DIFEQUA', 'Differential Equations', '1', '3'),
-('201387654333', 'LINALGE', 'Linear Algebra', '1', '3'),
-('201387654334', 'SWIDLEC', 'Switching curcuits and Logic gates', '1', '3'),
-('201387654335', 'SWIDLAB', 'Switching curcuits and Logic gates', '1', '3'),
-('201387654336', 'DATBASE', 'Database', '1', '3'),
-('201387654337', 'DATAMAN', 'Database Management', '1', '3'),
-('201387654338', 'WEBDEVE', 'Website development', '1', '3');
+INSERT INTO `course` (`course_ID`, `course_name`, `description`, `class_section`, `units`, `sched_day`, `sched_room`, `sched_time`) VALUES
+('201312344321', 'SYANAD2', 'Systems Analysis and Development 2', '1', '3', 'T', 'E411', '08:00-09:40'),
+('201312362789', 'COMSYOR', 'Computer Systems Organization', '1', '3', 'M', 'E413', '14:40-16:10'),
+('201387654321', 'ANDPRO', 'Android Programming', '1', '3', 'M', 'E401', '09:40-11:10'),
+('201387654322', 'ANDPROL', 'Android Programming', '2', '3', 'F', 'ELAB-B', '11:20-14:20'),
+('201387654323', 'FILIONE', 'Filipino Literature', '1', '3', 'W', 'W401', '14:40-16:10'),
+('201387654324', 'COMPARC', 'Computer Architecture', '1', '3', 'M', 'E414', '13:00-14:30'),
+('201387654325', 'ANALCOM', 'Analog communications', '1', '3', 'W', 'ENGFACRM', '13:00-14:30'),
+('201387654326', 'SOFTMET', 'Methods of Software development', '1', '3', 'T', 'W412', '16:20-17:50'),
+('201387654327', 'SOFTMAN', 'Software Management', '1', '3', 'T', 'W411', '16:20-17:50'),
+('201387654328', 'CMPROG1', 'Computer Programming 1', '1', '3', 'M', 'W404', '09:40-11:10'),
+('201387654329', 'DISTRU', 'Discrete Structures', '1', '3', 'M', 'E401', '16:20-17:50'),
+('201387654330', 'CALCU1', 'Differential Calculus', '1', '3', 'M', 'W403', '13:00-14:30'),
+('201387654331', 'CALCU2', 'Integral Calculus', '1', '3', 'T', 'W403', '14:40-16:10'),
+('201387654332', 'DIFEQUA', 'Differential Equations', '1', '3', 'W', 'W413', '13:00-14:30'),
+('201387654333', 'LINALGE', 'Linear Algebra', '1', '3', 'T', 'W410', '08:00-09:40'),
+('201387654334', 'SWIDLEC', 'Switching curcuits and Logic gates', '1', '3', 'TH', 'E411', '08:00-09:40'),
+('201387654335', 'SWIDLAB', 'Switching curcuits and Logic gates', '1', '3', 'F', 'ENGFACRM', '08:00-11:00'),
+('201387654336', 'DATBASE', 'Database', '1', '3', 'TH', 'W403', '09:40-11:20'),
+('201387654337', 'DATAMAN', 'Database Management', '1', '3', 'T', 'W412', '09:40-11:20'),
+('201387654338', 'WEBDEVE', 'Website development', '1', '3', 'T', 'E208', '09:40-11:20');
 
 	
 --	ATTENDANCE	-------------
 
-INSERT INTO `attendance` (`student_ID`, `teacher_ID`, `course_ID`, `time_in`, `status`, `class_type`) VALUES
+INSERT INTO `classlist` (`student_ID`, `teacher_ID`, `course_ID`, `time_in`, `status`, `class_type`) VALUES
 ('201107408872', '200717411111', '201312344321', '2022-02-24 18:40:22', 'absent', 'regular'),
 ('201007407586', '200717411111', '201312344321', '2022-02-24 17:01:01', 'present', 'regular'),
 ('201007407225', '200717411111', '201312344321', '2022-02-24 17:34:03', 'late', 'regular'),
