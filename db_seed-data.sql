@@ -57,7 +57,7 @@ INSERT INTO `student` (`student_ID`, `first_name`, `last_name`, `middle_initial`
 	
 --	COURSE	-----------------
 
-INSERT INTO `course` (`course_ID`, `course_name`, `description`, `class_section`, `units`) VALUES
+INSERT INTO `course` (`course_ID`, `course_name`, `description`, `class_section`, `units`, `sched_day`, `sched_room`) VALUES
 ('201312344321', 'SYANAD2', 'Systems Analysis and Development 2', '1', '3'),
 ('201312362789', 'COMSYOR', 'Computer Systems Organization', '1', '3'),
 ('201387654321', 'ANDPRO', 'Android Programming', '1', '3'),
@@ -95,18 +95,3 @@ INSERT INTO `attendance` (`student_ID`, `teacher_ID`, `course_ID`, `time_in`, `s
 ('201207412399', '200717411541', '201387654321', '2022-02-24 09:40:01', 'present', 'regular'),
 ('201207412055', '200717411541', '201387654321', '2022-02-24 09:40:01', 'present', 'regular'),
 ('201007407586', '200717411541', '201387654321', '2022-02-24 09:49:01', 'late', 'regular');
-
--- CLASSLIST ----------------
-
-INSERT INTO classlist(teacher_id, course_id, student_id)
-VALUES
-('200717411111', '201312344321', '201107408872'),
-('200717411111', '201312344321', '201007407225'),
-('200717411111', '201312344321', '201007407586'),
-('200717411321', '201387654332', '201007407883'),
-('200717411321', '201387654332', '201207411967'),
-('200717411321', '201387654332', '201207412022'),
-('200717411541', '201387654321', '201207412051'),
-('200717411541', '201387654321', '201207412399'),
-('200717411541', '201387654321', '201207412055'),
-('200717411541', '201387654321', '201007407586');
