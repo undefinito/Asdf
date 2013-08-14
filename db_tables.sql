@@ -1,6 +1,8 @@
 -- Author: Amoranto, Nedbie Francis F.
 -- 201007407225
 -- SYANAD2	-	anti-truancy system
+-- Edited : Carlo Carabeo 8/12/2013
+-- Edited : Carlo Carabeo 8/14/2013
 
 /*\
 		CREATION OF DB AND TABLES
