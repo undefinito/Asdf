@@ -2,12 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package anti.truancy;
+package syanad2;
 
 import java.awt.BorderLayout;
 import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.InputStream;
 
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
@@ -162,7 +164,7 @@ public class login extends javax.swing.JFrame {
     }
     
     @SuppressWarnings("deprecation")
-	private void tryLogin(){
+    private void tryLogin(){
         user = usernameField.getText();
         pass = passwordField.getText();
         String q = "SELECT * FROM teacher WHERE teacher_ID = '" + user + "' ";
@@ -187,7 +189,29 @@ public class login extends javax.swing.JFrame {
     			    			
     			btn_Ok.addActionListener(new ActionListener() {						//actions for the OK button
     				public void actionPerformed(ActionEvent arg0) {
-    						//GO TO TEACHER PAKING ATTENDANCE
+                                    
+                                    //GO TO TEACHER PAKING ATTENDANCE
+                                    ProcessBuilder pb = new ProcessBuilder("java", "-jar", "BEEEEEENGWHATFILE.jar");
+                                    pb.redirectErrorStream();
+
+                                    InputStream is = null;
+                                    try {
+
+                                        Process process = pb.start();
+                                        is = process.getInputStream();
+
+                                        int value;
+                                        while ((value = is.read()) != -1) {
+
+                                        char inChar = (char)value;
+                                        System.out.print(inChar);
+
+                                        }
+
+                                    } catch (IOException ex) {
+                                        ex.printStackTrace();
+                                    }
+                                    
     						y.dispose();			
                     }
     			});
