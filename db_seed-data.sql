@@ -55,9 +55,9 @@ INSERT INTO `student` (`student_ID`, `first_name`, `last_name`, `middle_initial`
 ('201207412055', 'Tywin', 'Lannister', 'A', '2', 'BSECE'),
 ('201207412399', 'Ria Angela', 'Alejar', 'P', '2', 'ABCA');
 	
---	COURSE	-----------------
+--	COURSE	----------------- bago na yung sched_time
 
-INSERT INTO `course` (`course_ID`, `course_name`, `description`, `class_section`, `units`, `sched_day`, `sched_room`, `sched_time`) VALUES
+INSERT INTO `course` (`course_ID`, `course_name`, `description`, `class_section`, `units`, `sched_day`, `sched_room`, `sched_start_time`, `sched_end_time`) VALUES
 ('201312344321', 'SYANAD2', 'Systems Analysis and Development 2', '1', '3', 'T', 'E411', '08:00-09:40'),
 ('201312362789', 'COMSYOR', 'Computer Systems Organization', '1', '3', 'M', 'E413', '14:40-16:10'),
 ('201387654321', 'ANDPRO', 'Android Programming', '1', '3', 'M', 'E401', '09:40-11:10'),
