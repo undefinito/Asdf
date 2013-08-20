@@ -30,14 +30,15 @@ ENGINE = INNODB;
 
 CREATE TABLE Course
 (
-	course_ID		varchar(12)					UNIQUE	NOT NULL,
-	course_name		varchar(20)							NOT NULL,
-	description		varchar(200)							NOT NULL,
-	class_section	char(1)									NOT NULL,
-	units			char(1)									NOT NULL,
-	sched_day		enum('M', 'T', 'W', 'TH', 'F', 'S')		NOT NULL,
-	sched_room		enum('W401', 'W402', 'W403', 'W404', 'W410', 'W411', 'W412', 'W413', 'W414', 'E401', 'E402', 'E403', 'E404', 'E405', 'E409', 'E410', 'E411', 'E412', 'E413', 'E414', 'ELAB-A', 'ELAB-B', 'E208', 'FACRM', 'ENGFACRM')				NOT NULL,
-	sched_time		char(11)								NOT NULL,
+	course_ID			varchar(12)					UNIQUE	NOT NULL,
+	course_name			varchar(20)							NOT NULL,
+	description			varchar(200)							NOT NULL,
+	class_section		char(1)									NOT NULL,
+	units				char(1)									NOT NULL,
+	sched_day			enum('M', 'T', 'W', 'TH', 'F', 'S')		NOT NULL,
+	sched_room			enum('W401', 'W402', 'W403', 'W404', 'W410', 'W411', 'W412', 'W413', 'W414', 'E401', 'E402', 'E403', 'E404', 'E405', 'E409', 'E410', 'E411', 'E412', 'E413', 'E414', 'ELAB-A', 'ELAB-B', 'E208', 'FACRM', 'ENGFACRM')				NOT NULL,
+	sched_start_time	time									NOT NULL,
+	sched_end_time		time									NOT NULL,
 PRIMARY KEY(course_ID)
 )
 ENGINE = INNODB;
@@ -60,12 +61,13 @@ ENGINE = INNODB;
 
 CREATE TABLE Classlist
 (
-	student_ID	char(12)	NOT NULL,
-	teacher_ID	char(12)	NOT NULL,
+	student_ID	char(12)		NOT NULL,
+	teacher_ID	char(12)		NOT NULL,
 	course_ID	varchar(12)	NOT NULL,
-	time_in		timestamp	NOT NULL, -- lagyan to ng default values
 	status		enum('late', 'absent', 'present'),
+	time_in		timestamp				,
 	class_type	enum('regular', 'makeup', 'alternative'),
+	time_out	timestamp				,
 FOREIGN KEY(student_ID) REFERENCES Student(student_ID),
 FOREIGN KEY(teacher_ID) REFERENCES Teacher(teacher_ID),
 FOREIGN KEY(course_ID) REFERENCES Course(course_ID)
