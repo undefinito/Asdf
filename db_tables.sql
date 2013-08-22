@@ -65,11 +65,11 @@ CREATE TABLE Classlist
 	teacher_ID	char(12)		NOT NULL,
 	course_ID	varchar(12)	NOT NULL,
 	status		enum('late', 'absent', 'present'),
-	time_in		timestamp				,
+	time_in		timestamp		DEFAULT '2001-01-01 01:01:01',
 	class_type	enum('regular', 'makeup', 'alternative'),
-	time_out	timestamp				,
-FOREIGN KEY(student_ID) REFERENCES Student(student_ID),
-FOREIGN KEY(teacher_ID) REFERENCES Teacher(teacher_ID),
-FOREIGN KEY(course_ID) REFERENCES Course(course_ID)
+	time_out	timestamp		DEFAULT '2001-01-01 01:01:01',			
+FOREIGN KEY(student_id) REFERENCES Student(student_id),
+FOREIGN KEY(teacher_id) REFERENCES Teacher(teacher_id),
+FOREIGN KEY(course_id) REFERENCES Course(course_id)
 )
 ENGINE = INNODB;
