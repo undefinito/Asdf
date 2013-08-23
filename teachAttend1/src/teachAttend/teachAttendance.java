@@ -26,10 +26,25 @@ public class teachAttendance extends JFrame {
     private static java_sql js = new java_sql();
     // End of variables declaration
 	
-	
+    //WTF
+    private static Object[][] x;
+    
     public static void main(String args[]) {
-        
+        //TESTING THIS SHIT
     	populate();
+    	x = new Object[classlist.length][4];
+    	
+    	for(int c = 0; c < classlist.length; c++){
+    		String c_code = classlist[c].getCoursecode();
+    		String Time = classlist[c].getSched_time();
+    		String Room = classlist[c].getSched_room();
+    		String Fac = classlist[c].getLast_name();
+    		x[c][0] = c_code;
+    		x[c][1] = Time;
+    		x[c][2] = Room;
+    		x[c][3] = Fac;
+    	}
+    	//END TEST
     	
     	try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -152,51 +167,6 @@ public class teachAttendance extends JFrame {
                 {"ANALGEO", "8:00-9:00", "W403", "Lawas"},
                 {"BUSCOMP", "8:00-9:30", "E-Lab A", "Encarnacion"},
                 {"COMPRO1", "9:40-11:10", "W412", "Encarnacion"},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null}
