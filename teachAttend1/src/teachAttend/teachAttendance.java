@@ -27,7 +27,7 @@ public class teachAttendance extends JFrame {
     // End of variables declaration
 	
     //WTF
-    private static Object[][] x;
+    private static Object[][] entries;
     
     public static void main(String args[]) {
         //TESTING THIS SHIT
@@ -39,10 +39,10 @@ public class teachAttendance extends JFrame {
     		String Time = classlist[c].getSched_time();
     		String Room = classlist[c].getSched_room();
     		String Fac = classlist[c].getLast_name();
-    		x[c][0] = c_code;
-    		x[c][1] = Time;
-    		x[c][2] = Room;
-    		x[c][3] = Fac;
+    		entries[c][0] = c_code;
+    		entries[c][1] = Time;
+    		entries[c][2] = Room;
+    		entries[c][3] = Fac;
     	}
     	//END TEST
     	
@@ -162,15 +162,7 @@ public class teachAttendance extends JFrame {
         attSheet.setAutoCreateRowSorter(true);
         attSheet.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         attSheet.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {"ACTONEA", "8:00-9:30", "E413", "Ragudo"},
-                {"ANALGEO", "8:00-9:00", "W403", "Lawas"},
-                {"BUSCOMP", "8:00-9:30", "E-Lab A", "Encarnacion"},
-                {"COMPRO1", "9:40-11:10", "W412", "Encarnacion"},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
+            entries,
             new String [] {
                 "Course", "Time", "Room", "Faculty"
             }
