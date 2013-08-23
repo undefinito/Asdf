@@ -25,27 +25,26 @@ public class teachAttendance extends JFrame {
     private static classlist[] classlist;
     private static java_sql js = new java_sql();
     // End of variables declaration
-	
-    //WTF
+	//Para sa atttable yun vars na to
     private static Object[][] entries;
+    private static String[] headers = {"Course", "Time", "Room", "Faculty"};
     
     public static void main(String args[]) {
-        //TESTING THIS SHIT
+        //Entries for le table
     	populate();
-    	x = new Object[classlist.length][4];
+    	entries = new Object[classlist.length][4];
     	
     	for(int c = 0; c < classlist.length; c++){
     		String c_code = classlist[c].getCoursecode();
     		String Time = classlist[c].getSched_time();
     		String Room = classlist[c].getSched_room();
-    		String Fac = classlist[c].getLast_name();
+    		String Fac = classlist[c].getFirst_name() + " " + classlist[c].getLast_name();
     		entries[c][0] = c_code;
     		entries[c][1] = Time;
     		entries[c][2] = Room;
     		entries[c][3] = Fac;
     	}
-    	//END TEST
-    	
+    	//End entries
     	try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -161,12 +160,7 @@ public class teachAttendance extends JFrame {
 
         attSheet.setAutoCreateRowSorter(true);
         attSheet.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        attSheet.setModel(new javax.swing.table.DefaultTableModel(
-            entries,
-            new String [] {
-                "Course", "Time", "Room", "Faculty"
-            }
-        ) {
+        attSheet.setModel(new javax.swing.table.DefaultTableModel(entries, headers) {
             Class[] types = new Class [] {
                 java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class
             };
