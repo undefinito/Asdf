@@ -1,4 +1,4 @@
-package teachAttend;
+package anti.truancy;
 
 import java.sql.*;
 
