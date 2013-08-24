@@ -135,7 +135,7 @@ public class teachAttendance extends JFrame {
         cancelbtn.setText("Cancel");
         cancelbtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                //TODO cancelbtnActionPerformed(evt);
+            	addSched.dispose();
             }
         });
         //END BUTTONS
