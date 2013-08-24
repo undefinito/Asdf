@@ -116,6 +116,20 @@ public class teachAttendance extends JFrame {
         
     private static void addSched(String course, String sec, String Stime, String Etime, String room){
     	//TODO
+        //Query if class exists
+        final String query = "SELECT * "
+        					+ "FROM course "
+        					+ "WHERE course_name = '" + course + "'"
+        					+ "AND class_section = '" + sec + "'";
+        
+        String tmp[][] = js.query(query);
+        
+    	if(tmp.length > 0){
+        	System.out.printf("%s", tmp[0][0]);
+        }
+        else{
+        	System.out.println("Shit");
+        }
     }
     
     private static void addSchedWindow(){
@@ -148,7 +162,7 @@ public class teachAttendance extends JFrame {
                 final String Etime = E_timetxt.getText();
                 Object roomy = RoomCombo.getItemAt(RoomCombo.getSelectedIndex());
                 final String room = roomy.toString();
-                addSched(course, sec, Stime, Etime, room);
+                addSched(course, sec, Stime, Etime, room);               
             }
         });
 
