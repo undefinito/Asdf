@@ -122,7 +122,7 @@ public class teachAttendance extends JFrame {
         JTextField courseCodetxt = new JTextField();
         JButton okbtb = new JButton();
         JLabel roomlbl = new JLabel();     
-        addSched.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        addSched.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         //BUTTONS
         okbtb.setText("Ok");
