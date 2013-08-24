@@ -3,6 +3,7 @@
 package teachAttend;
 
 import javax.swing.*;
+import java.awt.event.*;
 
 @SuppressWarnings("serial")
 public class teachAttendance extends JFrame {
@@ -22,6 +23,9 @@ public class teachAttendance extends JFrame {
     private JTextField searchBar;
     private JButton searchButton;
 
+    //Other Windows
+    private static JDialog addSched;
+    
     //Functions
     private static classlist[] classlist;
     private static java_sql js = new java_sql();
@@ -33,19 +37,7 @@ public class teachAttendance extends JFrame {
     public static void main(String args[]) {
         //Entries for le table
     	populate();
-    	entries = new Object[classlist.length][4];
     	
-    	for(int c = 0; c < classlist.length; c++){
-    		String c_code = classlist[c].getCoursecode();
-    		String Time = classlist[c].getSched_time();
-    		String Room = classlist[c].getSched_room();
-    		String Fac = classlist[c].getFirst_name() + " " + classlist[c].getLast_name();
-    		entries[c][0] = c_code;
-    		entries[c][1] = Time;
-    		entries[c][2] = Room;
-    		entries[c][3] = Fac;
-    	}
-    	//End entries
     	try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -69,7 +61,7 @@ public class teachAttendance extends JFrame {
                 new teachAttendance().setVisible(true);
             }
         });
-    }
+     }
 
     
     //OTHER FUNCTIONS
@@ -97,35 +89,195 @@ public class teachAttendance extends JFrame {
 			classlist[row] = new classlist(tmp[row][ID], tmp[row][fName], tmp[row][lName], tmp[row][mi], tmp[row][course], tmp[row][room], tmp[row][time], tmp[row][day]);
 		}
     	
+    	//Insert query into entries for att table
+    	entries = new Object[classlist.length][4];
+    	
+    	for(int c = 0; c < classlist.length; c++){
+    		String c_code = classlist[c].getCoursecode();
+    		String Time = classlist[c].getSched_time();
+    		String Room = classlist[c].getSched_room();
+    		String Fac = classlist[c].getFirst_name() + " " + classlist[c].getLast_name();
+    		entries[c][0] = c_code;
+    		entries[c][1] = Time;
+    		entries[c][2] = Room;
+    		entries[c][3] = Fac;
+    	}
+    	//End entries
+    	
     }
         
+    private static void addSched(){
+    	//TODO
+    	addSched = new JDialog();
+    	addSched.setVisible(true);
+    	new JPanel();
+        JTextField E_timetxt = new JTextField();
+        JLabel E_timlbl = new JLabel();
+        JComboBox RoomCombo = new JComboBox();;
+        JLabel S_timeLbl = new JLabel();
+        JTextField S_timetxt = new JTextField();
+        JLabel TitleLabel = new JLabel();
+        JButton cancelbtn = new JButton();
+        JLabel courseCodeLbl = new JLabel();
+        JTextField courseCodetxt = new JTextField();
+        JButton okbtb = new JButton();
+        JLabel roomlbl = new JLabel();     
+        addSched.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        //BUTTONS
+        okbtb.setText("Ok");
+        okbtb.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                //TODO okbtbActionPerformed(evt);
+            }
+        });
+
+        cancelbtn.setText("Cancel");
+        cancelbtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                //TODO cancelbtnActionPerformed(evt);
+            }
+        });
+        //END BUTTONS
+
+        TitleLabel.setText("New Schedule Form");
+
+        courseCodetxt.setText("jTextField1");
+
+        courseCodeLbl.setText("Course Code :");
+
+        S_timeLbl.setText("Start Time : ");
+
+        E_timlbl.setText("End Time : ");
+
+        roomlbl.setText("Room : ");
+
+        S_timetxt.setText("jTextField1");
+        S_timetxt.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                //TODO S_timetxtActionPerformed(evt);
+            }
+        });
+
+        E_timetxt.setText("jTextField1");
+
+        RoomCombo.setModel(new DefaultComboBoxModel(new String[] { "W401", "W402", "W403", "W404", "W405", "W406", "W407", "W408", "W409", "W410", "W411", "W412", "W413", "W414", "E401", "E402", "E403", "E404", "E405", "E406", "E407", "E408", "E409", "E410", "E411", "E412", "E413", "E414", "ELAB-A", "ELAB-B", "E208", "FACRM", "ENGFACRM", " " }));
+
+        //NEW WINDOW LAYOUT
+        GroupLayout layout = new GroupLayout(addSched.getContentPane());
+        addSched.getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(S_timeLbl)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(S_timetxt))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(courseCodeLbl)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(courseCodetxt))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(E_timlbl)
+                                        .addComponent(roomlbl))
+                                    .addGap(24, 24, 24)
+                                    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(E_timetxt, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(RoomCombo, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(29, 29, 29)
+                                .addComponent(okbtb, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE)
+                                .addGap(32, 32, 32)
+                                .addComponent(cancelbtn))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(70, 70, 70)
+                        .addComponent(TitleLabel)))
+                .addContainerGap(27, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(TitleLabel)
+                .addGap(28, 28, 28)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(courseCodetxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(courseCodeLbl))
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(S_timeLbl)
+                    .addComponent(S_timetxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(E_timlbl)
+                    .addComponent(E_timetxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(roomlbl)
+                    .addComponent(RoomCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(okbtb)
+                    .addComponent(cancelbtn))
+                .addGap(66, 66, 66))
+        );
+
+        addSched.pack();
+    }                        
     
     //BUTTON FUNCTIONS
-    private void dateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateButtonActionPerformed
+    private void dateButtonActionPerformed(ActionEvent evt) {                                           
         // TODO add your handling code here:
-    }//GEN-LAST:event_dateButtonActionPerformed
+    	System.out.println("date");
+    }                                          
 
-    private void absentBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_absentBActionPerformed
+    private void searchBarActionPerformed(ActionEvent evt) {                                          
         // TODO add your handling code here:
-    }//GEN-LAST:event_absentBActionPerformed
+    	System.out.println("search");
+    }                                         
 
-    private void lateBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lateBActionPerformed
+    private void schedButtonActionPerformed(ActionEvent evt) {                                            
         // TODO add your handling code here:
-    }//GEN-LAST:event_lateBActionPerformed
+    	System.out.println("addsched");
+    	addSched();
+    }                                           
 
-    private void presentBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_presentBActionPerformed
+    private void genReportActionPerformed(ActionEvent evt) {                                          
         // TODO add your handling code here:
-    }//GEN-LAST:event_presentBActionPerformed
-
-    private void excusedBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_excusedBActionPerformed
+    	System.out.println("genRep");
+    }                                         
+    
+    private void searchButtonActionPerformed(ActionEvent evt) {                                             
         // TODO add your handling code here:
-    }//GEN-LAST:event_excusedBActionPerformed
-
-    private void searchBarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBarActionPerformed
+    	System.out.println("search B");
+    }                                            
+    
+    //ALPE
+    private void absentBActionPerformed(ActionEvent evt) {                                        
         // TODO add your handling code here:
-    }//GEN-LAST:event_searchBarActionPerformed
+    	System.out.println("A");
+    }                                       
 
+    private void lateBActionPerformed(ActionEvent evt) {                                      
+        // TODO add your handling code here:
+    	System.out.println("L");
+    }                                     
 
+    private void presentBActionPerformed(ActionEvent evt) {                                         
+        // TODO add your handling code here:
+    	System.out.println("P");
+    }                                        
+
+    private void excusedBActionPerformed(ActionEvent evt) {                                         
+        // TODO add your handling code here:
+    	System.out.println("E");
+    }                                        
     
     // GUI Layout Below
     public teachAttendance() {
@@ -133,7 +285,6 @@ public class teachAttendance extends JFrame {
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jScrollPane1 = new JScrollPane();
@@ -148,14 +299,14 @@ public class teachAttendance extends JFrame {
         searchButton = new JButton();
         schedButton = new JButton();
         genReport = new JButton();
-
+       
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         attSheet.setAutoCreateRowSorter(true);
         attSheet.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         attSheet.setModel(new javax.swing.table.DefaultTableModel(entries, headers) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class
+                String.class, Object.class, String.class, String.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -175,8 +326,8 @@ public class teachAttendance extends JFrame {
         attSheet.getColumnModel().getColumn(2).setMaxWidth(60);
 
         dateButton.setText("MM/DD/YYYY");
-        dateButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        dateButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 dateButtonActionPerformed(evt);
             }
         });
@@ -188,16 +339,16 @@ public class teachAttendance extends JFrame {
         absentB.setForeground(new java.awt.Color(255, 255, 255));
         absentB.setText("A");
         absentB.setActionCommand("Absent");
-        absentB.setBorder(BorderFactory.createEtchedBorder());
+        absentB.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         absentB.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         absentB.setFocusable(false);
-        absentB.setHorizontalTextPosition(SwingConstants.CENTER);
+        absentB.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         absentB.setMaximumSize(new java.awt.Dimension(40, 40));
         absentB.setMinimumSize(new java.awt.Dimension(40, 40));
         absentB.setPreferredSize(new java.awt.Dimension(40, 40));
-        absentB.setVerticalTextPosition(SwingConstants.BOTTOM);
-        absentB.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        absentB.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        absentB.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 absentBActionPerformed(evt);
             }
         });
@@ -207,17 +358,17 @@ public class teachAttendance extends JFrame {
         lateB.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         lateB.setText("L");
         lateB.setActionCommand("Late");
-        lateB.setBorder(BorderFactory.createEtchedBorder());
+        lateB.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         lateB.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         lateB.setFocusable(false);
-        lateB.setHorizontalTextPosition(SwingConstants.CENTER);
+        lateB.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         lateB.setMargin(new java.awt.Insets(2, 20, 2, 14));
         lateB.setMaximumSize(new java.awt.Dimension(40, 40));
         lateB.setMinimumSize(new java.awt.Dimension(40, 40));
         lateB.setPreferredSize(new java.awt.Dimension(40, 40));
-        lateB.setVerticalTextPosition(SwingConstants.BOTTOM);
-        lateB.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        lateB.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        lateB.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 lateBActionPerformed(evt);
             }
         });
@@ -227,17 +378,17 @@ public class teachAttendance extends JFrame {
         presentB.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         presentB.setText("P");
         presentB.setActionCommand("Present");
-        presentB.setBorder(BorderFactory.createEtchedBorder());
+        presentB.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         presentB.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         presentB.setFocusable(false);
-        presentB.setHorizontalTextPosition(SwingConstants.CENTER);
+        presentB.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         presentB.setMargin(new java.awt.Insets(2, 20, 2, 14));
         presentB.setMaximumSize(new java.awt.Dimension(40, 40));
         presentB.setMinimumSize(new java.awt.Dimension(40, 40));
         presentB.setPreferredSize(new java.awt.Dimension(40, 40));
-        presentB.setVerticalTextPosition(SwingConstants.BOTTOM);
-        presentB.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        presentB.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        presentB.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 presentBActionPerformed(evt);
             }
         });
@@ -247,36 +398,52 @@ public class teachAttendance extends JFrame {
         excusedB.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         excusedB.setText("E");
         excusedB.setActionCommand("Excused");
-        excusedB.setBorder(BorderFactory.createEtchedBorder());
+        excusedB.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         excusedB.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         excusedB.setFocusable(false);
-        excusedB.setHorizontalTextPosition(SwingConstants.CENTER);
+        excusedB.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         excusedB.setMargin(new java.awt.Insets(2, 20, 2, 14));
         excusedB.setMaximumSize(new java.awt.Dimension(40, 40));
         excusedB.setMinimumSize(new java.awt.Dimension(40, 40));
         excusedB.setPreferredSize(new java.awt.Dimension(40, 40));
-        excusedB.setVerticalTextPosition(SwingConstants.BOTTOM);
-        excusedB.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        excusedB.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        excusedB.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 excusedBActionPerformed(evt);
             }
         });
         attBar.add(excusedB);
 
         searchBar.setText("Search...");
-        searchBar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        searchBar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 searchBarActionPerformed(evt);
             }
         });
 
         searchButton.setText("Go");
+        searchButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                searchButtonActionPerformed(evt);
+            }
+        });
+
 
         schedButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         schedButton.setText("Add Schedule");
+        schedButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                schedButtonActionPerformed(evt);
+            }
+        });
 
         genReport.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         genReport.setText("Generate Report");
+        genReport.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                genReportActionPerformed(evt);
+            }
+        });
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -320,6 +487,6 @@ public class teachAttendance extends JFrame {
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
 }
