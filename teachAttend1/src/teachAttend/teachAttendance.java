@@ -3,7 +3,10 @@
 package teachAttend;
 
 import javax.swing.*;
+import javax.swing.table.*;
+import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 
 @SuppressWarnings("serial")
 public class teachAttendance extends JFrame {
@@ -26,13 +29,18 @@ public class teachAttendance extends JFrame {
     //Other Windows
     private static JDialog addSched;
     
-    //Functions
+    //Functionalities
     private static classlist[] classlist;
     private static java_sql js = new java_sql();
     // End of variables declaration
 	//Para sa atttable yun vars na to
     private static Object[][] entries;
     private static String[] headers = {"Course", "Time", "Room", "Faculty"};
+    //Colors for ALPE
+    private final  Color ABSENT = Color.RED;
+    private final  Color LATE = Color.YELLOW;
+    private final  Color PRESENT = Color.GREEN;
+    private final  Color EXCUSED = Color.BLUE;
     
     public static void main(String args[]) {
         //Entries for le table
@@ -106,29 +114,41 @@ public class teachAttendance extends JFrame {
     	
     }
         
-    private static void addSched(){
+    private static void addSched(String course, String sec, String Stime, String Etime, String room){
     	//TODO
+    }
+    
+    private static void addSchedWindow(){
     	addSched = new JDialog();
     	addSched.setVisible(true);
     	new JPanel();
-        JTextField E_timetxt = new JTextField();
-        JLabel E_timlbl = new JLabel();
-        JComboBox RoomCombo = new JComboBox();;
-        JLabel S_timeLbl = new JLabel();
-        JTextField S_timetxt = new JTextField();
-        JLabel TitleLabel = new JLabel();
-        JButton cancelbtn = new JButton();
-        JLabel courseCodeLbl = new JLabel();
-        JTextField courseCodetxt = new JTextField();
-        JButton okbtb = new JButton();
-        JLabel roomlbl = new JLabel();     
+    	final JLabel courseCodeLbl = new JLabel();
+    	final JLabel roomlbl = new JLabel();
+    	final JLabel Sectionlbl = new JLabel();
+    	final JLabel E_timlbl = new JLabel();
+        final JLabel S_timeLbl = new JLabel();
+        final JLabel TitleLabel = new JLabel();
+        final JTextField courseCodetxt = new JTextField();
+        final JTextField sectiontxt = new JTextField();
+        final JTextField S_timetxt = new JTextField();
+        final JTextField E_timetxt = new JTextField();
+        final JComboBox RoomCombo = new JComboBox();;
+        final JButton cancelbtn = new JButton();
+        final JButton okbtb = new JButton();
+        
         addSched.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         //BUTTONS
         okbtb.setText("Ok");
         okbtb.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                //TODO okbtbActionPerformed(evt);
+                final String course = courseCodetxt.getText();
+                final String sec = sectiontxt.getText();
+                final String Stime = S_timetxt.getText();
+                final String Etime = E_timetxt.getText();
+                Object roomy = RoomCombo.getItemAt(RoomCombo.getSelectedIndex());
+                final String room = roomy.toString();
+                addSched(course, sec, Stime, Etime, room);
             }
         });
 
@@ -141,28 +161,19 @@ public class teachAttendance extends JFrame {
         //END BUTTONS
 
         TitleLabel.setText("New Schedule Form");
-
-        courseCodetxt.setText("jTextField1");
-
         courseCodeLbl.setText("Course Code :");
-
+        
         S_timeLbl.setText("Start Time : ");
-
         E_timlbl.setText("End Time : ");
-
         roomlbl.setText("Room : ");
-
-        S_timetxt.setText("jTextField1");
-        S_timetxt.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                //TODO S_timetxtActionPerformed(evt);
-            }
-        });
-
-        E_timetxt.setText("jTextField1");
-
-        RoomCombo.setModel(new DefaultComboBoxModel(new String[] { "W401", "W402", "W403", "W404", "W405", "W406", "W407", "W408", "W409", "W410", "W411", "W412", "W413", "W414", "E401", "E402", "E403", "E404", "E405", "E406", "E407", "E408", "E409", "E410", "E411", "E412", "E413", "E414", "ELAB-A", "ELAB-B", "E208", "FACRM", "ENGFACRM", " " }));
-
+        Sectionlbl.setText("Section : ");
+        courseCodetxt.setText("");
+        S_timetxt.setText("");
+        E_timetxt.setText("");
+        sectiontxt.setText("");
+        String[] x = new String[] { "W401", "W402", "W403", "W404", "W405", "W406", "W407", "W408", "W409", "W410", "W411", "W412", "W413", "W414", "E401", "E402", "E403", "E404", "E405", "E406", "E407", "E408", "E409", "E410", "E411", "E412", "E413", "E414", "ELAB-A", "ELAB-B", "E208", "FACRM", "ENGFACRM", " " };
+        RoomCombo.setModel(new DefaultComboBoxModel(x));
+        
         //NEW WINDOW LAYOUT
         GroupLayout layout = new GroupLayout(addSched.getContentPane());
         addSched.getContentPane().setLayout(layout);
@@ -172,32 +183,36 @@ public class teachAttendance extends JFrame {
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(S_timeLbl)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(S_timetxt))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(courseCodeLbl)
-                                    .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(courseCodetxt))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                        .addComponent(E_timlbl)
-                                        .addComponent(roomlbl))
-                                    .addGap(24, 24, 24)
-                                    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                        .addComponent(E_timetxt, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(RoomCombo, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(courseCodeLbl)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(courseCodetxt, GroupLayout.PREFERRED_SIZE, 126, GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(70, 70, 70)
+                        .addComponent(TitleLabel))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                    .addComponent(E_timlbl)
+                                    .addComponent(roomlbl))
+                                .addGap(24, 24, 24)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                    .addComponent(E_timetxt, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(RoomCombo, GroupLayout.PREFERRED_SIZE, 110, GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(29, 29, 29)
                                 .addComponent(okbtb, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE)
                                 .addGap(32, 32, 32)
-                                .addComponent(cancelbtn))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(70, 70, 70)
-                        .addComponent(TitleLabel)))
+                                .addComponent(cancelbtn))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                    .addComponent(S_timeLbl)
+                                    .addComponent(Sectionlbl))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                    .addComponent(sectiontxt)
+                                    .addComponent(S_timetxt))))))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -209,7 +224,11 @@ public class teachAttendance extends JFrame {
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(courseCodetxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addComponent(courseCodeLbl))
-                .addGap(10, 10, 10)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(sectiontxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Sectionlbl))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(S_timeLbl)
                     .addComponent(S_timetxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
@@ -225,9 +244,9 @@ public class teachAttendance extends JFrame {
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(okbtb)
                     .addComponent(cancelbtn))
-                .addGap(66, 66, 66))
+                .addGap(39, 39, 39))
         );
-
+        
         addSched.pack();
     }                        
     
@@ -243,9 +262,7 @@ public class teachAttendance extends JFrame {
     }                                         
 
     private void schedButtonActionPerformed(ActionEvent evt) {                                            
-        // TODO add your handling code here:
-    	System.out.println("addsched");
-    	addSched();
+    	addSchedWindow();
     }                                           
 
     private void genReportActionPerformed(ActionEvent evt) {                                          
@@ -261,7 +278,8 @@ public class teachAttendance extends JFrame {
     //ALPE
     private void absentBActionPerformed(ActionEvent evt) {                                        
         // TODO add your handling code here:
-    	System.out.println("A");
+    	int	row = attSheet.getSelectedRow();
+    	System.out.println("Gumana ba to");
     }                                       
 
     private void lateBActionPerformed(ActionEvent evt) {                                      
@@ -487,6 +505,6 @@ public class teachAttendance extends JFrame {
         );
 
         pack();
-    }
-
+    }    
+    
 }
