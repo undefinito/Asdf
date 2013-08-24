@@ -116,17 +116,35 @@ public class teachAttendance extends JFrame {
         
     private static void addSched(String course, String sec, String Stime, String Etime, String room){
     	//TODO
-        //Query if class exists
-        final String query = "SELECT * "
+    	//CONSTANTS
+    	final int preCourseID = 0;
+    	final int preCourseName = 1;
+    	final int preDescription = 2;
+    	final int preSection = 3;
+    	final int preUnits = 4;
+    	final int preSchedDay = 5;
+    	final int preSchedRoom = 6;
+    	final int preSchedTime = 7;
+
+    	//Query if class exists
+        final String prequery = "SELECT * "
         					+ "FROM course "
         					+ "WHERE course_name = '" + course + "'"
         					+ "AND class_section = '" + sec + "'";
         
-        String tmp[][] = js.query(query);
+        String pretmp[][] = js.query(prequery);
         
-    	if(tmp.length > 0){
-        	System.out.printf("%s", tmp[0][0]);
+    	if(pretmp.length > 0){
+    		final String q = "SELECT * FROM classlist WHERE course_ID = '" + pretmp[0][preCourseID] + "'"; 
+    		String tmp[][] = js.query(q);
+    		for(int c = 0; c < tmp.length; c++){
+    			for(int c2 = 0; c2 < 6; c2++){
+    				System.out.printf("%s ", tmp[c][c2]);
+    			}
+    			System.out.println();
+    		}
         }
+    	//Does not exist
         else{
         	System.out.println("Shit");
         }
