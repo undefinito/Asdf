@@ -100,7 +100,7 @@ public class attendance extends javax.swing.JFrame {
      
         
 //      set colors
-		setRowColorStats();
+		setRowColorStats(tableEntries);
         
         attSheet.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(attSheet);
@@ -329,19 +329,14 @@ public class attendance extends javax.swing.JFrame {
     }
     
     //if late, absent, present, or excused
-    private static int getStatus(int row)
+//    only gets status regarding the row in classlist table
+    private static int getStatus(int row, Object[][] tabel)
 	{
 		//status of row
 		int stat = -1;
 		
-		//query yung student_id in that row
-		String qtabel = "SELECT student_id FROM classlist WHERE teacher_id LIKE "  + profNow +
-				" AND course_id LIKE " + subjNow;
-		
-		String[][] tab = js.query(qtabel);
-		
 		// QUERY YUNG STATUS
-		String q = "SELECT DISTINCT status FROM classlist WHERE student_id LIKE " + tab[row][0] +
+		String q = "SELECT DISTINCT status FROM classlist WHERE student_id LIKE " + tabel[row][2] +
 				" 	AND teacher_id LIKE "  + profNow +
 				" 	AND course_id LIKE " + subjNow;
 		
@@ -427,9 +422,9 @@ public class attendance extends javax.swing.JFrame {
 	    		{
 	    			Object temp = newEntries[x][y];
 	    			myTableModel.setValueAt(temp, x, y);
+
+	    	    	setRowColorStats(resultSearch);
 	    		}
-	    		myTableModel.setRowColour(x, myTableModel.getRowColour(x));
-	    		
 	    	}
 	    	
 //	    	remove non results
@@ -441,6 +436,10 @@ public class attendance extends javax.swing.JFrame {
 	    			myTableModel.setRowColour(c, Color.white);
 	    		}
 	    	}
+	    	
+	    	setRowColorStats(tableEntries);
+	    	
+	    	attSheet.revalidate();
     	}
     }
     
@@ -635,11 +634,12 @@ public class attendance extends javax.swing.JFrame {
         
 	}
 	
-	private void setRowColorStats()
+	
+	private void setRowColorStats(Object[][] currentTable)
 	{
-		for(int x=0; x<tableEntries.length; x++)
+		for(int x=0; x<currentTable.length; x++)
 		{
-			switch(getStatus(x))
+			switch(getStatus(x, currentTable))
 			{
 				case ABSENT: myTableModel.setRowColour(x, Color.RED); break;
 				case PRESENT: myTableModel.setRowColour(x, Color.GREEN); break;
@@ -712,7 +712,7 @@ public class attendance extends javax.swing.JFrame {
     ////<editor-fold defaultstate="collapsed" desc="strings to be displayed">
 
     //constants
-    private final static int ABSENT	= 0;
+    private final static int ABSENT		= 0;
     private final static int PRESENT	= 1;
     private final static int LATE		= 2;
     private final static int EXCUSED 	= 3;
@@ -752,17 +752,17 @@ public class attendance extends javax.swing.JFrame {
 		
     	//default is white everywhere
     	List<Color> rowColours = Arrays.asList(
-    			Color.WHITE, Color.WHITE, Color.WHITE,
-    			Color.WHITE, Color.WHITE, Color.WHITE,
-    			Color.WHITE, Color.WHITE, Color.WHITE,
-    			Color.WHITE, Color.WHITE, Color.WHITE,
-    			Color.WHITE, Color.WHITE, Color.WHITE,
-    			Color.WHITE, Color.WHITE, Color.WHITE,
-    			Color.WHITE, Color.WHITE, Color.WHITE,
-    			Color.WHITE, Color.WHITE, Color.WHITE,
-    			Color.WHITE, Color.WHITE, Color.WHITE,
-    			Color.WHITE, Color.WHITE, Color.WHITE,
-    			Color.WHITE, Color.WHITE, Color.WHITE
+    			Color.lightGray, Color.lightGray, Color.lightGray,
+    			Color.lightGray, Color.lightGray, Color.lightGray,
+    			Color.lightGray, Color.lightGray, Color.lightGray,
+    			Color.lightGray, Color.lightGray, Color.lightGray,
+    			Color.lightGray, Color.lightGray, Color.lightGray,
+    			Color.lightGray, Color.lightGray, Color.lightGray,
+    			Color.lightGray, Color.lightGray, Color.lightGray,
+    			Color.lightGray, Color.lightGray, Color.lightGray,
+    			Color.lightGray, Color.lightGray, Color.lightGray,
+    			Color.lightGray, Color.lightGray, Color.lightGray,
+    			Color.lightGray, Color.lightGray, Color.lightGray
     			);
     	
 	    public void setRowColour(int row, Color c) {
@@ -773,17 +773,7 @@ public class attendance extends javax.swing.JFrame {
 	    }
 
 	    public Color getRowColour(int row) {
-	    	Color chosen = Color.white;
-	    	
-	    	switch(attendance.getStatus(row))
-			{
-				case ABSENT: chosen = Color.RED; break;
-				case PRESENT: chosen = Color.GREEN; break;
-				case LATE: chosen = Color.YELLOW; break;
-				case EXCUSED: chosen = Color.BLUE; break;
-			}
-	    	setRowColour(row, chosen);
-	    	
+	    		    	
 	    	return rowColours.get(row);
 	    }
 		
