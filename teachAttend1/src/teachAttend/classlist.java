@@ -9,7 +9,8 @@ public class classlist
 	private String middle_name;
 	private String last_name;
 	private String sched_room;
-	private String sched_time;
+	private String sched_Stime;
+	private String sched_Etime;
 	private String sched_day;
 
 	/* 
@@ -19,7 +20,7 @@ WHERE classlist.teacher_ID = teacher.teacher_ID
 AND classlist.course_ID = course.course_ID
 	 */
 	
-	public classlist( String ID, String f_name, String l_name, String mi, String course_code, String room, String time, String day )
+	public classlist( String ID, String f_name, String l_name, String mi, String course_code, String room, String Stime, String Etime, String day )
 	{
         teacher_ID = ID;
 		first_name = f_name;
@@ -27,7 +28,8 @@ AND classlist.course_ID = course.course_ID
 		last_name = l_name;
 		coursecode = course_code;
 		sched_room = room;
-		sched_time = time;
+		sched_Stime = Stime;
+		sched_Etime = Etime;
 		sched_day = day;
 	}
 
@@ -62,8 +64,12 @@ AND classlist.course_ID = course.course_ID
 	}
 
 	//@return the sched_time
-	public String getSched_time() {
-		return sched_time;
+	public String getSched_Stime() {
+		return sched_Stime;
+	}
+	
+	public String getSched_Etime() {
+		return sched_Etime;
 	}
 
 	//@return the sched_day
@@ -102,8 +108,13 @@ AND classlist.course_ID = course.course_ID
 	}
 
 	//@param sched_time the sched_time to set
-	public void setSched_time(String sched_time) {
-		this.sched_time = sched_time;
+	public void setSched_Stime(String sched_Stime) {
+		this.sched_Stime = sched_Stime;
+	}
+	
+	//@param sched_time the sched_time to set
+	public void setSched_Etime(String sched_Etime) {
+		this.sched_Etime = sched_Etime;
 	}
 
 	//@param sched_day the sched_day to set

@@ -75,7 +75,7 @@ public class teachAttendance extends JFrame {
     //OTHER FUNCTIONS
     private static void populate(){
     	final String query = "SELECT DISTINCT teacher.teacher_ID, course_name, first_name, "
-				+ " last_name, middle_initial, sched_room, sched_time, sched_day "
+				+ " last_name, middle_initial, sched_room, sched_start_time, sched_end_time, sched_day "
 				+ " FROM classlist, teacher, course "
 				+ " WHERE classlist.teacher_ID = teacher.teacher_ID "
 				+ " AND classlist.course_ID = course.course_ID";
@@ -91,10 +91,11 @@ public class teachAttendance extends JFrame {
 			final int lName = 3;
 			final int mi = 4;
 			final int room = 5;
-			final int time = 6;
-			final int day = 7;
+			final int Stime = 6;
+			final int Etime = 7;
+			final int day = 8;
 			//( String ID, String f_name, String l_name, String mi, String course_code, String room, String time, String day )
-			classlist[row] = new classlist(tmp[row][ID], tmp[row][fName], tmp[row][lName], tmp[row][mi], tmp[row][course], tmp[row][room], tmp[row][time], tmp[row][day]);
+			classlist[row] = new classlist(tmp[row][ID], tmp[row][fName], tmp[row][lName], tmp[row][mi], tmp[row][course], tmp[row][room], tmp[row][Stime], tmp[row][Etime], tmp[row][day]);
 		}
     	
     	//Insert query into entries for att table
@@ -102,7 +103,7 @@ public class teachAttendance extends JFrame {
     	
     	for(int c = 0; c < classlist.length; c++){
     		String c_code = classlist[c].getCoursecode();
-    		String Time = classlist[c].getSched_time();
+    		String Time = classlist[c].getSched_Stime() + " - " + classlist[c].getSched_Etime();
     		String Room = classlist[c].getSched_room();
     		String Fac = classlist[c].getFirst_name() + " " + classlist[c].getLast_name();
     		entries[c][0] = c_code;
@@ -114,6 +115,7 @@ public class teachAttendance extends JFrame {
     	
     }
         
+    @SuppressWarnings ("unused")
     private static void addSched(String course, String sec, String Stime, String Etime, String room){
     	//TODO
     	//CONSTANTS
@@ -137,6 +139,7 @@ public class teachAttendance extends JFrame {
     	if(pretmp.length > 0){
     		final String q = "SELECT * FROM classlist WHERE course_ID = '" + pretmp[0][preCourseID] + "'"; 
     		String tmp[][] = js.query(q);
+    		//ALL Classes in 'course' - 'sec'
     		for(int c = 0; c < tmp.length; c++){
     			for(int c2 = 0; c2 < 6; c2++){
     				System.out.printf("%s ", tmp[c][c2]);
@@ -203,7 +206,7 @@ public class teachAttendance extends JFrame {
         S_timetxt.setText("");
         E_timetxt.setText("");
         sectiontxt.setText("");
-        String[] x = new String[] { "W401", "W402", "W403", "W404", "W405", "W406", "W407", "W408", "W409", "W410", "W411", "W412", "W413", "W414", "E401", "E402", "E403", "E404", "E405", "E406", "E407", "E408", "E409", "E410", "E411", "E412", "E413", "E414", "ELAB-A", "ELAB-B", "E208", "FACRM", "ENGFACRM", " " };
+        String[] x = new String[] { "W401", "W402", "W403", "W404", "W405", "W406", "W407", "W408", "W409", "W410", "W411", "W412", "W413", "W414", "E401", "E402", "E403", "E404", "E405", "E406", "E407", "E408", "E409", "E410", "E411", "E412", "E413", "E414", "ELAB-A", "ELAB-B", "E208", "FACRM", "ENGFACRM", "E208" };
         RoomCombo.setModel(new DefaultComboBoxModel(x));
         
         //NEW WINDOW LAYOUT
@@ -369,8 +372,8 @@ public class teachAttendance extends JFrame {
         attSheet.getColumnModel().getColumn(0).setPreferredWidth(90);
         attSheet.getColumnModel().getColumn(0).setMaxWidth(90);
         attSheet.getColumnModel().getColumn(1).setMinWidth(80);
-        attSheet.getColumnModel().getColumn(1).setPreferredWidth(80);
-        attSheet.getColumnModel().getColumn(1).setMaxWidth(80);
+        attSheet.getColumnModel().getColumn(1).setPreferredWidth(150);
+        attSheet.getColumnModel().getColumn(1).setMaxWidth(200);
         attSheet.getColumnModel().getColumn(2).setMinWidth(60);
         attSheet.getColumnModel().getColumn(2).setPreferredWidth(60);
         attSheet.getColumnModel().getColumn(2).setMaxWidth(60);
@@ -505,7 +508,7 @@ public class teachAttendance extends JFrame {
                     .addComponent(dateButton)
                     .addComponent(schedButton)
                     .addComponent(genReport))
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 136, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(attBar, GroupLayout.PREFERRED_SIZE, 180, GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
