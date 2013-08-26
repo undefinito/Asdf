@@ -3,15 +3,12 @@ package teachAttend;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Graphics;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.swing.*;
 import java.awt.event.*;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
+
 
 @SuppressWarnings("serial")
 public class teachAttendance extends JFrame {
@@ -30,7 +27,7 @@ public class teachAttendance extends JFrame {
     //GUI
     private JButton absentB;
     private JToolBar attBar;
-    private JTable attSheet;
+    private static JTable attSheet;
     private JButton dateButton;
     private JButton excusedB;
     private JButton schedButton;
@@ -60,7 +57,6 @@ public class teachAttendance extends JFrame {
     public static void main(String args[]) {
         //Entries for le table
     	populate();
-    	
     	try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -88,6 +84,39 @@ public class teachAttendance extends JFrame {
 
     
     //OTHER FUNCTIONS
+    private static void setRowColorStats(Object[][] tabel)//Sets row color depending on prof status
+    {
+    	//TODO
+    	for(int x=0; x<tabel.length; x++)
+    	{
+    		if(getStatus(x).equals("absent")){
+    			myTableModel.setRowColour(x, cABSENT);
+    		}
+    		else if(getStatus(x).equals("late")){
+    			myTableModel.setRowColour(x, cLATE);
+    		}
+    		else if(getStatus(x).equals("excused")){
+    			myTableModel.setRowColour(x, cEXCUSED);
+    		}
+    		else if(getStatus(x).equals("present")){
+    			myTableModel.setRowColour(x, cPRESENT);
+    		}	
+    	}
+    }
+    
+    private static String getStatus(int row){  	
+    	String q = "SELECT DISTINCT teacher.teacher_ID, course_name, first_name, "
+				+ " last_name, middle_initial, sched_room, sched_start_time, sched_end_time, sched_day, Pstatus "
+				+ " FROM classlist, teacher, course "
+				+ " WHERE classlist.teacher_ID = teacher.teacher_ID "
+				+ " AND classlist.course_ID = course.course_ID"
+				+ " AND course_name = '" + attSheet.getValueAt(row,0).toString() + "'";
+    	//Get status
+    	String[][] result = js.query(q);
+    	String stat = result[0][9].toString().toLowerCase();
+		return stat;
+	}
+    
     private static void populate(){
     	final String query = "SELECT DISTINCT teacher.teacher_ID, course_name, first_name, "
 				+ " last_name, middle_initial, sched_room, sched_start_time, sched_end_time, sched_day "
@@ -340,7 +369,8 @@ public class teachAttendance extends JFrame {
     private void absentBActionPerformed(ActionEvent evt) {                                        
         // TODO add your handling code here:
     	int	row = attSheet.getSelectedRow();
-    	System.out.println("Gumana ba to");
+    	String smexy = getStatus(row);
+    	System.out.printf("%s", smexy);
     }                                       
 
     private void lateBActionPerformed(ActionEvent evt) {                                      
@@ -360,6 +390,8 @@ public class teachAttendance extends JFrame {
     
     // GUI Layout Below
     public teachAttendance() {
+    	initTableModel();
+    	initTableRenderer();
         initComponents();
     }
     
@@ -388,20 +420,16 @@ public class teachAttendance extends JFrame {
         genReport = new JButton();
        
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
+        //TODO di daw updated
+        attSheet.setModel(myTableModel);
+        attSheet.setDefaultRenderer(Object.class, myTableRenderer);
+    	setRowColorStats(entries);
+        
         attSheet.setAutoCreateRowSorter(true);
         attSheet.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        attSheet.setModel(new javax.swing.table.DefaultTableModel(entries, columnNames) {
-            Class[] types = new Class [] {
-                String.class, Object.class, String.class, String.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
         attSheet.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(attSheet);
+        
         attSheet.getColumnModel().getColumn(0).setMinWidth(90);
         attSheet.getColumnModel().getColumn(0).setPreferredWidth(90);
         attSheet.getColumnModel().getColumn(0).setMaxWidth(90);
@@ -617,16 +645,32 @@ public class teachAttendance extends JFrame {
 
 	    public Color getRowColour(int row) {
 	    	Color chosen = Color.white;
+	    	int x = 4;
+	    	String y = getStatus(row);
 	    	
-	    	switch(ABSENT) //TODO status of prof attendance prev : switch(getStatus(x))
-			{
+	    	if(y.equals("absent")){
+    			x = ABSENT;
+    		}
+    		else if(y.equals("late")){
+    			x = LATE;
+    		}
+    		else if(y.equals("excused")){
+    			x = EXCUSED;
+    		}
+    		else if(y.equals("present")){
+    			x = PRESENT;
+    		}
+	    	
+	    	switch(x){
 				case ABSENT: 	chosen = cABSENT; 
 								break;
 				case PRESENT: 	chosen = cPRESENT;
 								break;
 				case LATE: 		chosen = cLATE; 
 								break;
-				case EXCUSED: 	chosen = cEXCUSED; 
+				case EXCUSED: 	chosen = cEXCUSED;
+								break;
+				default :		chosen = Color.WHITE;
 								break;
 			}
 	    	setRowColour(row, chosen);
