@@ -67,7 +67,11 @@ CREATE TABLE Classlist
 	status		enum('late', 'absent', 'present'),
 	time_in		timestamp		DEFAULT '2001-01-01 01:01:01',
 	class_type	enum('regular', 'makeup', 'alternative'),
-	time_out	timestamp		DEFAULT '2001-01-01 01:01:01',			
+	time_out	timestamp		DEFAULT '2001-01-01 01:01:01',
+	Ptime_in		timestamp		DEFAULT '2001-01-01 01:01:01',
+	Ptime_out	timestamp		DEFAULT '2001-01-01 01:01:01',
+	Pstatus		enum('late', 'absent', 'present'),
+
 FOREIGN KEY(student_id) REFERENCES Student(student_id),
 FOREIGN KEY(teacher_id) REFERENCES Teacher(teacher_id),
 FOREIGN KEY(course_id) REFERENCES Course(course_id)

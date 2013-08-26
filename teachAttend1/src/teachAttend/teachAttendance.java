@@ -1,17 +1,32 @@
-//package anti.truancy;
-
+//package teachAttend
 package teachAttend;
 
-import javax.swing.*;
-import javax.swing.table.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import javax.swing.*;
+import java.awt.event.*;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 
 @SuppressWarnings("serial")
 public class teachAttendance extends JFrame {
 
     // Variables declaration
+	//CONSTANTS
+    private final static int ABSENT	= 0;
+    private final static int PRESENT = 1;
+    private final static int LATE = 2;
+    private final static int EXCUSED = 3;
+    private final static  Color cABSENT = Color.RED;
+    private final static Color cLATE = Color.YELLOW;
+    private final static Color cPRESENT = Color.GREEN;
+    private final static Color cEXCUSED = Color.BLUE;
+	
     //GUI
     private JButton absentB;
     private JToolBar attBar;
@@ -32,15 +47,15 @@ public class teachAttendance extends JFrame {
     //Functionalities
     private static classlist[] classlist;
     private static java_sql js = new java_sql();
-    // End of variables declaration
+    //custom table model
+    private static MyTableModel myTableModel;
+    //custom table renderer (for colors)
+    private MyTableCellRenderer myTableRenderer;
+    
 	//Para sa atttable yun vars na to
     private static Object[][] entries;
-    private static String[] headers = {"Course", "Time", "Room", "Faculty"};
+    private static String[] columnNames = {"Course", "Time", "Room", "Faculty"};
     //Colors for ALPE
-    private final  Color ABSENT = Color.RED;
-    private final  Color LATE = Color.YELLOW;
-    private final  Color PRESENT = Color.GREEN;
-    private final  Color EXCUSED = Color.BLUE;
     
     public static void main(String args[]) {
         //Entries for le table
@@ -136,12 +151,23 @@ public class teachAttendance extends JFrame {
         
         String pretmp[][] = js.query(prequery);
         
-    	if(pretmp.length > 0){
-    		final String q = "SELECT * FROM classlist WHERE course_ID = '" + pretmp[0][preCourseID] + "'"; 
+    	if(pretmp.length > 0){  		
+    		final String q = "SELECT * FROM classlist WHERE course_ID = '" + pretmp[0][preCourseID] + "'";
+    		final int StudID = 0;
+        	final int TeacherID = 1;
+        	final int CourseID = 2;
+        	final int classType = 5;
+        	final int studStatus = 3;
+        	final int studTime_in = 4;
+        	final int studTime_out = 6;
+        	final int profTime_in = 7;
+        	final int profTime_out = 8;
+        	final int profStatus = 9;
+    		
     		String tmp[][] = js.query(q);
     		//ALL Classes in 'course' - 'sec'
     		for(int c = 0; c < tmp.length; c++){
-    			for(int c2 = 0; c2 < 6; c2++){
+    			for(int c2 = 0; c2 < 9; c2++){
     				System.out.printf("%s ", tmp[c][c2]);
     			}
     			System.out.println();
@@ -336,6 +362,14 @@ public class teachAttendance extends JFrame {
     public teachAttendance() {
         initComponents();
     }
+    
+    private void initTableRenderer(){
+    	myTableRenderer = new MyTableCellRenderer();
+    }
+    
+    private void initTableModel(){
+    	myTableModel = new MyTableModel();
+    }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private void initComponents() {
@@ -357,7 +391,7 @@ public class teachAttendance extends JFrame {
 
         attSheet.setAutoCreateRowSorter(true);
         attSheet.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        attSheet.setModel(new javax.swing.table.DefaultTableModel(entries, headers) {
+        attSheet.setModel(new javax.swing.table.DefaultTableModel(entries, columnNames) {
             Class[] types = new Class [] {
                 String.class, Object.class, String.class, String.class
             };
@@ -377,7 +411,7 @@ public class teachAttendance extends JFrame {
         attSheet.getColumnModel().getColumn(2).setMinWidth(60);
         attSheet.getColumnModel().getColumn(2).setPreferredWidth(60);
         attSheet.getColumnModel().getColumn(2).setMaxWidth(60);
-
+        
         dateButton.setText("MM/DD/YYYY");
         dateButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -542,4 +576,90 @@ public class teachAttendance extends JFrame {
         pack();
     }    
     
+    
+    
+    //FROM ZE NED COLORING
+    private static class MyTableCellRenderer extends DefaultTableCellRenderer {
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            MyTableModel model = (MyTableModel) table.getModel();
+            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            c.setBackground(model.getRowColour(row));
+            return c;
+        }
+    }
+    
+    //tabel model
+    private static class MyTableModel extends AbstractTableModel {
+		
+    	//default is white everywhere
+    	List<Color> rowColours = Arrays.asList(
+    			Color.WHITE, Color.WHITE, Color.WHITE,
+    			Color.WHITE, Color.WHITE, Color.WHITE,
+    			Color.WHITE, Color.WHITE, Color.WHITE,
+    			Color.WHITE, Color.WHITE, Color.WHITE,
+    			Color.WHITE, Color.WHITE, Color.WHITE,
+    			Color.WHITE, Color.WHITE, Color.WHITE,
+    			Color.WHITE, Color.WHITE, Color.WHITE,
+    			Color.WHITE, Color.WHITE, Color.WHITE,
+    			Color.WHITE, Color.WHITE, Color.WHITE,
+    			Color.WHITE, Color.WHITE, Color.WHITE,
+    			Color.WHITE, Color.WHITE, Color.WHITE
+    			);
+    	
+	    public void setRowColour(int row, Color c) {
+	    	
+	    	rowColours.set(row, c);
+	    	
+	    	fireTableRowsUpdated(row, row);
+	    }
+
+	    public Color getRowColour(int row) {
+	    	Color chosen = Color.white;
+	    	
+	    	switch(ABSENT) //TODO status of prof attendance prev : switch(getStatus(x))
+			{
+				case ABSENT: 	chosen = cABSENT; 
+								break;
+				case PRESENT: 	chosen = cPRESENT;
+								break;
+				case LATE: 		chosen = cLATE; 
+								break;
+				case EXCUSED: 	chosen = cEXCUSED; 
+								break;
+			}
+	    	setRowColour(row, chosen);
+	    	
+	    	return rowColours.get(row);
+	    }
+		
+		@Override
+		public String getColumnName(int column) {
+			return columnNames[column];
+		}
+		
+		@Override
+		public Object getValueAt(int row, int col) {
+			return entries[row][col];
+		}
+		
+		@Override
+		public int getRowCount() {
+			return entries.length;
+		}
+		
+		@Override
+		public int getColumnCount() {
+			return columnNames.length;
+		}
+		
+		@Override
+		public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+			// TODO Auto-generated method stub
+			entries[rowIndex][columnIndex] = aValue;
+	        fireTableCellUpdated(rowIndex, columnIndex);
+		}
+		
+	}
 }
