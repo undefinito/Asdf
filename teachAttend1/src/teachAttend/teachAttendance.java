@@ -22,9 +22,9 @@ public class teachAttendance extends JFrame {
     private final static Color cEXCUSED = Color.BLUE;
 	
     //GUI
+    private static JTable attSheet;
     private JButton absentB;
     private JToolBar attBar;
-    private static JTable attSheet;
     private JButton dateButton;
     private JButton excusedB;
     private JButton schedButton;
@@ -82,38 +82,24 @@ public class teachAttendance extends JFrame {
     //OTHER FUNCTIONS
     private static void setRowColorStats(Object[][] tabel)//Sets row color depending on prof status
     {
-    	//TODO
     	for(int x=0; x<tabel.length; x++)
     	{
-    		if(getStatus(x).equals("absent")){
+    		if(classlist[x].getStatus().equals("absent")){
     			myTableModel.setRowColour(x, cABSENT);
     		}
-    		else if(getStatus(x).equals("late")){
+    		else if(classlist[x].getStatus().equals("late")){
     			myTableModel.setRowColour(x, cLATE);
     		}
-    		else if(getStatus(x).equals("excused")){
+    		else if(classlist[x].getStatus().equals("excused")){
     			myTableModel.setRowColour(x, cEXCUSED);
     		}
-    		else if(getStatus(x).equals("present")){
+    		else if(classlist[x].getStatus().equals("present")){
     			myTableModel.setRowColour(x, cPRESENT);
     		}	
     	}
     }
     
-    private static String getStatus(int row){//TODO incorporate classlist.class
-    	/*String q = "SELECT DISTINCT teacher.teacher_ID, course_name, first_name, "
-				+ " last_name, middle_initial, sched_room, sched_start_time, sched_end_time, sched_day, Pstatus "
-				+ " FROM classlist, teacher, course "
-				+ " WHERE classlist.teacher_ID = teacher.teacher_ID "
-				+ " AND classlist.course_ID = course.course_ID"
-				+ " AND course_name = '" + classlist[row].getCoursecode() + "'";
-    	//Get status
-    	String[][] result = js.query(q);*/
-    	String stat = classlist[row].getStatus();//result[0][9].toString().toLowerCase();
-		return stat;
-	}
-    
-    private static void populate(){
+    private static void populate(){//Populates the table and the classlist object
     	final String query = "SELECT DISTINCT teacher.teacher_ID, course_name, first_name, "
 				+ " last_name, middle_initial, sched_room, sched_start_time, sched_end_time, sched_day, "
 				+ " class_type, Ptime_in, Ptime_out, Pstatus"
@@ -161,8 +147,7 @@ public class teachAttendance extends JFrame {
     	enterAllEntries();
     	
     }
-        
-    
+          
     private static void enterAllEntries() {
     	for(int c = 0; c < classlist.length; c++){
     		String c_code = classlist[c].getCoursecode();
@@ -358,51 +343,54 @@ public class teachAttendance extends JFrame {
     }                        
     
     //BUTTON FUNCTIONS
-    private void dateButtonActionPerformed(ActionEvent evt) {                                           
+    private void dateButtonActionPerformed(ActionEvent evt) {//Button MM/DD/YYYY                                           
         // TODO add your handling code here:
     	System.out.println("date");
     }                                          
 
-    private void searchBarActionPerformed(ActionEvent evt) {                                          
+    private void searchBarActionPerformed(ActionEvent evt) { //No idea                                         
         // TODO add your handling code here:
     	System.out.println("search");
     }                                         
 
-    private void schedButtonActionPerformed(ActionEvent evt) {                                            
+    private void schedButtonActionPerformed(ActionEvent evt) {//Button Add Schedule                                    
     	addSchedWindow();
     }                                           
 
-    private void genReportActionPerformed(ActionEvent evt) {                                          
+    private void genReportActionPerformed(ActionEvent evt) {//Button Generate Report
         // TODO add your handling code here:
     	System.out.println("genRep");
     }                                         
     
-    private void searchButtonActionPerformed(ActionEvent evt) {                                             
+    private void searchButtonActionPerformed(ActionEvent evt) {//Go                        
         // TODO add your handling code here:
     	System.out.println("search B");
     }                                            
     
     //ALPE
+    // TODO UPDATE DB
     private void absentBActionPerformed(ActionEvent evt) {                                        
-        // TODO add your handling code here:
     	int	row = attSheet.getSelectedRow();
-    	String smexy = getStatus(row);
-    	System.out.printf("%s", smexy);
+    	classlist[row].setStatus("absent");
+    	myTableModel.fireTableRowsUpdated(row, row);
     }                                       
 
     private void lateBActionPerformed(ActionEvent evt) {                                      
-        // TODO add your handling code here:
-    	System.out.println("L");
+    	int	row = attSheet.getSelectedRow();
+    	classlist[row].setStatus("late");
+    	myTableModel.fireTableRowsUpdated(row, row);
     }                                     
 
     private void presentBActionPerformed(ActionEvent evt) {                                         
-        // TODO add your handling code here:
-    	System.out.println("P");
+    	int	row = attSheet.getSelectedRow();
+    	classlist[row].setStatus("present");
+    	myTableModel.fireTableRowsUpdated(row, row);
     }                                        
 
     private void excusedBActionPerformed(ActionEvent evt) {                                         
-        // TODO add your handling code here:
-    	System.out.println("E");
+    	int	row = attSheet.getSelectedRow();
+    	classlist[row].setStatus("excused");
+    	myTableModel.fireTableRowsUpdated(row, row);
     }                                        
     
     // GUI Layout Below
@@ -420,7 +408,6 @@ public class teachAttendance extends JFrame {
     	myTableModel = new MyTableModel();
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     private void initComponents() {
 
         jScrollPane1 = new JScrollPane();
@@ -437,7 +424,6 @@ public class teachAttendance extends JFrame {
         genReport = new JButton();
        
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        //TODO di daw updated
         attSheet.setModel(myTableModel);
         attSheet.setDefaultRenderer(Object.class, myTableRenderer);
     	setRowColorStats(entries);
@@ -660,24 +646,21 @@ public class teachAttendance extends JFrame {
 
 	    public Color getRowColour(int row) {
 	    	Color chosen = Color.white;
-
-	    	String y = getStatus(row);
 	    	
-	    	if(y.equals("absent")){
+	    	if(classlist[row].getStatus().equals("absent")){
     			chosen = cABSENT;
     		}
-    		else if(y.equals("late")){
+    		else if(classlist[row].getStatus().equals("late")){
     			chosen = cLATE;
     		}
-    		else if(y.equals("excused")){
+    		else if(classlist[row].getStatus().equals("excused")){
     			chosen = cEXCUSED;
     		}
-    		else if(y.equals("present")){
+    		else if(classlist[row].getStatus().equals("present")){
     			chosen = cPRESENT;
     		}
 
 	    	setRowColour(row, chosen);
-	    	
 	    	return rowColours.get(row);
 	    }
 		
@@ -703,7 +686,6 @@ public class teachAttendance extends JFrame {
 		
 		@Override
 		public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-			// TODO Auto-generated method stub
 			entries[rowIndex][columnIndex] = aValue;
 	        fireTableCellUpdated(rowIndex, columnIndex);
 		}
