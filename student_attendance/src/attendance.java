@@ -66,6 +66,9 @@ public class attendance extends javax.swing.JFrame {
 //        	    }
 //        };
         
+        //reset button
+        revert = new javax.swing.JButton();
+        
         profName = new javax.swing.JLabel();
         courseCode = new javax.swing.JLabel();
         section = new javax.swing.JLabel();
@@ -225,7 +228,7 @@ public class attendance extends javax.swing.JFrame {
         });
 
         searchButton.setText("Go");
-        searchBar.addActionListener(new java.awt.event.ActionListener() {
+        searchButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchButtonActionPerformed(evt);
             }
@@ -282,28 +285,44 @@ public class attendance extends javax.swing.JFrame {
 
 
 	private void dateButtonActionPerformed(java.awt.event.ActionEvent evt)
-    {                                           
-        // TODO add your handling code here:
+    {           
+		//TODO wat.
     }                                          
 
     private void absentBActionPerformed(java.awt.event.ActionEvent evt)
-    {                                        
-        // TODO add your handling code here:
+    {               
+		int current_row = attSheet.getSelectedRow();
+		
+		updateClasslist(current_row, "absent");
+		
+		myTableModel.setRowColour(current_row, Color.RED);
     }                                       
 
     private void lateBActionPerformed(java.awt.event.ActionEvent evt) 
     {
-         // TODO add your handling code here:
+    	int current_row = attSheet.getSelectedRow();
+		
+    	updateClasslist(current_row, "late");
+		
+    	myTableModel.setRowColour(current_row, Color.YELLOW);
     }                                      
        
     private void presentBActionPerformed(java.awt.event.ActionEvent evt) 
     {                                         
-        // TODO add your handling code here:
+    	int current_row = attSheet.getSelectedRow();
+    	
+    	updateClasslist(current_row, "present");
+		
+    	myTableModel.setRowColour(current_row, Color.GREEN);
     }                                        
 
     private void excusedBActionPerformed(java.awt.event.ActionEvent evt)
     {                                         
-        // TODO add your handling code here:
+    	int current_row = attSheet.getSelectedRow();
+    	
+    	updateClasslist(current_row, "excused");
+		
+    	myTableModel.setRowColour(current_row, Color.BLUE);
     }                                        
 
     private void searchBarActionPerformed(java.awt.event.ActionEvent evt)
@@ -346,19 +365,25 @@ public class attendance extends javax.swing.JFrame {
 	}
     
     //TODO revert of values in table
+    //add search functionality for names and status
     private void executeSearch()
     {
     	//save what you where searching for
-    	String stud = searchBar.getText().toString();
+    	String sKey = searchBar.getText().toString();
     	
 //    	SELECT FROM TABLE WHERE somecolumn = search key
-    	String q = 
-				"SELECT DISTINCT * " +
-    			"	FROM classlist " +
-    			"	WHERE teacher_id LIKE " + profNow +
-    				"	AND COURSE_ID LIKE " + subjNow  +
-					"	AND student_id LIKE '" + stud +"'" ;
+    	String q =
+	"SELECT DISTINCT *" +
+	" FROM classlist L JOIN student S "+
+	"  ON L.student_id = S.student_id " +
+	" WHERE (L.teacher_id LIKE "+ profNow +
+	" AND COURSE_ID LIKE " + subjNow + ") " +
+	" AND (L.student_id LIKE '%"+ sKey +"%' OR S.deg_prog LIKE '%"+ sKey +"%' " +
+	"  OR S.first_name LIKE '%"+ sKey +"%' OR S.last_name LIKE '%"+ sKey +"%'" +
+	" OR L.status LIKE '%"+ sKey +"%')" ;
+    	
     	String[][] resultSearch = null;
+    	
     	try
     	{
     		resultSearch = js.query(q);
@@ -377,22 +402,26 @@ public class attendance extends javax.swing.JFrame {
     	
     	if(resultSearch.length > 0)
     	{
-	    	//    	row of result
-	    	String[] row = resultSearch[0];
-	    	String[] studDetails = getDetails(stud);
-    	//    	place into table entries
-    	Object[][] newEntries = new Object[][]
-    				{
-    					{
-    						convertMiToSt(row[4], true),
-    						convertMiToSt(row[6], true),
-    						studDetails[0],
-    						studDetails[1],
-    						studDetails[2],
-    						studDetails[3]
-    					}
-    				};
+    		Object[][] newEntries = new Object[resultSearch.length][];
 
+    		for(int x = 0; x < resultSearch.length; x++)
+    		{
+		    	//    		row of result
+		    	String[] row = resultSearch[x];
+		    	String[] studDetails = getDetails(resultSearch[x][0]);
+		    	
+		    	//place into table entries
+		    	newEntries[x] = new Object[]
+	    				{
+	    						convertMiToSt(row[4], true),
+	    						convertMiToSt(row[6], true),
+	    						studDetails[0],
+	    						studDetails[1],
+	    						studDetails[2],
+	    						studDetails[3]
+	    				};
+    		}
+    		
     	//    	repaint that shit
 	    	for(int x=0; x < resultSearch.length; x++)
 	    	{
@@ -420,7 +449,7 @@ public class attendance extends javax.swing.JFrame {
 	    	attSheet.repaint();
     	}
     	else
-    	{
+    	{	//display a dialog box saying not found
     		final JDialog y = new JDialog();
     		y.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
     		y.setVisible(true);
@@ -441,12 +470,14 @@ public class attendance extends javax.swing.JFrame {
     		});
     		btn_Ok.setBounds(30, 36, 89, 23);
     		contentPanel1.add(btn_Ok);
-    		JLabel msg = new JLabel("'" + stud + "' not found.");
+    		JLabel msg = new JLabel("'" + sKey + "' not found.");
     		msg.setBounds(10, 11, 200, 14);
     		contentPanel1.add(msg);
     	}
+    	//TODO set visible dito yung bagong button
     }
     
+    //set row colors according to status
     private void setRowColorStats(Object[][] tabel)
     {
     	for(int x=0; x<tabel.length; x++)
@@ -461,6 +492,7 @@ public class attendance extends javax.swing.JFrame {
     	}
     }
     
+    //duh professor's name
     private void acquireProfName(String ID)
     {
     	String q = "SELECT last_name, first_name, middle_initial FROM teacher WHERE teacher_id LIKE "+ ID ;
@@ -623,10 +655,11 @@ public class attendance extends javax.swing.JFrame {
 
 	private void acquireSubj(String prof)
 	{
+//		TODO
 		// use this as reference for what is the current ongoing class
         //for getting current date
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date current_date = new Date();
+//        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        Date current_date = new Date();
         
 //    	TODO ayusin pa to yung current_date
 //        depende sa db fix ni beng
@@ -651,6 +684,20 @@ public class attendance extends javax.swing.JFrame {
 //        debugging
 //        System.out.println(dateFormat.format(current_date));
         
+	}
+	
+	//update the status of teh student in the attendance/classlist
+	private void updateClasslist(int row, String status)
+	{
+		String ID = myTableModel.getValueAt(row, 2).toString();
+		
+		//debugging
+		System.out.println(ID);
+		
+		String q = "UPDATE classlist SET status='" + status + "' " +
+					" WHERE student_id LIKE '" + ID + "'";
+		js.updateQuery(q);
+		
 	}
 	
     /**
@@ -691,6 +738,8 @@ public class attendance extends javax.swing.JFrame {
     // Variables declaration - do not modify                     
     private javax.swing.JButton absentB;
     private javax.swing.JToolBar attBar;
+    
+    private javax.swing.JButton revert;
     
     //rows in the table
     private static Object[][] tableEntries;
@@ -747,6 +796,9 @@ public class attendance extends javax.swing.JFrame {
     //tabel model
     private static class MyTableModel extends AbstractTableModel {
 		
+    	//TODO optional
+    	// lagyan ng alternating colors sa rows/columns
+    	
     	//default is white everywhere
     	List<Color> rowColours = Arrays.asList(
     			Color.lightGray, Color.lightGray, Color.lightGray,
@@ -796,7 +848,6 @@ public class attendance extends javax.swing.JFrame {
 		
 		@Override
 		public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-			// TODO Auto-generated method stub
 			tableEntries[rowIndex][columnIndex] = aValue;
 	        fireTableCellUpdated(rowIndex, columnIndex);
 		}
