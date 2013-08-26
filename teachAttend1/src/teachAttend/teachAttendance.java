@@ -15,10 +15,7 @@ public class teachAttendance extends JFrame {
 
     // Variables declaration
 	//CONSTANTS
-    private final static int ABSENT	= 0;
-    private final static int PRESENT = 1;
-    private final static int LATE = 2;
-    private final static int EXCUSED = 3;
+    //Colors for ALPE
     private final static  Color cABSENT = Color.RED;
     private final static Color cLATE = Color.YELLOW;
     private final static Color cPRESENT = Color.GREEN;
@@ -52,7 +49,7 @@ public class teachAttendance extends JFrame {
 	//Para sa atttable yun vars na to
     private static Object[][] entries;
     private static String[] columnNames = {"Course", "Time", "Room", "Faculty"};
-    //Colors for ALPE
+
     
     public static void main(String args[]) {
         //Entries for le table
@@ -82,7 +79,6 @@ public class teachAttendance extends JFrame {
         });
      }
 
-    
     //OTHER FUNCTIONS
     private static void setRowColorStats(Object[][] tabel)//Sets row color depending on prof status
     {
@@ -105,21 +101,22 @@ public class teachAttendance extends JFrame {
     }
     
     private static String getStatus(int row){//TODO incorporate classlist.class
-    	String q = "SELECT DISTINCT teacher.teacher_ID, course_name, first_name, "
+    	/*String q = "SELECT DISTINCT teacher.teacher_ID, course_name, first_name, "
 				+ " last_name, middle_initial, sched_room, sched_start_time, sched_end_time, sched_day, Pstatus "
 				+ " FROM classlist, teacher, course "
 				+ " WHERE classlist.teacher_ID = teacher.teacher_ID "
 				+ " AND classlist.course_ID = course.course_ID"
 				+ " AND course_name = '" + classlist[row].getCoursecode() + "'";
     	//Get status
-    	String[][] result = js.query(q);
-    	String stat = result[0][9].toString().toLowerCase();
+    	String[][] result = js.query(q);*/
+    	String stat = classlist[row].getStatus();//result[0][9].toString().toLowerCase();
 		return stat;
 	}
     
     private static void populate(){
     	final String query = "SELECT DISTINCT teacher.teacher_ID, course_name, first_name, "
-				+ " last_name, middle_initial, sched_room, sched_start_time, sched_end_time, sched_day "
+				+ " last_name, middle_initial, sched_room, sched_start_time, sched_end_time, sched_day, "
+				+ " class_type, Ptime_in, Ptime_out, Pstatus"
 				+ " FROM classlist, teacher, course "
 				+ " WHERE classlist.teacher_ID = teacher.teacher_ID "
 				+ " AND classlist.course_ID = course.course_ID";
@@ -138,13 +135,35 @@ public class teachAttendance extends JFrame {
 			final int Stime = 6;
 			final int Etime = 7;
 			final int day = 8;
-			//( String ID, String f_name, String l_name, String mi, String course_code, String room, String time, String day )
-			classlist[row] = new classlist(tmp[row][ID], tmp[row][fName], tmp[row][lName], tmp[row][mi], tmp[row][course], tmp[row][room], tmp[row][Stime], tmp[row][Etime], tmp[row][day]);
+			final int classtype = 9;
+			final int ptime_in = 10;
+			final int ptime_out = 11;
+			final int pstatus = 12;
+			classlist[row] = new classlist(
+					tmp[row][ID], 
+					tmp[row][fName], 
+					tmp[row][lName], 
+					tmp[row][mi], 
+					tmp[row][course], 
+					tmp[row][room], 
+					tmp[row][Stime], 
+					tmp[row][Etime], 
+					tmp[row][day],
+					tmp[row][classtype],
+					tmp[row][ptime_in],
+					tmp[row][ptime_out],
+					tmp[row][pstatus]
+							);
 		}
     	
     	//Insert query into entries for att table
     	entries = new Object[classlist.length][4];
+    	enterAllEntries();
     	
+    }
+        
+    
+    private static void enterAllEntries() {
     	for(int c = 0; c < classlist.length; c++){
     		String c_code = classlist[c].getCoursecode();
     		String Time = classlist[c].getSched_Stime() + " - " + classlist[c].getSched_Etime();
@@ -155,11 +174,9 @@ public class teachAttendance extends JFrame {
     		entries[c][2] = Room;
     		entries[c][3] = Fac;
     	}
-    	//End entries
-    	
-    }
-        
-    @SuppressWarnings ("unused")
+	}
+
+	@SuppressWarnings ("unused")
     private static void addSched(String course, String sec, String Stime, String Etime, String room){
     	//TODO
     	//CONSTANTS
