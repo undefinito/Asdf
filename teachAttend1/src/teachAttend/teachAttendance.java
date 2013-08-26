@@ -104,13 +104,13 @@ public class teachAttendance extends JFrame {
     	}
     }
     
-    private static String getStatus(int row){  	
+    private static String getStatus(int row){//TODO incorporate classlist.class
     	String q = "SELECT DISTINCT teacher.teacher_ID, course_name, first_name, "
 				+ " last_name, middle_initial, sched_room, sched_start_time, sched_end_time, sched_day, Pstatus "
 				+ " FROM classlist, teacher, course "
 				+ " WHERE classlist.teacher_ID = teacher.teacher_ID "
 				+ " AND classlist.course_ID = course.course_ID"
-				+ " AND course_name = '" + attSheet.getValueAt(row,0).toString() + "'";
+				+ " AND course_name = '" + classlist[row].getCoursecode() + "'";
     	//Get status
     	String[][] result = js.query(q);
     	String stat = result[0][9].toString().toLowerCase();
@@ -637,42 +637,28 @@ public class teachAttendance extends JFrame {
     			);
     	
 	    public void setRowColour(int row, Color c) {
-	    	
 	    	rowColours.set(row, c);
-	    	
 	    	fireTableRowsUpdated(row, row);
 	    }
 
 	    public Color getRowColour(int row) {
 	    	Color chosen = Color.white;
-	    	int x = 4;
+
 	    	String y = getStatus(row);
 	    	
 	    	if(y.equals("absent")){
-    			x = ABSENT;
+    			chosen = cABSENT;
     		}
     		else if(y.equals("late")){
-    			x = LATE;
+    			chosen = cLATE;
     		}
     		else if(y.equals("excused")){
-    			x = EXCUSED;
+    			chosen = cEXCUSED;
     		}
     		else if(y.equals("present")){
-    			x = PRESENT;
+    			chosen = cPRESENT;
     		}
-	    	
-	    	switch(x){
-				case ABSENT: 	chosen = cABSENT; 
-								break;
-				case PRESENT: 	chosen = cPRESENT;
-								break;
-				case LATE: 		chosen = cLATE; 
-								break;
-				case EXCUSED: 	chosen = cEXCUSED;
-								break;
-				default :		chosen = Color.WHITE;
-								break;
-			}
+
 	    	setRowColour(row, chosen);
 	    	
 	    	return rowColours.get(row);
