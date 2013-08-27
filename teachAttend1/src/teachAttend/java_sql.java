@@ -131,5 +131,31 @@ public class java_sql
                 
                 return st;
 	}
+
+	public void updateQuery(String q)
+	{
+		connect();
+		
+        if(con != null)
+        {
+	//Testing of Queries
+            try
+            { 
+            	statement = con.createStatement();// creates an object used for sending sql statements to the database
+			
+				statement.executeUpdate(q);
+                                
+				//Close connections
+				resultSet.close();
+				statement.close();
+				con.close();
+	             
+			}
+            catch (Exception e)
+            {
+				e.printStackTrace();
+			}
+        }
+	}
 	
 }

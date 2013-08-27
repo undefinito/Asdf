@@ -102,7 +102,7 @@ public class teachAttendance extends JFrame {
     private static void populate(){//Populates the table and the classlist object
     	final String query = "SELECT DISTINCT teacher.teacher_ID, course_name, first_name, "
 				+ " last_name, middle_initial, sched_room, sched_start_time, sched_end_time, sched_day, "
-				+ " class_type, Ptime_in, Ptime_out, Pstatus"
+				+ " class_type, Ptime_in, Ptime_out, Pstatus, course.course_ID"
 				+ " FROM classlist, teacher, course "
 				+ " WHERE classlist.teacher_ID = teacher.teacher_ID "
 				+ " AND classlist.course_ID = course.course_ID";
@@ -125,6 +125,7 @@ public class teachAttendance extends JFrame {
 			final int ptime_in = 10;
 			final int ptime_out = 11;
 			final int pstatus = 12;
+			final int courseID = 13;
 			classlist[row] = new classlist(
 					tmp[row][ID], 
 					tmp[row][fName], 
@@ -138,7 +139,8 @@ public class teachAttendance extends JFrame {
 					tmp[row][classtype],
 					tmp[row][ptime_in],
 					tmp[row][ptime_out],
-					tmp[row][pstatus]
+					tmp[row][pstatus],
+					tmp[row][courseID]
 							);
 		}
     	
@@ -368,15 +370,24 @@ public class teachAttendance extends JFrame {
     }                                            
     
     //ALPE
-    // TODO UPDATE DB
     private void absentBActionPerformed(ActionEvent evt) {                                        
     	int	row = attSheet.getSelectedRow();
+    	String u = "UPDATE classlist "
+    				+ "SET Pstatus = 'absent'	"
+    				+ "WHERE course_ID = '" + classlist[row].getCourse_ID() + "'" 
+    				+ "AND teacher_ID = '" + classlist[row].getTeacher_ID() + "'";
+    	js.updateQuery(u);
     	classlist[row].setStatus("absent");
     	myTableModel.fireTableRowsUpdated(row, row);
     }                                       
 
     private void lateBActionPerformed(ActionEvent evt) {                                      
     	int	row = attSheet.getSelectedRow();
+    	String u = "UPDATE classlist "
+				+ "SET Pstatus = 'late'	"
+				+ "WHERE course_ID = '" + classlist[row].getCourse_ID() + "'" 
+				+ "AND teacher_ID = '" + classlist[row].getTeacher_ID() + "'";
+	js.updateQuery(u);
     	classlist[row].setStatus("late");
     	myTableModel.fireTableRowsUpdated(row, row);
     }                                     
@@ -384,11 +395,21 @@ public class teachAttendance extends JFrame {
     private void presentBActionPerformed(ActionEvent evt) {                                         
     	int	row = attSheet.getSelectedRow();
     	classlist[row].setStatus("present");
+    	String u = "UPDATE classlist "
+				+ "SET Pstatus = 'present'	"
+				+ "WHERE course_ID = '" + classlist[row].getCourse_ID() + "'" 
+				+ "AND teacher_ID = '" + classlist[row].getTeacher_ID() + "'";
+	js.updateQuery(u);
     	myTableModel.fireTableRowsUpdated(row, row);
     }                                        
 
     private void excusedBActionPerformed(ActionEvent evt) {                                         
     	int	row = attSheet.getSelectedRow();
+    	String u = "UPDATE classlist "
+				+ "SET Pstatus = 'excused'	"
+				+ "WHERE course_ID = '" + classlist[row].getCourse_ID() + "'" 
+				+ "AND teacher_ID = '" + classlist[row].getTeacher_ID() + "'";
+	js.updateQuery(u);
     	classlist[row].setStatus("excused");
     	myTableModel.fireTableRowsUpdated(row, row);
     }                                        

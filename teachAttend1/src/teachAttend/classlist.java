@@ -4,6 +4,7 @@ package teachAttend;
 public class classlist
 {
 	private String teacher_ID;
+	private String course_ID;
 	private String coursecode;
 	private String first_name;
 	private String middle_name;
@@ -18,7 +19,7 @@ public class classlist
 	private String status;
 	
 	public classlist( 
-			String ID,
+			String teachID,
 			String f_name, 
 			String l_name, 
 			String mi, 
@@ -30,9 +31,11 @@ public class classlist
 			String classtype1,
 			String time_in1,
 			String time_out1,
-			String status1){
+			String status1,
+			String courseID){
 		
-        teacher_ID = ID;
+        teacher_ID = teachID;
+        course_ID = courseID;
 		first_name = f_name;
 		middle_name = mi;
 		last_name = l_name;
@@ -53,6 +56,14 @@ public class classlist
 
 	public void setTeacher_ID(String teacher_ID) {
 		this.teacher_ID = teacher_ID;
+	}
+
+	public String getCourse_ID() {
+		return course_ID;
+	}
+
+	public void setCourse_ID(String course_ID) {
+		this.course_ID = course_ID;
 	}
 
 	public String getCoursecode() {
@@ -150,6 +161,5 @@ public class classlist
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
 
 }
