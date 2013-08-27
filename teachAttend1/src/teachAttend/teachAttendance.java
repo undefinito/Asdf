@@ -184,7 +184,7 @@ public class teachAttendance extends JFrame {
         
         String pretmp[][] = js.query(prequery);
         
-    	if(pretmp.length > 0){  		
+    	if(pretmp.length > 0){  //Class exists		
     		final String q = "SELECT * FROM classlist WHERE course_ID = '" + pretmp[0][preCourseID] + "'";
     		final int StudID = 0;
         	final int TeacherID = 1;
@@ -215,24 +215,46 @@ public class teachAttendance extends JFrame {
     private static void addSchedWindow(){
     	addSched = new JDialog();
     	addSched.setVisible(true);
-    	new JPanel();
-    	final JLabel courseCodeLbl = new JLabel();
-    	final JLabel roomlbl = new JLabel();
-    	final JLabel Sectionlbl = new JLabel();
-    	final JLabel E_timlbl = new JLabel();
-        final JLabel S_timeLbl = new JLabel();
-        final JLabel TitleLabel = new JLabel();
-        final JTextField courseCodetxt = new JTextField();
-        final JTextField sectiontxt = new JTextField();
-        final JTextField S_timetxt = new JTextField();
-        final JTextField E_timetxt = new JTextField();
-        final JComboBox RoomCombo = new JComboBox();;
-        final JButton cancelbtn = new JButton();
-        final JButton okbtb = new JButton();
-        
+
+        final JLabel TitleLabel = new  JLabel();
+        final JLabel courseCodeLbl = new  JLabel();
+        final JLabel Sectionlbl = new  JLabel();
+        final JLabel S_timeLbl = new  JLabel();
+        final JLabel E_timlbl = new  JLabel();
+        final JLabel DateLbl = new  JLabel();
+        final JTextField courseCodetxt = new  JTextField();
+        final JTextField sectiontxt = new  JTextField();
+        final JComboBox monthCombo = new  JComboBox();
+        final JComboBox dayCombo = new  JComboBox();
+        final JComboBox yearCombo = new  JComboBox();
+        final JTextField S_timetxt = new  JTextField();
+        final JTextField E_timetxt = new  JTextField();
+        final JLabel formatLabel = new  JLabel();
+        final JButton okbtb = new  JButton();
+        final JButton cancelbtn = new  JButton();
+        final JLabel roomlbl = new  JLabel();
+        final JComboBox RoomCombo = new  JComboBox();
+        String[] rm = new String[] { "W401", "W402", "W403", "W404", "W405", "W406", "W407", "W408", "W409", "W410", "W411", "W412", "W413", "W414", "E401", "E402", "E403", "E404", "E405", "E406", "E407", "E408", "E409", "E410", "E411", "E412", "E413", "E414", "ELAB-A", "ELAB-B", "E208", "FACRM", "ENGFACRM", "E208" };        
+        String[] mo = new String[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"};
+        String[] day = new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"};
+        String[] yr = new String[] { "2013", "2014", "2015", "2016", "2017" };
+
         addSched.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        //BUTTONS
+        TitleLabel.setText("Add Subject");
+        courseCodeLbl.setText("Course Code :");
+        Sectionlbl.setText("Section : ");
+        S_timeLbl.setText("Start Time : ");
+        E_timlbl.setText("End Time : ");
+        DateLbl.setText("Date : ");
+        formatLabel.setText("Use hh:mm:ss in military time format");
+        roomlbl.setText("Room : ");
+        
+        monthCombo.setModel(new DefaultComboBoxModel(mo));
+        dayCombo.setModel(new DefaultComboBoxModel(day));
+        yearCombo.setModel(new DefaultComboBoxModel(yr));
+        RoomCombo.setModel(new DefaultComboBoxModel(rm));
+        
         okbtb.setText("Ok");
         okbtb.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -242,7 +264,7 @@ public class teachAttendance extends JFrame {
                 final String Etime = E_timetxt.getText();
                 Object roomy = RoomCombo.getItemAt(RoomCombo.getSelectedIndex());
                 final String room = roomy.toString();
-                addSched(course, sec, Stime, Etime, room);               
+                addSched(course, sec, Stime, Etime, room, date); //TODO               
             }
         });
 
@@ -252,23 +274,7 @@ public class teachAttendance extends JFrame {
             	addSched.dispose();
             }
         });
-        //END BUTTONS
 
-        TitleLabel.setText("New Schedule Form");
-        courseCodeLbl.setText("Course Code :");
-        
-        S_timeLbl.setText("Start Time : ");
-        E_timlbl.setText("End Time : ");
-        roomlbl.setText("Room : ");
-        Sectionlbl.setText("Section : ");
-        courseCodetxt.setText("");
-        S_timetxt.setText("");
-        E_timetxt.setText("");
-        sectiontxt.setText("");
-        String[] x = new String[] { "W401", "W402", "W403", "W404", "W405", "W406", "W407", "W408", "W409", "W410", "W411", "W412", "W413", "W414", "E401", "E402", "E403", "E404", "E405", "E406", "E407", "E408", "E409", "E410", "E411", "E412", "E413", "E414", "ELAB-A", "ELAB-B", "E208", "FACRM", "ENGFACRM", "E208" };
-        RoomCombo.setModel(new DefaultComboBoxModel(x));
-        
-        //NEW WINDOW LAYOUT
         GroupLayout layout = new GroupLayout(addSched.getContentPane());
         addSched.getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -276,71 +282,100 @@ public class teachAttendance extends JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(courseCodeLbl)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(courseCodetxt, GroupLayout.PREFERRED_SIZE, 126, GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(70, 70, 70)
-                        .addComponent(TitleLabel))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                    .addComponent(E_timlbl)
-                                    .addComponent(roomlbl))
-                                .addGap(24, 24, 24)
-                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                    .addComponent(E_timetxt, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(RoomCombo, GroupLayout.PREFERRED_SIZE, 110, GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(29, 29, 29)
-                                .addComponent(okbtb, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE)
-                                .addGap(32, 32, 32)
-                                .addComponent(cancelbtn))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                    .addComponent(S_timeLbl)
-                                    .addComponent(Sectionlbl))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                    .addComponent(sectiontxt)
-                                    .addComponent(S_timetxt))))))
-                .addContainerGap(27, Short.MAX_VALUE))
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                    .addGroup(GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(Sectionlbl)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(sectiontxt, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(courseCodeLbl)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(TitleLabel)
+                                                .addGap(0, 86, Short.MAX_VALUE))
+                                            .addComponent(courseCodetxt)))))
+                            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addGap(40, 40, 40)
+                                    .addComponent(okbtb, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(cancelbtn, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+                                    .addGap(23, 23, 23))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addContainerGap()
+                                    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(DateLbl)
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(monthCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(dayCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(yearCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(S_timeLbl)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(S_timetxt))
+                                            .addGroup(GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                                .addComponent(E_timlbl)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(E_timetxt, GroupLayout.PREFERRED_SIZE, 110, GroupLayout.PREFERRED_SIZE)))))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(formatLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(roomlbl)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(RoomCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(TitleLabel)
-                .addGap(28, 28, 28)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(courseCodetxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(courseCodeLbl))
-                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(sectiontxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Sectionlbl))
+                    .addComponent(courseCodeLbl)
+                    .addComponent(courseCodetxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(S_timeLbl)
-                    .addComponent(S_timetxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(Sectionlbl)
+                    .addComponent(sectiontxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(E_timlbl)
-                    .addComponent(E_timetxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                    .addComponent(DateLbl)
+                    .addComponent(monthCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dayCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(yearCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(roomlbl)
                     .addComponent(RoomCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                .addComponent(formatLabel)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(S_timeLbl)
+                    .addComponent(S_timetxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(E_timlbl)
+                    .addComponent(E_timetxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(okbtb)
                     .addComponent(cancelbtn))
-                .addGap(39, 39, 39))
+                .addGap(9, 9, 9))
         );
-        
         addSched.pack();
     }                        
     
@@ -628,7 +663,7 @@ public class teachAttendance extends JFrame {
         pack();
     }    
     
-    
+
     
     //FROM ZE NED COLORING
     private static class MyTableCellRenderer extends DefaultTableCellRenderer {
