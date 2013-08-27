@@ -378,7 +378,7 @@ public class teachAttendance extends JFrame {
     				+ "AND teacher_ID = '" + classlist[row].getTeacher_ID() + "'";
     	js.updateQuery(u);
     	classlist[row].setStatus("absent");
-    	myTableModel.fireTableRowsUpdated(row, row);
+    	myTableModel.fireTableRowsUpdated(row, row);//row your boat gently down the stream
     }                                       
 
     private void lateBActionPerformed(ActionEvent evt) {                                      
@@ -389,7 +389,7 @@ public class teachAttendance extends JFrame {
 				+ "AND teacher_ID = '" + classlist[row].getTeacher_ID() + "'";
     	js.updateQuery(u);
     	classlist[row].setStatus("late");
-    	myTableModel.fireTableRowsUpdated(row, row);
+    	myTableModel.fireTableRowsUpdated(row, row);//row your boat gently down the stream
     }                                     
 
     private void presentBActionPerformed(ActionEvent evt) {                                         
@@ -400,7 +400,7 @@ public class teachAttendance extends JFrame {
 				+ "WHERE course_ID = '" + classlist[row].getCourse_ID() + "'" 
 				+ "AND teacher_ID = '" + classlist[row].getTeacher_ID() + "'";
     	js.updateQuery(u);
-    	myTableModel.fireTableRowsUpdated(row, row);
+    	myTableModel.fireTableRowsUpdated(row, row);//row your boat gently down the stream
     }                                        
 
     private void excusedBActionPerformed(ActionEvent evt) {                                         
@@ -411,7 +411,7 @@ public class teachAttendance extends JFrame {
 				+ "AND teacher_ID = '" + classlist[row].getTeacher_ID() + "'";
     	js.updateQuery(u);
     	classlist[row].setStatus("excused");
-    	myTableModel.fireTableRowsUpdated(row, row);
+    	myTableModel.fireTableRowsUpdated(row, row);//row your boat gently down the stream
     }                                        
     
     // GUI Layout Below
