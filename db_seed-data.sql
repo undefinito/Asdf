@@ -122,7 +122,7 @@ INSERT INTO `classlist` (`student_ID`, `teacher_ID`, `course_ID`, `time_in`, `st
 ('201207412022', '200717411461', '201387654344', null, null, 'regular', null, 'present'),
 ('201207412051', '200717411461', '201387654344', null, null, 'regular', null, 'present'),
 ('201207412055', '200717411461', '201387654344', null, null, 'regular', null, 'present'),
-('201207412399', '200717411461', '201387654344', null, null, 'regular', null, 'present');
-('201107408872', '200717411111', '201312344321', null, null, 'make-up', null, null),
-('201007407586', '200717411111', '201312344321', null, null, 'make-up', null, null),
-('201007407225', '200717411111', '201312344321', null, null, 'make-up', null, null),
+('201207412399', '200717411461', '201387654344', null, null, 'regular', null, 'present')
+('201107408872', '200717411111', '201312344321', null, null, 'make-up', null, 'na'),
+('201007407586', '200717411111', '201312344321', null, null, 'make-up', null, 'na'),
+('201007407225', '200717411111', '201312344321', null, null, 'make-up', null, 'na');

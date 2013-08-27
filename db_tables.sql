@@ -64,13 +64,13 @@ CREATE TABLE Classlist
 	student_ID	char(12)		NOT NULL,
 	teacher_ID	char(12)		NOT NULL,
 	course_ID	varchar(12)	NOT NULL,
-	status		enum('late', 'absent', 'present', 'excused'),
-	time_in		timestamp		DEFAULT '2001-01-01 01:01:01',
+	status		enum('late', 'absent', 'present', 'excused',' na') DEFAULT na,
+	time_in		timestamp		DEFAULT NULL
 	class_type	enum('regular', 'makeup', 'alternative'),
-	time_out	timestamp		DEFAULT '2001-01-01 01:01:01',
-	Ptime_in		timestamp		DEFAULT '2001-01-01 01:01:01',
-	Ptime_out	timestamp		DEFAULT '2001-01-01 01:01:01',
-	Pstatus		enum('late', 'absent', 'present', 'excused'),
+	time_out	timestamp		DEFAULT NULL
+	Ptime_in		timestamp		DEFAULT NULL
+	Ptime_out	timestamp		DEFAULT NULL
+	Pstatus		enum('late', 'absent', 'present', 'excused', 'na') DEFAULT na,
 
 FOREIGN KEY(student_id) REFERENCES Student(student_id),
 FOREIGN KEY(teacher_id) REFERENCES Teacher(teacher_id),

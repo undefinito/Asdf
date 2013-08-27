@@ -184,11 +184,6 @@ public class teachAttendance extends JFrame {
         String pretmp[][] = js.query(prequery);
         
     	if(pretmp.length > 0){  //Class exists		
-    		/* TODO
-    		 * SELECT DISTINCT 3-id, classtype, starttime, endtime
-    		 * FROM classlist, course
-    		 * WHERE 
-    		 */
     		final String q = "SELECT * FROM classlist WHERE course_ID = '" + pretmp[0][preCourseID] + "'";
     		final int StudID = 0;
         	final int TeacherID = 1;
@@ -694,17 +689,17 @@ public class teachAttendance extends JFrame {
 		
     	//default is white everywhere
     	List<Color> rowColours = Arrays.asList(
-    			Color.WHITE, Color.WHITE, Color.WHITE,
-    			Color.WHITE, Color.WHITE, Color.WHITE,
-    			Color.WHITE, Color.WHITE, Color.WHITE,
-    			Color.WHITE, Color.WHITE, Color.WHITE,
-    			Color.WHITE, Color.WHITE, Color.WHITE,
-    			Color.WHITE, Color.WHITE, Color.WHITE,
-    			Color.WHITE, Color.WHITE, Color.WHITE,
-    			Color.WHITE, Color.WHITE, Color.WHITE,
-    			Color.WHITE, Color.WHITE, Color.WHITE,
-    			Color.WHITE, Color.WHITE, Color.WHITE,
-    			Color.WHITE, Color.WHITE, Color.WHITE
+    			Color.lightGray, Color.lightGray, Color.lightGray,
+    			Color.lightGray, Color.lightGray, Color.lightGray,
+    			Color.lightGray, Color.lightGray, Color.lightGray,
+    			Color.lightGray, Color.lightGray, Color.lightGray,
+    			Color.lightGray, Color.lightGray, Color.lightGray,
+    			Color.lightGray, Color.lightGray, Color.lightGray,
+    			Color.lightGray, Color.lightGray, Color.lightGray,
+    			Color.lightGray, Color.lightGray, Color.lightGray,
+    			Color.lightGray, Color.lightGray, Color.lightGray,
+    			Color.lightGray, Color.lightGray, Color.lightGray,
+    			Color.lightGray, Color.lightGray, Color.lightGray
     			);
     	
 	    public void setRowColour(int row, Color c) {
@@ -713,7 +708,7 @@ public class teachAttendance extends JFrame {
 	    }
 
 	    public Color getRowColour(int row) {
-	    	Color chosen = Color.white;
+	    	Color chosen = Color.lightGray;
 	    	
 	    	if(classlist[row].getStatus().equals("absent")){
     			chosen = cABSENT;
@@ -726,6 +721,9 @@ public class teachAttendance extends JFrame {
     		}
     		else if(classlist[row].getStatus().equals("present")){
     			chosen = cPRESENT;
+    		}
+    		else if(classlist[row].getStatus().equals("na")){
+    			chosen = Color.lightGray;
     		}
 
 	    	setRowColour(row, chosen);
