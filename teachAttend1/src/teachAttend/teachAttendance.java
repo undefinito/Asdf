@@ -163,7 +163,6 @@ public class teachAttendance extends JFrame {
     	}
 	}
 
-	@SuppressWarnings ("unused")
     private static void addSched(String course, String sec, String Stime, String Etime, String room){
     	//TODO
     	//CONSTANTS
@@ -174,7 +173,7 @@ public class teachAttendance extends JFrame {
     	final int preUnits = 4;
     	final int preSchedDay = 5;
     	final int preSchedRoom = 6;
-    	final int preSchedTime = 7;
+    	final int preSchedTime = 7; // part nito date
 
     	//Query if class exists
         final String prequery = "SELECT * "
@@ -185,6 +184,11 @@ public class teachAttendance extends JFrame {
         String pretmp[][] = js.query(prequery);
         
     	if(pretmp.length > 0){  //Class exists		
+    		/* TODO
+    		 * SELECT DISTINCT 3-id, classtype, starttime, endtime
+    		 * FROM classlist, course
+    		 * WHERE 
+    		 */
     		final String q = "SELECT * FROM classlist WHERE course_ID = '" + pretmp[0][preCourseID] + "'";
     		final int StudID = 0;
         	final int TeacherID = 1;
@@ -234,10 +238,11 @@ public class teachAttendance extends JFrame {
         final JButton cancelbtn = new  JButton();
         final JLabel roomlbl = new  JLabel();
         final JComboBox RoomCombo = new  JComboBox();
-        String[] rm = new String[] { "W401", "W402", "W403", "W404", "W405", "W406", "W407", "W408", "W409", "W410", "W411", "W412", "W413", "W414", "E401", "E402", "E403", "E404", "E405", "E406", "E407", "E408", "E409", "E410", "E411", "E412", "E413", "E414", "ELAB-A", "ELAB-B", "E208", "FACRM", "ENGFACRM", "E208" };        
-        String[] mo = new String[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"};
-        String[] day = new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"};
-        String[] yr = new String[] { "2013", "2014", "2015", "2016", "2017" };
+        final String[] rm = new String[] { "W401", "W402", "W403", "W404", "W405", "W406", "W407", "W408", "W409", "W410", "W411", "W412", "W413", "W414", "E401", "E402", "E403", "E404", "E405", "E406", "E407", "E408", "E409", "E410", "E411", "E412", "E413", "E414", "ELAB-A", "ELAB-B", "E208", "FACRM", "ENGFACRM", "E208" };        
+        final String[] mo = new String[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"};
+        final String[] moNum = new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"};
+        final String[] day = new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"};
+        final String[] yr = new String[] { "2013", "2014", "2015", "2016", "2017" };
 
         addSched.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -260,11 +265,18 @@ public class teachAttendance extends JFrame {
             public void actionPerformed(ActionEvent evt) {
                 final String course = courseCodetxt.getText();
                 final String sec = sectiontxt.getText();
-                final String Stime = S_timetxt.getText();
-                final String Etime = E_timetxt.getText();
-                Object roomy = RoomCombo.getItemAt(RoomCombo.getSelectedIndex());
-                final String room = roomy.toString();
-                addSched(course, sec, Stime, Etime, room, date); //TODO               
+                final String Stime = "'" + yearCombo.getItemAt(yearCombo.getSelectedIndex()).toString() + "-" + 
+										moNum[monthCombo.getSelectedIndex()] + "-" +
+										dayCombo.getItemAt(dayCombo.getSelectedIndex()).toString() + " " +
+										S_timetxt.getText() + "'";
+                final String Etime = "'" + yearCombo.getItemAt(yearCombo.getSelectedIndex()).toString() + "-" + 
+											moNum[monthCombo.getSelectedIndex()] + "-" +
+											dayCombo.getItemAt(dayCombo.getSelectedIndex()).toString() + " " +
+											E_timetxt.getText() + "'";
+                final String room = RoomCombo.getItemAt(RoomCombo.getSelectedIndex()).toString();
+                            
+                addSched(course, sec, Stime, Etime, room); //TODO
+                
             }
         });
 
