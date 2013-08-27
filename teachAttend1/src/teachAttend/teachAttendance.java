@@ -387,7 +387,7 @@ public class teachAttendance extends JFrame {
 				+ "SET Pstatus = 'late'	"
 				+ "WHERE course_ID = '" + classlist[row].getCourse_ID() + "'" 
 				+ "AND teacher_ID = '" + classlist[row].getTeacher_ID() + "'";
-	js.updateQuery(u);
+    	js.updateQuery(u);
     	classlist[row].setStatus("late");
     	myTableModel.fireTableRowsUpdated(row, row);
     }                                     
@@ -399,7 +399,7 @@ public class teachAttendance extends JFrame {
 				+ "SET Pstatus = 'present'	"
 				+ "WHERE course_ID = '" + classlist[row].getCourse_ID() + "'" 
 				+ "AND teacher_ID = '" + classlist[row].getTeacher_ID() + "'";
-	js.updateQuery(u);
+    	js.updateQuery(u);
     	myTableModel.fireTableRowsUpdated(row, row);
     }                                        
 
@@ -409,7 +409,7 @@ public class teachAttendance extends JFrame {
 				+ "SET Pstatus = 'excused'	"
 				+ "WHERE course_ID = '" + classlist[row].getCourse_ID() + "'" 
 				+ "AND teacher_ID = '" + classlist[row].getTeacher_ID() + "'";
-	js.updateQuery(u);
+    	js.updateQuery(u);
     	classlist[row].setStatus("excused");
     	myTableModel.fireTableRowsUpdated(row, row);
     }                                        
