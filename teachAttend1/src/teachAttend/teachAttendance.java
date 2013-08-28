@@ -101,7 +101,7 @@ public class teachAttendance extends JFrame {
     
     private static void populate(){//Populates the table and the classlist object
     	final String query = "SELECT DISTINCT teacher.teacher_ID, course_name, first_name, "
-				+ " last_name, middle_initial, sched_room, sched_start_time, sched_end_time, sched_day, "
+				+ " last_name, middle_initial, sched_room, schedstart_time, schedend_time, sched_day, "
 				+ " class_type, Ptime_in, Ptime_out, Pstatus, course.course_ID"
 				+ " FROM classlist, teacher, course "
 				+ " WHERE classlist.teacher_ID = teacher.teacher_ID "

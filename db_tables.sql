@@ -3,14 +3,11 @@
 -- SYANAD2	-	anti-truancy system
 -- Edited : Carlo Carabeo 8/12/2013
 -- Edited : Carlo Carabeo 8/14/2013
+-- Edited : Carlo Carabeo 8/28/2013 - Time in classlist
 
 /*\
 		CREATION OF DB AND TABLES
 \*/
-
-CREATE DATABASE syanad2;	-- create the db
-
-USE syanad2;				-- specify what db to query into
 
 --	TABLES	------------------
 
@@ -61,17 +58,19 @@ ENGINE = INNODB;
 
 CREATE TABLE Classlist
 (
-	student_ID	char(12)		NOT NULL,
-	teacher_ID	char(12)		NOT NULL,
-	course_ID	varchar(12)	NOT NULL,
-	status		enum('late', 'absent', 'present', 'excused',' na') DEFAULT na,
-	time_in		timestamp		DEFAULT NULL
-	class_type	enum('regular', 'makeup', 'alternative'),
-	time_out	timestamp		DEFAULT NULL
-	Ptime_in		timestamp		DEFAULT NULL
-	Ptime_out	timestamp		DEFAULT NULL
-	Pstatus		enum('late', 'absent', 'present', 'excused', 'na') DEFAULT na,
-
+	`student_ID` char(12) NOT NULL,
+	`teacher_ID` char(12) NOT NULL,
+	`course_ID` varchar(12) NOT NULL,
+	`status` enum('late','absent','present','excused','na') DEFAULT 'na',
+	`time_in` timestamp DEFAULT '2001-01-01 01:01:01',
+	`class_type` enum('regular','makeup','alternative') DEFAULT 'regular',
+	`time_out` timestamp DEFAULT '2001-01-01 01:01:01',
+	`Ptime_in` timestamp DEFAULT '2001-01-01 01:01:01',
+	`Ptime_out` timestamp DEFAULT '2001-01-01 01:01:01',
+	`Pstatus` enum('late','absent','present','excused','na') DEFAULT 'na',
+	`schedstart_time` time NOT NULL,
+	`schedend_time` time NOT NULL,
+	`sched_date` date NOT NULL,
 FOREIGN KEY(student_id) REFERENCES Student(student_id),
 FOREIGN KEY(teacher_id) REFERENCES Teacher(teacher_id),
 FOREIGN KEY(course_id) REFERENCES Course(course_id)
