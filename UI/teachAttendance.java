@@ -45,69 +45,76 @@ public class teachAttendance extends javax.swing.JFrame {
         attSheet.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         attSheet.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"ACTONEA", "8:00-9:30", "E413", "Ragudo"},
-                {"ANALGEO", "8:00-9:00", "W403", "Lawas"},
-                {"BUSCOMP", "8:00-9:30", "E-Lab A", "Encarnacion"},
-                {"COMPRO1", "9:40-11:10", "W412", "Encarnacion"},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {"ACTONEA", null, "8:00-9:30", "E413", "Ragudo"},
+                {"ANALGEO", null, "8:00-9:00", "W403", "Lawas"},
+                {"BUSCOMP", null, "8:00-9:30", "E-Lab A", "Encarnacion"},
+                {"COMPRO1", null, "9:40-11:10", "W412", "Encarnacion"},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Course", "Time", "Room", "Faculty"
+                "Course", "Section", "Time", "Room", "Faculty"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                true, false, true, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         attSheet.getTableHeader().setReorderingAllowed(false);
@@ -115,12 +122,13 @@ public class teachAttendance extends javax.swing.JFrame {
         attSheet.getColumnModel().getColumn(0).setMinWidth(90);
         attSheet.getColumnModel().getColumn(0).setPreferredWidth(90);
         attSheet.getColumnModel().getColumn(0).setMaxWidth(90);
-        attSheet.getColumnModel().getColumn(1).setMinWidth(80);
-        attSheet.getColumnModel().getColumn(1).setPreferredWidth(80);
-        attSheet.getColumnModel().getColumn(1).setMaxWidth(80);
-        attSheet.getColumnModel().getColumn(2).setMinWidth(60);
-        attSheet.getColumnModel().getColumn(2).setPreferredWidth(60);
-        attSheet.getColumnModel().getColumn(2).setMaxWidth(60);
+        attSheet.getColumnModel().getColumn(1).setPreferredWidth(10);
+        attSheet.getColumnModel().getColumn(2).setMinWidth(80);
+        attSheet.getColumnModel().getColumn(2).setPreferredWidth(80);
+        attSheet.getColumnModel().getColumn(2).setMaxWidth(80);
+        attSheet.getColumnModel().getColumn(3).setMinWidth(60);
+        attSheet.getColumnModel().getColumn(3).setPreferredWidth(60);
+        attSheet.getColumnModel().getColumn(3).setMaxWidth(60);
 
         dateButton.setText("MM/DD/YYYY");
         dateButton.addActionListener(new java.awt.event.ActionListener() {
@@ -248,17 +256,19 @@ public class teachAttendance extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(dateButton)
-                    .addComponent(schedButton)
-                    .addComponent(genReport))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(attBar, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(searchBar, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(searchButton))))
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(dateButton)
+                            .addComponent(schedButton)
+                            .addComponent(genReport))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 259, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(attBar, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(searchBar, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(searchButton))))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

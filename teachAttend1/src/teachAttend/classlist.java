@@ -17,6 +17,8 @@ public class classlist
 	private String time_in;
 	private String time_out;
 	private String status;
+	private String date;
+	private String section;
 	
 	public classlist( 
 			String teachID,
@@ -32,7 +34,9 @@ public class classlist
 			String time_in1,
 			String time_out1,
 			String status1,
-			String courseID){
+			String courseID,
+			String d,
+			String sec){
 		
         teacher_ID = teachID;
         course_ID = courseID;
@@ -48,6 +52,8 @@ public class classlist
 		time_in = time_in1;
 		time_out = time_out1;
 		status = status1;
+		date = d;
+		section = sec;
 	}
 
 	public String getTeacher_ID() {
@@ -160,6 +166,22 @@ public class classlist
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
+	public String getSection() {
+		return section;
+	}
+
+	public void setSection(String section) {
+		this.section = section;
 	}
 
 }

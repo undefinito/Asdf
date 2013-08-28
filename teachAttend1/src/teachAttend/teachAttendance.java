@@ -1,11 +1,17 @@
 //package teachAttend
 package teachAttend;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.util.*;
+
 import javax.swing.*;
+
+import java.awt.Dialog.ModalityType;
 import java.awt.event.*;
+
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -20,6 +26,8 @@ public class teachAttendance extends JFrame {
     private final static Color cLATE = Color.YELLOW;
     private final static Color cPRESENT = Color.GREEN;
     private final static Color cEXCUSED = Color.BLUE;
+    private final static String nulltimestamp = "2001-01-01 01:01:01";
+    private final static String nullstatus = "na";
 	
     //GUI
     private static JTable attSheet;
@@ -48,7 +56,7 @@ public class teachAttendance extends JFrame {
     
 	//Para sa atttable yun vars na to
     private static Object[][] entries;
-    private static String[] columnNames = {"Course", "Time", "Room", "Faculty"};
+    private static String[] columnNames = {"Course","Section", "Time", "Room", "Faculty"};
 
     
     public static void main(String args[]) {
@@ -102,7 +110,7 @@ public class teachAttendance extends JFrame {
     private static void populate(){//Populates the table and the classlist object
     	final String query = "SELECT DISTINCT teacher.teacher_ID, course_name, first_name, "
 				+ " last_name, middle_initial, sched_room, schedstart_time, schedend_time, sched_day, "
-				+ " class_type, Ptime_in, Ptime_out, Pstatus, course.course_ID"
+				+ " class_type, Ptime_in, Ptime_out, Pstatus, course.course_ID, sched_date, class_section"
 				+ " FROM classlist, teacher, course "
 				+ " WHERE classlist.teacher_ID = teacher.teacher_ID "
 				+ " AND classlist.course_ID = course.course_ID";
@@ -126,6 +134,8 @@ public class teachAttendance extends JFrame {
 			final int ptime_out = 11;
 			final int pstatus = 12;
 			final int courseID = 13;
+			final int date = 14;
+			final int sec = 15;
 			classlist[row] = new classlist(
 					tmp[row][ID], 
 					tmp[row][fName], 
@@ -140,12 +150,14 @@ public class teachAttendance extends JFrame {
 					tmp[row][ptime_in],
 					tmp[row][ptime_out],
 					tmp[row][pstatus],
-					tmp[row][courseID]
+					tmp[row][courseID],
+					tmp[row][date],
+					tmp[row][sec]
 							);
 		}
     	
     	//Insert query into entries for att table
-    	entries = new Object[classlist.length][4];
+    	entries = new Object[classlist.length][5];
     	enterAllEntries();
     	
     }
@@ -156,15 +168,16 @@ public class teachAttendance extends JFrame {
     		String Time = classlist[c].getSched_Stime() + " - " + classlist[c].getSched_Etime();
     		String Room = classlist[c].getSched_room();
     		String Fac = classlist[c].getFirst_name() + " " + classlist[c].getLast_name();
+    		String section = classlist[c].getSection();
     		entries[c][0] = c_code;
-    		entries[c][1] = Time;
-    		entries[c][2] = Room;
-    		entries[c][3] = Fac;
+    		entries[c][1] = section;
+    		entries[c][2] = Time;
+    		entries[c][3] = Room;
+    		entries[c][4] = Fac;
     	}
 	}
 
-    private static void addSched(String course, String sec, String Stime, String Etime, String room){
-    	//TODO
+    private static void addSched(String course, String sec, String Stime, String Etime, String room, String date){
     	//CONSTANTS
     	final int preCourseID = 0;
     	final int preCourseName = 1;
@@ -173,7 +186,7 @@ public class teachAttendance extends JFrame {
     	final int preUnits = 4;
     	final int preSchedDay = 5;
     	final int preSchedRoom = 6;
-    	final int preSchedTime = 7; // part nito date
+    	final int preSchedTime = 7; 
 
     	//Query if class exists
         final String prequery = "SELECT * "
@@ -183,31 +196,79 @@ public class teachAttendance extends JFrame {
         
         String pretmp[][] = js.query(prequery);
         
-    	if(pretmp.length > 0){  //Class exists		
-    		final String q = "SELECT * FROM classlist WHERE course_ID = '" + pretmp[0][preCourseID] + "'";
+    	if(pretmp.length > 0){  //A regular class exists //TODO		
+    		final String q = "SELECT * "
+    						+ "FROM classlist "
+    						+ "WHERE course_ID = '" + pretmp[0][preCourseID] + "'"
+    						+ "AND class_type = 'regular'";
     		final int StudID = 0;
         	final int TeacherID = 1;
         	final int CourseID = 2;
-        	final int classType = 5;
         	final int studStatus = 3;
         	final int studTime_in = 4;
+        	final int classType = 5;
         	final int studTime_out = 6;
         	final int profTime_in = 7;
         	final int profTime_out = 8;
         	final int profStatus = 9;
-    		
+        	final int schedStarttime = 10;
+        	final int schedEndtime = 11;
+        	final int schedDate = 12;
+
+        	final String x = "INSERT INTO `classlist` (`student_ID`, "
+        				+ "`teacher_ID`, `course_ID`, `time_in`, "
+        			+ "`status`, `class_type`, `ptime_in`, `pstatus`, "
+        			+ "`schedstart_time`, `schedend_time`, `sched_date`) VALUES";
+        	final String makeup = "makeup";
+        	String y; //Values
     		String tmp[][] = js.query(q);
-    		//ALL Classes in 'course' - 'sec'
+
     		for(int c = 0; c < tmp.length; c++){
-    			for(int c2 = 0; c2 < 9; c2++){
-    				System.out.printf("%s ", tmp[c][c2]);
-    			}
-    			System.out.println();
+    			y = "('"
+    				+ tmp[c][StudID] + "', '" 
+    				+ tmp[c][TeacherID] + "', '"
+    				+ tmp[c][CourseID] + "', '"
+    				+ nulltimestamp + "', '"
+    				+ nullstatus + "', '"
+    				+ makeup + "', '"
+    				+ nulltimestamp + "', '"
+    				+ nullstatus + "', '"
+    				+ Stime + "', '"
+    				+ Etime + "', '"
+    				+ date	+ "');";
+    			
+    			js.insertQuery(x + y);
+    			populate(); //reinitialize classlist object //TODO efficiency 
+    			attSheet.tableChanged(null);
+    			
     		}
         }
     	//Does not exist
         else{
-        	System.out.println("Shit");
+    		final JDialog y = new JDialog();
+			y.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			y.setVisible(true);
+			y.setModalityType(ModalityType.APPLICATION_MODAL);
+			y.setBounds(250, 250, 181, 108);
+		
+			JPanel contentPanel1 = new JPanel();
+			y.getContentPane().setLayout(new BorderLayout());
+			contentPanel1.setBorder(new EmptyBorder(5, 5, 5, 5));
+			y.getContentPane().add(contentPanel1, BorderLayout.CENTER);
+			contentPanel1.setLayout(null);
+			JButton btn_Ok = new JButton("OK");	
+			    			
+			btn_Ok.addActionListener(new ActionListener() {						//actions for the OK button
+				public void actionPerformed(ActionEvent arg0) {
+						//GO TO TEACHER PAKING ATTENDANCE
+						y.dispose();			
+                }
+			});
+			btn_Ok.setBounds(30, 36, 89, 23);
+			contentPanel1.add(btn_Ok);
+			JLabel msg = new JLabel("Class does not exist");
+			msg.setBounds(10, 11, 200, 20);
+			contentPanel1.add(msg);
         }
     }
     
@@ -260,17 +321,22 @@ public class teachAttendance extends JFrame {
             public void actionPerformed(ActionEvent evt) {
                 final String course = courseCodetxt.getText();
                 final String sec = sectiontxt.getText();
-                final String Stime = "'" + yearCombo.getItemAt(yearCombo.getSelectedIndex()).toString() + "-" + 
-										moNum[monthCombo.getSelectedIndex()] + "-" +
-										dayCombo.getItemAt(dayCombo.getSelectedIndex()).toString() + " " +
-										S_timetxt.getText() + "'";
-                final String Etime = "'" + yearCombo.getItemAt(yearCombo.getSelectedIndex()).toString() + "-" + 
-											moNum[monthCombo.getSelectedIndex()] + "-" +
-											dayCombo.getItemAt(dayCombo.getSelectedIndex()).toString() + " " +
-											E_timetxt.getText() + "'";
+                final String Stime = yearCombo.getItemAt(yearCombo.getSelectedIndex()).toString() + "-" + 
+									moNum[monthCombo.getSelectedIndex()] + "-" +
+									dayCombo.getItemAt(dayCombo.getSelectedIndex()).toString() + " " +
+									S_timetxt.getText();
+                
+                final String Etime = yearCombo.getItemAt(yearCombo.getSelectedIndex()).toString() + "-" + 
+									moNum[monthCombo.getSelectedIndex()] + "-" +
+									dayCombo.getItemAt(dayCombo.getSelectedIndex()).toString() + " " +
+									E_timetxt.getText();
+                
                 final String room = RoomCombo.getItemAt(RoomCombo.getSelectedIndex()).toString();
+                final String date = yearCombo.getItemAt(yearCombo.getSelectedIndex()).toString() + "-" + 
+									moNum[monthCombo.getSelectedIndex()] + "-" +
+									dayCombo.getItemAt(dayCombo.getSelectedIndex()).toString();
                             
-                addSched(course, sec, Stime, Etime, room); //TODO
+                addSched(course, sec, Stime, Etime, room, date);
                 
             }
         });
@@ -310,7 +376,7 @@ public class teachAttendance extends JFrame {
                                     .addGap(40, 40, 40)
                                     .addComponent(okbtb, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)
                                     .addGap(18, 18, 18)
-                                    .addComponent(cancelbtn, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cancelbtn, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
                                     .addGap(23, 23, 23))
                                 .addGroup(layout.createSequentialGroup()
                                     .addContainerGap()
@@ -412,7 +478,7 @@ public class teachAttendance extends JFrame {
     }                                            
     
     //ALPE
-    private void absentBActionPerformed(ActionEvent evt) {                                        
+    private void absentBActionPerformed(ActionEvent evt) {
     	int	row = attSheet.getSelectedRow();
     	String u = "UPDATE classlist "
     				+ "SET Pstatus = 'absent'	"
@@ -423,7 +489,7 @@ public class teachAttendance extends JFrame {
     	myTableModel.fireTableRowsUpdated(row, row);//row your boat gently down the stream
     }                                       
 
-    private void lateBActionPerformed(ActionEvent evt) {                                      
+    private void lateBActionPerformed(ActionEvent evt) {
     	int	row = attSheet.getSelectedRow();
     	String u = "UPDATE classlist "
 				+ "SET Pstatus = 'late'	"
@@ -434,7 +500,7 @@ public class teachAttendance extends JFrame {
     	myTableModel.fireTableRowsUpdated(row, row);//row your boat gently down the stream
     }                                     
 
-    private void presentBActionPerformed(ActionEvent evt) {                                         
+    private void presentBActionPerformed(ActionEvent evt) { 
     	int	row = attSheet.getSelectedRow();
     	classlist[row].setStatus("present");
     	String u = "UPDATE classlist "
@@ -445,7 +511,7 @@ public class teachAttendance extends JFrame {
     	myTableModel.fireTableRowsUpdated(row, row);//row your boat gently down the stream
     }                                        
 
-    private void excusedBActionPerformed(ActionEvent evt) {                                         
+    private void excusedBActionPerformed(ActionEvent evt) {
     	int	row = attSheet.getSelectedRow();
     	String u = "UPDATE classlist "
 				+ "SET Pstatus = 'excused'	"
@@ -499,12 +565,14 @@ public class teachAttendance extends JFrame {
         attSheet.getColumnModel().getColumn(0).setMinWidth(90);
         attSheet.getColumnModel().getColumn(0).setPreferredWidth(90);
         attSheet.getColumnModel().getColumn(0).setMaxWidth(90);
-        attSheet.getColumnModel().getColumn(1).setMinWidth(80);
-        attSheet.getColumnModel().getColumn(1).setPreferredWidth(150);
-        attSheet.getColumnModel().getColumn(1).setMaxWidth(200);
-        attSheet.getColumnModel().getColumn(2).setMinWidth(60);
-        attSheet.getColumnModel().getColumn(2).setPreferredWidth(60);
-        attSheet.getColumnModel().getColumn(2).setMaxWidth(60);
+        attSheet.getColumnModel().getColumn(1).setPreferredWidth(50);
+        attSheet.getColumnModel().getColumn(1).setMaxWidth(50);
+        attSheet.getColumnModel().getColumn(2).setMinWidth(130);
+        attSheet.getColumnModel().getColumn(2).setPreferredWidth(150);
+        attSheet.getColumnModel().getColumn(2).setMaxWidth(200);
+        attSheet.getColumnModel().getColumn(3).setMinWidth(80);
+        attSheet.getColumnModel().getColumn(3).setPreferredWidth(90);
+        attSheet.getColumnModel().getColumn(3).setMaxWidth(100);
         
         dateButton.setText("MM/DD/YYYY");
         dateButton.addActionListener(new ActionListener() {
@@ -633,17 +701,19 @@ public class teachAttendance extends JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(dateButton)
-                    .addComponent(schedButton)
-                    .addComponent(genReport))
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 136, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(attBar, GroupLayout.PREFERRED_SIZE, 180, GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(searchBar, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(searchButton))))
-            .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(dateButton)
+                            .addComponent(schedButton)
+                            .addComponent(genReport))
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 259, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(attBar, GroupLayout.PREFERRED_SIZE, 180, GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(searchBar, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(searchButton))))
+                    .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -666,7 +736,6 @@ public class teachAttendance extends JFrame {
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 240, GroupLayout.PREFERRED_SIZE))
         );
-
         pack();
     }    
     
