@@ -5,12 +5,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.util.*;
-
 import javax.swing.*;
-
 import java.awt.Dialog.ModalityType;
 import java.awt.event.*;
-
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -45,6 +42,8 @@ public class teachAttendance extends JFrame {
 
     //Other Windows
     private static JDialog addSched;
+    private static JDialog dateWindow;
+    private static JDialog afterDateWindow;
     
     //Functionalities
     private static classlist[] classlist;
@@ -106,6 +105,7 @@ public class teachAttendance extends JFrame {
     		}	
     	}
     }
+    
     
     private static void populate(){//Populates the table and the classlist object
     	final String query = "SELECT DISTINCT teacher.teacher_ID, course_name, first_name, "
@@ -271,6 +271,7 @@ public class teachAttendance extends JFrame {
 			contentPanel1.add(msg);
         }
     }
+    
     
     private static void addSchedWindow(){
     	addSched = new JDialog();
@@ -451,11 +452,189 @@ public class teachAttendance extends JFrame {
         );
         addSched.pack();
     }                        
+
+    private static void afterDateWindow(){ //TODO
+    	afterDateWindow = new JDialog();
+    	afterDateWindow.setVisible(true);
+    	
+        JComboBox classCombo = new JComboBox();
+        JLabel classLbl = new JLabel();
+        JButton okBtn = new JButton();
+        JButton cancelbtn = new JButton();
+        JScrollPane jScrollPane1 = new JScrollPane();
+        JTable classlist = new JTable();
+
+        afterDateWindow.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
+        classCombo.setModel(new DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        classLbl.setText("Class");
+
+        okBtn.setText("Go!");
+        okBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                //okBtnActionPerformed(evt); //TODO
+            }
+        });
+
+        cancelbtn.setText("Cancel");
+        cancelbtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                afterDateWindow.dispose();
+            }
+        });
+
+        classlist.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] { //Entries
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {"Title 1", "Title 2", "Title 3", "Title 4"}));//Headers
+        
+        jScrollPane1.setViewportView(classlist);
+        classlist.getColumnModel().getColumn(0).setResizable(false);
+        classlist.getColumnModel().getColumn(1).setResizable(false);
+        classlist.getColumnModel().getColumn(2).setResizable(false);
+        classlist.getColumnModel().getColumn(3).setResizable(false);
+
+        GroupLayout layout = new GroupLayout(afterDateWindow.getContentPane());
+        afterDateWindow.getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(70, 70, 70)
+                        .addComponent(classLbl)
+                        .addGap(40, 40, 40)
+                        .addComponent(classCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(60, 60, 60)
+                        .addComponent(okBtn, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(cancelbtn))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 246, GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(classLbl)
+                    .addComponent(classCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addGap(9, 9, 9)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(okBtn)
+                    .addComponent(cancelbtn))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 125, GroupLayout.PREFERRED_SIZE)
+                .addGap(86, 86, 86))
+        );
+
+        afterDateWindow.pack();
+    }
+    
+    private static void dateButtonWindow(){ //TODO
+    	dateWindow = new JDialog();
+    	dateWindow.setVisible(true);
+
+        JComboBox monthCombo = new JComboBox();
+        JComboBox dayCombo = new JComboBox();
+        JComboBox yearCombo = new JComboBox();
+        JLabel monthLbl = new JLabel();
+        JLabel dayLbl = new JLabel();
+        JLabel yearLbl = new JLabel();
+        JButton okBtn = new JButton();
+        JButton cancelbtn = new JButton();
+
+        dateWindow.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        String month[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+        String year[] = {"2013", "2014", "2015", "2016"};// Di ko alam kung kelangan to
+        String day[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"};
+        
+        monthCombo.setModel(new DefaultComboBoxModel(month));
+        dayCombo.setModel(new DefaultComboBoxModel(day));
+        yearCombo.setModel(new DefaultComboBoxModel(year));
+
+        monthLbl.setText("Month");
+
+        dayLbl.setText("Day");
+
+        yearLbl.setText("Year");
+
+        okBtn.setText("Go!");
+        okBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                //TODO
+            	afterDateWindow();
+            }
+        });
+
+        cancelbtn.setText("Cancel");
+        cancelbtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                dateWindow.dispose();
+            }
+        });
+
+        GroupLayout layout = new GroupLayout(dateWindow.getContentPane());
+        dateWindow.getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(monthLbl)
+                .addGap(36, 36, 36)
+                .addComponent(dayLbl)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(yearLbl)
+                .addGap(41, 41, 41))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(monthCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(dayCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(yearCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(okBtn, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cancelbtn)))
+                .addContainerGap(16, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(monthLbl)
+                    .addComponent(dayLbl)
+                    .addComponent(yearLbl))
+                .addGap(9, 9, 9)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(monthCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dayCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(yearCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(okBtn)
+                    .addComponent(cancelbtn))
+                .addContainerGap(19, Short.MAX_VALUE))
+        );
+
+        dateWindow.pack();
+    }
     
     //BUTTON FUNCTIONS
     private void dateButtonActionPerformed(ActionEvent evt) {//Button MM/DD/YYYY                                           
-        // TODO add your handling code here:
-    	System.out.println("date");
+        dateButtonWindow();
     }                                          
 
     private void searchBarActionPerformed(ActionEvent evt) { //No idea                                         
@@ -529,13 +708,16 @@ public class teachAttendance extends JFrame {
         initComponents();
     }
     
+    
     private void initTableRenderer(){
     	myTableRenderer = new MyTableCellRenderer();
     }
     
+
     private void initTableModel(){
     	myTableModel = new MyTableModel();
     }
+
 
     private void initComponents() {
 
@@ -738,9 +920,7 @@ public class teachAttendance extends JFrame {
         );
         pack();
     }    
-    
-
-    
+        
     //FROM ZE NED COLORING
     private static class MyTableCellRenderer extends DefaultTableCellRenderer {
 
