@@ -454,9 +454,11 @@ public class teachAttendance extends JFrame {
     }                        
 
     private static void afterDateWindow(){ //TODO
-    	afterDateWindow = new JDialog();
+    	//Creates the window
+    	afterDateWindow = new JDialog(); 
     	afterDateWindow.setVisible(true);
     	
+    	//Variable Declaration of objects
         JComboBox classCombo = new JComboBox();
         JLabel classLbl = new JLabel();
         JButton okBtn = new JButton();
@@ -464,10 +466,11 @@ public class teachAttendance extends JFrame {
         JScrollPane jScrollPane1 = new JScrollPane();
         JTable classlist = new JTable();
 
-        afterDateWindow.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        afterDateWindow.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE); //Function for the 'x' button :D
 
         classCombo.setModel(new DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
+        //Items for combo box. Classes to on a given 'date' iba pala magiging itsura nito sa teachAttend :)) akona bahala dun
+        
         classLbl.setText("Class");
 
         okBtn.setText("Go!");
@@ -483,9 +486,9 @@ public class teachAttendance extends JFrame {
                 afterDateWindow.dispose();
             }
         });
-
+        //classlist.setModel(entries, headers);
         classlist.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] { //Entries
+            new Object [][] { //Entries/ laman ng table
                 {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null},
@@ -498,7 +501,8 @@ public class teachAttendance extends JFrame {
         classlist.getColumnModel().getColumn(1).setResizable(false);
         classlist.getColumnModel().getColumn(2).setResizable(false);
         classlist.getColumnModel().getColumn(3).setResizable(false);
-
+        
+        //LAYOUT
         GroupLayout layout = new GroupLayout(afterDateWindow.getContentPane());
         afterDateWindow.getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -539,9 +543,12 @@ public class teachAttendance extends JFrame {
     }
     
     private static void dateButtonWindow(){ //TODO
+    	//Creates the window
     	dateWindow = new JDialog();
     	dateWindow.setVisible(true);
 
+    	//Variable Declaration
+    	//UI Objects
         JComboBox monthCombo = new JComboBox();
         JComboBox dayCombo = new JComboBox();
         JComboBox yearCombo = new JComboBox();
@@ -550,9 +557,7 @@ public class teachAttendance extends JFrame {
         JLabel yearLbl = new JLabel();
         JButton okBtn = new JButton();
         JButton cancelbtn = new JButton();
-
-        dateWindow.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
+        //STring contstatns <-- combo box
         String month[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
         String year[] = {"2013", "2014", "2015", "2016"};// Di ko alam kung kelangan to
         String day[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"};
@@ -561,6 +566,8 @@ public class teachAttendance extends JFrame {
         dayCombo.setModel(new DefaultComboBoxModel(day));
         yearCombo.setModel(new DefaultComboBoxModel(year));
 
+        dateWindow.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        
         monthLbl.setText("Month");
 
         dayLbl.setText("Day");
@@ -571,7 +578,8 @@ public class teachAttendance extends JFrame {
         okBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 //TODO
-            	afterDateWindow();
+            	afterDateWindow();//afterDateWindow('date')
+            	//Date = year + "-" + month + "-" + day
             }
         });
 
@@ -581,7 +589,8 @@ public class teachAttendance extends JFrame {
                 dateWindow.dispose();
             }
         });
-
+        
+        //LAYOUT
         GroupLayout layout = new GroupLayout(dateWindow.getContentPane());
         dateWindow.getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
