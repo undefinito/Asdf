@@ -810,7 +810,7 @@ Public Class frmMain
             Dim fs As FileStream = File.Create(path)
 
             ' Add text to the file. 
-            Dim info As Byte() = New UTF8Encoding(True).GetBytes("set PATH=%PATH%;'C:\Program Files\Java\jdk1.7.0_05\bin'" + vbCrLf + "cd C:\code" + vbCrLf + "java login " + Data)
+            Dim info As Byte() = New UTF8Encoding(True).GetBytes("set PATH=%PATH%;'C:\Program Files\Java\jdk1.7.0_05\bin'" + vbCrLf + "cd C:\code" + vbCrLf + "javac login.java" + vbCrLf + "java -cp C:\mysql-connector-java\mysql-connector-java-5.1.24-bin.jar; login " + Data)
 
             fs.Write(info, 0, info.Length)
             fs.Close()
