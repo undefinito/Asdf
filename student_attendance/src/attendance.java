@@ -36,7 +36,7 @@ public class attendance extends javax.swing.JFrame {
     
     static //java-sql connector
     java_sql js = new java_sql();
-   
+	
     public attendance() {
     	initTableModel();
     	initTableRenderer();
@@ -56,19 +56,6 @@ public class attendance extends javax.swing.JFrame {
     	
         jScrollPane1 = new javax.swing.JScrollPane();
         attSheet = new javax.swing.JTable();
-//        {
-//        	public Component prepareRenderer(
-//        	        TableCellRenderer renderer, int row, int column)
-//        	    {
-//        	        Component c = super.prepareRenderer(renderer, row, column);
-//        	        c.setBackground(Color.GREEN);
-//        	        return c;
-//        	    }
-//        };
-        
-        //reset button
-        revert = new javax.swing.JButton();
-        
         profName = new javax.swing.JLabel();
         courseCode = new javax.swing.JLabel();
         section = new javax.swing.JLabel();
@@ -80,7 +67,8 @@ public class attendance extends javax.swing.JFrame {
         excusedB = new javax.swing.JButton();
         searchBar = new javax.swing.JTextField();
         searchButton = new javax.swing.JButton();
-
+        subjNowType = "regular";
+        
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         setPreferredSize(new java.awt.Dimension(600, 300));
@@ -95,12 +83,9 @@ public class attendance extends javax.swing.JFrame {
         //gets current subject depending on profID and current timestamp
         acquireSubj(profNow);
         acquireProfName(profNow);
-        
-    	Object[][] tabel = getClasslist(subjNow);
 
-		tableEntries = tabel;
+		tableEntries = getClasslist(subjNow);
      
-    	
     	attSheet.setModel( myTableModel );
      
     	attSheet.setDefaultRenderer(Object.class, myTableRenderer);
@@ -136,10 +121,10 @@ public class attendance extends javax.swing.JFrame {
                 dateButtonActionPerformed(evt);
             }
         });
-
+        
         attBar.setFloatable(false);
         attBar.setRollover(true);
-
+       
         absentB.setBackground(new java.awt.Color(255, 0, 0));
         absentB.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         absentB.setForeground(new java.awt.Color(255, 255, 255));
@@ -233,7 +218,17 @@ public class attendance extends javax.swing.JFrame {
                 searchButtonActionPerformed(evt);
             }
         });
+        
+        absentB.createToolTip();
+        lateB.createToolTip();
+        presentB.createToolTip();
+        excusedB.createToolTip();
 
+        absentB.setToolTipText("Absent");
+        lateB.setToolTipText("Late");
+        presentB.setToolTipText("Present");
+        excusedB.setToolTipText("Excused");
+        
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -282,7 +277,7 @@ public class attendance extends javax.swing.JFrame {
 
         pack();
     }
-
+    
 
 	private void dateButtonActionPerformed(java.awt.event.ActionEvent evt)
     {           
@@ -355,8 +350,8 @@ public class attendance extends javax.swing.JFrame {
     	//
 		String q = "SELECT status FROM classlist WHERE student_id LIKE " +
 				myTableModel.getValueAt(row, 2).toString() +
-				" AND teacher_id LIKE " + profNow +
-				" AND course_id LIKE " + subjNow;
+				" AND teacher_id LIKE '" + profNow + "' " +
+				" AND course_id LIKE '" + subjNow + "'";
     	String[][] result = js.query(q);
     	
     	String stat = result[0][0].toString().toLowerCase();
@@ -422,60 +417,116 @@ public class attendance extends javax.swing.JFrame {
 	    				};
     		}
     		
-    	//    	repaint that shit
-	    	for(int x=0; x < resultSearch.length; x++)
-	    	{
-	    		for(int y=0; y<columnNames.length; y++)
-	    		{
-	    			Object temp = newEntries[x][y];
-	    			myTableModel.setValueAt(temp, x, y);
-
-	    		}
-	    	}
-	    	
-//	    	remove non results
-	    	for(int c=resultSearch.length; c < tableEntries.length; c++)
-	    	{
-	    		for(int y=0; y<columnNames.length; y++)
-	    		{
-	    			myTableModel.setValueAt(null, c, y);
-	    			myTableModel.setRowColour(c, Color.white);
-	    		}
-	    	}
-	    	
-	    	//color the rows according to results
-	    	setRowColorStats(newEntries);
-	    	
-	    	attSheet.repaint();
+    		viewSearchResults(newEntries);
+    		
+//    	//    	repaint that shit
+//	    	for(int x=0; x < resultSearch.length; x++)
+//	    	{
+//	    		for(int y=0; y<columnNames.length; y++)
+//	    		{
+//	    			Object temp = newEntries[x][y];
+//	    			myTableModel.setValueAt(temp, x, y);
+//
+//	    		}
+//	    	}
+//	    	
+////	    	remove non results
+//	    	for(int c=resultSearch.length; c < tableEntries.length; c++)
+//	    	{
+//	    		for(int y=0; y<columnNames.length; y++)
+//	    		{
+//	    			myTableModel.setValueAt(null, c, y);
+//	    			myTableModel.setRowColour(c, Color.white);
+//	    		}
+//	    	}
+//	    	
+//	    	//color the rows according to results
+//	    	setRowColorStats(newEntries);
+//	    	
+//	    	attSheet.repaint();
     	}
     	else
     	{	//display a dialog box saying not found
-    		final JDialog y = new JDialog();
-    		y.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-    		y.setVisible(true);
-    		y.setModalityType(ModalityType.APPLICATION_MODAL);
-    		y.setBounds(250, 250, 181, 108);
-    	
-    		JPanel contentPanel1 = new JPanel();
-    		y.getContentPane().setLayout(new BorderLayout());
-    		contentPanel1.setBorder(new EmptyBorder(5, 5, 5, 5));
-    		y.getContentPane().add(contentPanel1, BorderLayout.CENTER);
-    		contentPanel1.setLayout(null);
-    		JButton btn_Ok = new JButton("OK");	
-    		
-    		btn_Ok.addActionListener(new ActionListener() {						//actions for the OK button
-    			public void actionPerformed(ActionEvent arg0) {
-    					y.dispose();			
-                   }
-    		});
-    		btn_Ok.setBounds(30, 36, 89, 23);
-    		contentPanel1.add(btn_Ok);
-    		JLabel msg = new JLabel("'" + sKey + "' not found.");
-    		msg.setBounds(10, 11, 200, 14);
-    		contentPanel1.add(msg);
+    		displayNotFound(sKey);
     	}
-    	//TODO set visible dito yung bagong button
     }
+    
+    private void displayNotFound(String sKey)
+    {
+    	final JDialog y = new JDialog();
+		y.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		y.setVisible(true);
+		y.setModalityType(ModalityType.APPLICATION_MODAL);
+		y.setBounds(250, 250, 181, 108);
+	
+		JPanel contentPanel1 = new JPanel();
+		y.getContentPane().setLayout(new BorderLayout());
+		contentPanel1.setBorder(new EmptyBorder(5, 5, 5, 5));
+		y.getContentPane().add(contentPanel1, BorderLayout.CENTER);
+		contentPanel1.setLayout(null);
+		JButton btn_Ok = new JButton("OK");	
+		
+		btn_Ok.addActionListener(new ActionListener() {						//actions for the OK button
+			public void actionPerformed(ActionEvent arg0) {
+					y.dispose();			
+               }
+		});
+		btn_Ok.setBounds(30, 36, 89, 23);
+		contentPanel1.add(btn_Ok);
+		JLabel msg = new JLabel("'" + sKey + "' not found.");
+		msg.setBounds(10, 11, 200, 14);
+		contentPanel1.add(msg);
+    }
+    
+    private void viewSearchResults(Object[][] results)
+    {
+    	
+    	//UI dialog box
+		final JDialog searchView = new JDialog();
+		searchView.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		searchView.setVisible(true);
+		searchView.setModalityType(ModalityType.APPLICATION_MODAL);
+		searchView.setBounds(100, 200, 400, 300);
+	
+		JPanel contentPanel1 = new JPanel();
+		searchView.getContentPane().setLayout(new BorderLayout());
+		contentPanel1.setBorder(new EmptyBorder(5, 5, 5, 5));
+		searchView.getContentPane().add(contentPanel1, BorderLayout.CENTER);
+		contentPanel1.setLayout(null);
+		JButton btn_Ok = new JButton("OK");	
+		
+		JTable searchTable = new JTable();
+		
+		searchTable.setDefaultRenderer(Object.class, myTableRenderer);
+		searchTable.setModel(myTableModel);
+				
+		searchTable.setAutoCreateRowSorter(true);
+        searchTable.setFont(new java.awt.Font("Tahoma", 0, 14));
+        
+        contentPanel1.add(searchTable);
+        
+		btn_Ok.addActionListener(new ActionListener() {						//actions for the OK button
+			public void actionPerformed(ActionEvent arg0) {
+					searchView.dispose();			
+               }
+		});
+		btn_Ok.setBounds(30, 36, 89, 23);
+		contentPanel1.add(btn_Ok);
+		JLabel msg = new JLabel("qwertyuiop[]\\azxcvbnm,./sdfghjkl;");
+		msg.setBounds(10, 11, 200, 14);
+		contentPanel1.add(msg);
+    	
+		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(searchView.getContentPane());
+        searchView.getContentPane().setLayout(layout);
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(layout.createSequentialGroup()
+            .addGap(21, 21, 21)
+            .addComponent(attBar)
+            .addGap(36, 36, 36)
+            );
+    
+    }
+    
     
     //set row colors according to status
     private void setRowColorStats(Object[][] tabel)
@@ -604,23 +655,29 @@ public class attendance extends javax.swing.JFrame {
     private Object[][] getClasslist(String currentSubj)
     {
     	//gets entries from classlist table
-    	String[][] listClass = js.query("SELECT * FROM classlist WHERE teacher_id LIKE " + profNow);
+    	String[][] listClass = js.query(
+    			"SELECT time_in, time_out, student_id " +
+    			" FROM classlist " +
+    			" WHERE teacher_id LIKE '" + profNow + "'" +
+    			" AND course_id LIKE '"+ subjNow + "'" +
+    			" AND class_type LIKE '"+ subjNowType +"'"
+    			);
     	
     	//arranged 2D array classlist/attendance to be returned
-    	Object[][] actualAtt = new Object[listClass.length][countCurrentSubject(subjNow)];	//actual attendance table to be displayed
+    	Object[][] actualAtt = new Object[countCurrentSubject(subjNow)][columnNames.length];	//actual attendance table to be displayed
     	
     	//according to how many rows of classlist table
     	for(int x=0; x<listClass.length; x++)
     	{
     		//details of student
-    		String[] dets = getDetails(listClass[x][0]);
+    		String[] dets = getDetails(listClass[x][2]);
     		
 //    		System.out.println(listClass[x][3]);
     		
     		actualAtt[x] = new Object[]
     				{
-    					convertMiToSt(listClass[x][4], true),	//time in
-    					convertMiToSt(listClass[x][6], true),	//dapat time out to
+    					convertMiToSt(listClass[x][0], true),	//time in
+    					convertMiToSt(listClass[x][1], true),	//dapat time out to
 						dets[0],						//student ID
 						dets[1],						//last name
 						dets[2],						//first name
@@ -695,7 +752,8 @@ public class attendance extends javax.swing.JFrame {
 		System.out.println(ID);
 		
 		String q = "UPDATE classlist SET status='" + status + "' " +
-					" WHERE student_id LIKE '" + ID + "'";
+					" WHERE student_id LIKE '" + ID + "'"+
+					" AND course_id LIKE '" + subjNow + "'";
 		js.updateQuery(q);
 		
 	}
@@ -739,8 +797,6 @@ public class attendance extends javax.swing.JFrame {
     private javax.swing.JButton absentB;
     private javax.swing.JToolBar attBar;
     
-    private javax.swing.JButton revert;
-    
     //rows in the table
     private static Object[][] tableEntries;
     private javax.swing.JTable attSheet;
@@ -762,13 +818,13 @@ public class attendance extends javax.swing.JFrame {
     		};
     
     ////<editor-fold defaultstate="collapsed" desc="strings to be displayed">
-    
+    private String subjNowType;				//class type of current subject
     private static String profNow;			//ID of current prof fetched from login
     private static String subjNow;     	//ID of current subject
     private String subjSec;			//section of current subject	
     private String profNameNow;		//name of current prof
     private String subjNameNow;		//name of current subject
-    	
+    
     private javax.swing.JLabel courseCode;
     private javax.swing.JButton dateButton;
     private javax.swing.JButton excusedB;
