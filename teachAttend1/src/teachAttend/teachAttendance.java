@@ -459,7 +459,17 @@ public class teachAttendance extends JFrame {
         addSched.pack();
     }                        
 
-    private static void afterDateWindow(String chosen){
+    private static void setSearch(classlist x, String stat){
+    	boolean flag = false;
+    	for(int c = 0; c < classlist.length && flag == false; c++){
+    		if(x.getCourse_ID().equals(classlist[c].getCourse_ID())){
+    			flag = true;
+    			classlist[c].setStatus(stat);
+    		}
+    	}
+    }
+    
+    private static void afterDateWindow(final String chosen){
     	//Creates the window
     	afterDateWindow = new JDialog(); 
     	afterDateWindow.setVisible(true);
@@ -585,11 +595,13 @@ public class teachAttendance extends JFrame {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	int	row = cl.getSelectedRow();
             	String u = "UPDATE classlist "
-            				+ "SET Pstatus = 'absent'	"
-            				+ "WHERE course_ID = '" + classlist[row].getCourse_ID() + "'" 
-            				+ "AND teacher_ID = '" + classlist[row].getTeacher_ID() + "'";
+        				+ "SET Pstatus = 'absent'	"
+        				+ "WHERE course_ID = '" + cla[row].getCourse_ID() + "'" 
+        				+ " AND teacher_ID = '" + cla[row].getTeacher_ID() + "'"
+                		+ " AND sched_date ='" + cla[row].getDate() + "'"
+                        + " AND class_type ='" + cla[row].getClasstype() + "'";
             	js.updateQuery(u);
-            	cla[row].setStatus("absent");
+            	setSearch(cla[row], "absent");
             	tmpentries[row][5] = "absent";
             	cl.setModel(new DefaultTableModel(tmpentries, tmpcolnames));
             }
@@ -612,11 +624,13 @@ public class teachAttendance extends JFrame {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	int	row = cl.getSelectedRow();
             	String u = "UPDATE classlist "
-            				+ "SET Pstatus = 'late'	"
-            				+ "WHERE course_ID = '" + classlist[row].getCourse_ID() + "'" 
-            				+ "AND teacher_ID = '" + classlist[row].getTeacher_ID() + "'";
+        				+ "SET Pstatus = 'late'	"
+        				+ "WHERE course_ID = '" + cla[row].getCourse_ID() + "'" 
+        				+ " AND teacher_ID = '" + cla[row].getTeacher_ID() + "'"
+                		+ " AND sched_date ='" + cla[row].getDate() + "'"
+                        + " AND class_type ='" + cla[row].getClasstype() + "'";
             	js.updateQuery(u);
-            	cla[row].setStatus("late");
+            	setSearch(cla[row], "late");
             	tmpentries[row][5] = "late";
             	cl.setModel(new DefaultTableModel(tmpentries, tmpcolnames));
             }
@@ -639,11 +653,13 @@ public class teachAttendance extends JFrame {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	int	row = cl.getSelectedRow();
             	String u = "UPDATE classlist "
-            				+ "SET Pstatus = 'present'	"
-            				+ "WHERE course_ID = '" + classlist[row].getCourse_ID() + "'" 
-            				+ "AND teacher_ID = '" + classlist[row].getTeacher_ID() + "'";
+        				+ "SET Pstatus = 'present'	"
+        				+ "WHERE course_ID = '" + cla[row].getCourse_ID() + "'" 
+        				+ " AND teacher_ID = '" + cla[row].getTeacher_ID() + "'"
+                		+ " AND sched_date ='" + cla[row].getDate() + "'"
+                        + " AND class_type ='" + cla[row].getClasstype() + "'";
             	js.updateQuery(u);
-            	cla[row].setStatus("present");
+            	setSearch(cla[row], "present");
             	tmpentries[row][5] = "present";
             	cl.setModel(new DefaultTableModel(tmpentries, tmpcolnames));
             }
@@ -666,11 +682,13 @@ public class teachAttendance extends JFrame {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	int	row = cl.getSelectedRow();
             	String u = "UPDATE classlist "
-            				+ "SET Pstatus = 'excused'	"
-            				+ "WHERE course_ID = '" + classlist[row].getCourse_ID() + "'" 
-            				+ "AND teacher_ID = '" + classlist[row].getTeacher_ID() + "'";
+        				+ "SET Pstatus = 'excused'	"
+        				+ "WHERE course_ID = '" + cla[row].getCourse_ID() + "'" 
+        				+ " AND teacher_ID = '" + cla[row].getTeacher_ID() + "'"
+                		+ " AND sched_date ='" + cla[row].getDate() + "'"
+                        + " AND class_type ='" + cla[row].getClasstype() + "'";            	
             	js.updateQuery(u);
-            	cla[row].setStatus("excused");
+            	setSearch(cla[row], "excused");
             	tmpentries[row][5] = "excused";
             	cl.setModel(new DefaultTableModel(tmpentries, tmpcolnames));
             }
@@ -860,7 +878,9 @@ public class teachAttendance extends JFrame {
     	String u = "UPDATE classlist "
     				+ "SET Pstatus = 'absent'	"
     				+ "WHERE course_ID = '" + classlist[row].getCourse_ID() + "'" 
-    				+ "AND teacher_ID = '" + classlist[row].getTeacher_ID() + "'";
+    				+ " AND teacher_ID = '" + classlist[row].getTeacher_ID() + "'"
+            		+ " AND sched_date ='" + classlist[row].getDate() + "'"
+                    + " AND class_type ='" + classlist[row].getClasstype() + "'";
     	js.updateQuery(u);
     	classlist[row].setStatus("absent");
     	myTableModel.fireTableRowsUpdated(row, row);//row your boat gently down the stream
@@ -871,7 +891,9 @@ public class teachAttendance extends JFrame {
     	String u = "UPDATE classlist "
 				+ "SET Pstatus = 'late'	"
 				+ "WHERE course_ID = '" + classlist[row].getCourse_ID() + "'" 
-				+ "AND teacher_ID = '" + classlist[row].getTeacher_ID() + "'";
+				+ " AND teacher_ID = '" + classlist[row].getTeacher_ID() + "'"
+        		+ " AND sched_date ='" + classlist[row].getDate() + "'"
+                + " AND class_type ='" + classlist[row].getClasstype() + "'";
     	js.updateQuery(u);
     	classlist[row].setStatus("late");
     	myTableModel.fireTableRowsUpdated(row, row);//row your boat gently down the stream
@@ -879,21 +901,25 @@ public class teachAttendance extends JFrame {
 
     private void presentBActionPerformed(ActionEvent evt) { 
     	int	row = attSheet.getSelectedRow();
-    	classlist[row].setStatus("present");
     	String u = "UPDATE classlist "
 				+ "SET Pstatus = 'present'	"
 				+ "WHERE course_ID = '" + classlist[row].getCourse_ID() + "'" 
-				+ "AND teacher_ID = '" + classlist[row].getTeacher_ID() + "'";
+				+ " AND teacher_ID = '" + classlist[row].getTeacher_ID() + "'"
+        		+ " AND sched_date ='" + classlist[row].getDate() + "'"
+                + " AND class_type ='" + classlist[row].getClasstype() + "'";
     	js.updateQuery(u);
+    	classlist[row].setStatus("present");
     	myTableModel.fireTableRowsUpdated(row, row);//row your boat gently down the stream
     }                                        
 
     private void excusedBActionPerformed(ActionEvent evt) {
     	int	row = attSheet.getSelectedRow();
     	String u = "UPDATE classlist "
-				+ "SET Pstatus = 'excused'	"
+				+ "SET Pstatus = 'absent'	"
 				+ "WHERE course_ID = '" + classlist[row].getCourse_ID() + "'" 
-				+ "AND teacher_ID = '" + classlist[row].getTeacher_ID() + "'";
+				+ " AND teacher_ID = '" + classlist[row].getTeacher_ID() + "'"
+        		+ " AND sched_date ='" + classlist[row].getDate() + "'"
+                + " AND class_type ='" + classlist[row].getClasstype() + "'";
     	js.updateQuery(u);
     	classlist[row].setStatus("excused");
     	myTableModel.fireTableRowsUpdated(row, row);//row your boat gently down the stream
