@@ -37,7 +37,6 @@ public class teachAttendance extends javax.swing.JFrame {
         searchBar = new javax.swing.JTextField();
         searchButton = new javax.swing.JButton();
         schedButton = new javax.swing.JButton();
-        genReport = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -130,7 +129,7 @@ public class teachAttendance extends javax.swing.JFrame {
         attSheet.getColumnModel().getColumn(3).setPreferredWidth(60);
         attSheet.getColumnModel().getColumn(3).setMaxWidth(60);
 
-        dateButton.setText("MM/DD/YYYY");
+        dateButton.setText("Reports By date");
         dateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 dateButtonActionPerformed(evt);
@@ -241,14 +240,6 @@ public class teachAttendance extends javax.swing.JFrame {
             }
         });
 
-        genReport.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        genReport.setText("Generate Report");
-        genReport.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                genReportActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -259,9 +250,8 @@ public class teachAttendance extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(dateButton)
-                            .addComponent(schedButton)
-                            .addComponent(genReport))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 259, Short.MAX_VALUE)
+                            .addComponent(schedButton))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 277, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(attBar, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
@@ -279,15 +269,14 @@ public class teachAttendance extends javax.swing.JFrame {
                         .addComponent(dateButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(schedButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(genReport))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(searchBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(searchButton))
                         .addGap(18, 18, 18)
-                        .addComponent(attBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(attBar, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -322,10 +311,6 @@ public class teachAttendance extends javax.swing.JFrame {
     private void schedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_schedButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_schedButtonActionPerformed
-
-    private void genReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genReportActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_genReportActionPerformed
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         // TODO add your handling code here:
@@ -371,7 +356,6 @@ public class teachAttendance extends javax.swing.JFrame {
     private javax.swing.JTable attSheet;
     private javax.swing.JButton dateButton;
     private javax.swing.JButton excusedB;
-    private javax.swing.JButton genReport;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton lateB;
     private javax.swing.JButton presentB;
