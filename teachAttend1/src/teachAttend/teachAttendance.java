@@ -5,12 +5,16 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.util.*;
+
 import javax.swing.*;
+
 import java.awt.Dialog.ModalityType;
 import java.awt.event.*;
+
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
 
 @SuppressWarnings("serial")
@@ -51,7 +55,10 @@ public class teachAttendance extends JFrame {
     //custom table model
     private static MyTableModel myTableModel;
     //custom table renderer (for colors)
-    private MyTableCellRenderer myTableRenderer;
+    private static MyTableCellRenderer myTableRenderer;
+    //FOR MM/DD/YYYY
+    private static classlist[] cla;
+    private static Object[][] tmpentries;
     
 	//Para sa atttable yun vars na to
     private static Object[][] entries;
@@ -271,8 +278,7 @@ public class teachAttendance extends JFrame {
 			contentPanel1.add(msg);
         }
     }
-    
-    
+        
     private static void addSchedWindow(){
     	addSched = new JDialog();
     	addSched.setVisible(true);
@@ -295,11 +301,11 @@ public class teachAttendance extends JFrame {
         final JButton cancelbtn = new  JButton();
         final JLabel roomlbl = new  JLabel();
         final JComboBox RoomCombo = new  JComboBox();
-        final String[] rm = new String[] { "W401", "W402", "W403", "W404", "W405", "W406", "W407", "W408", "W409", "W410", "W411", "W412", "W413", "W414", "E401", "E402", "E403", "E404", "E405", "E406", "E407", "E408", "E409", "E410", "E411", "E412", "E413", "E414", "ELAB-A", "ELAB-B", "E208", "FACRM", "ENGFACRM", "E208" };        
-        final String[] mo = new String[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"};
-        final String[] moNum = new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"};
-        final String[] day = new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"};
-        final String[] yr = new String[] { "2013", "2014", "2015", "2016", "2017" };
+        final String[] rm = { "W401", "W402", "W403", "W404", "W405", "W406", "W407", "W408", "W409", "W410", "W411", "W412", "W413", "W414", "E401", "E402", "E403", "E404", "E405", "E406", "E407", "E408", "E409", "E410", "E411", "E412", "E413", "E414", "ELAB-A", "ELAB-B", "E208", "FACRM", "ENGFACRM", "E208" };        
+        final String[] mo = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"};
+        final String[] moNum = { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"};
+        final String[] day = { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"};
+        final String[] yr = { "2013", "2014", "2015", "2016", "2017" };
 
         addSched.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -453,54 +459,240 @@ public class teachAttendance extends JFrame {
         addSched.pack();
     }                        
 
-    private static void afterDateWindow(){ //TODO
+    private static void afterDateWindow(String chosen){
     	//Creates the window
     	afterDateWindow = new JDialog(); 
     	afterDateWindow.setVisible(true);
     	
+    	
+    	//Population of list
+    	final String query = "SELECT DISTINCT teacher.teacher_ID, course_name, first_name, "
+				+ " last_name, middle_initial, sched_room, schedstart_time, schedend_time, sched_day, "
+				+ " class_type, Ptime_in, Ptime_out, Pstatus, course.course_ID, sched_date, class_section"
+				+ " FROM classlist, teacher, course "
+				+ " WHERE classlist.teacher_ID = teacher.teacher_ID "
+				+ " AND classlist.course_ID = course.course_ID"
+				+ " AND sched_date = '" + chosen + "'";
+
+    	String tmp[][];   	
+    	tmp = js.query(query);
+    	cla = new classlist[tmp.length];
+    	System.out.printf("%d", tmp.length);
+    	
+    	for(int row = 0; row < tmp.length; row++ ){
+			final int ID = 0;
+			final int course = 1;
+			final int fName = 2;
+			final int lName = 3;
+			final int mi = 4;
+			final int room = 5;
+			final int Stime = 6;
+			final int Etime = 7;
+			final int day = 8;
+			final int classtype = 9;
+			final int ptime_in = 10;
+			final int ptime_out = 11;
+			final int pstatus = 12;
+			final int courseID = 13;
+			final int date = 14;
+			final int sec = 15;
+			cla[row] = new classlist(
+					tmp[row][ID], 
+					tmp[row][fName], 
+					tmp[row][lName], 
+					tmp[row][mi], 
+					tmp[row][course], 
+					tmp[row][room], 
+					tmp[row][Stime], 
+					tmp[row][Etime], 
+					tmp[row][day],
+					tmp[row][classtype],
+					tmp[row][ptime_in],
+					tmp[row][ptime_out],
+					tmp[row][pstatus],
+					tmp[row][courseID],
+					tmp[row][date],
+					tmp[row][sec]
+							);
+		}
+    	//END POPULATE
+    	
+    	//INSERT ENTRIES    	
+    	final Object[][] tmpentries = new Object[cla.length][6];
+    	
+    	for(int c = 0; c < cla.length; c++){
+    		String c_code = cla[c].getCoursecode();
+    		String Time = cla[c].getSched_Stime() + " - " + cla[c].getSched_Etime();
+    		String Room = cla[c].getSched_room();
+    		String Fac = cla[c].getFirst_name() + " " + cla[c].getLast_name();
+    		String pStat = cla[c].getStatus();
+    		String section = cla[c].getSection();
+    		tmpentries[c][0] = c_code;
+    		tmpentries[c][1] = section;
+    		tmpentries[c][2] = Time;
+    		tmpentries[c][3] = Room;
+    		tmpentries[c][4] = Fac;
+    		if(pStat.equals("na"))
+    			tmpentries[c][5] = "";
+    		else	
+    			tmpentries[c][5] = pStat;
+    	}
+    	//END INSERT
+
     	//Variable Declaration of objects
-        JComboBox classCombo = new JComboBox();
-        JLabel classLbl = new JLabel();
-        JButton okBtn = new JButton();
-        JButton cancelbtn = new JButton();
-        JScrollPane jScrollPane1 = new JScrollPane();
-        JTable classlist = new JTable();
+    	final JButton backbtn = new JButton();
+        final JButton gogobtn = new JButton();
+        final JScrollPane jScrollPane1 = new JScrollPane();
+        final JTable cl = new JTable();
+        final JButton absent = new javax.swing.JButton();
+        final JButton late = new javax.swing.JButton();
+        final JButton present = new javax.swing.JButton();
+        final JButton excused = new javax.swing.JButton();
+        final String[] tmpcolnames = {"Course","Section", "Time", "Room", "Faculty", "Status"};
+        afterDateWindow.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE); //Function for the 'x' button :D
 
-        afterDateWindow.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE); //Function for the 'x' button :D
-
-        classCombo.setModel(new DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        //Items for combo box. Classes to on a given 'date' iba pala magiging itsura nito sa teachAttend :)) akona bahala dun
-        
-        classLbl.setText("Class");
-
-        okBtn.setText("Go!");
-        okBtn.addActionListener(new ActionListener() {
+        backbtn.setText("back");
+        backbtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                //okBtnActionPerformed(evt); //TODO
-            }
-        });
-
-        cancelbtn.setText("Cancel");
-        cancelbtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
+            	populate(); //DI uupdate orignial table D:
                 afterDateWindow.dispose();
+                myTableModel.fireTableRowsDeleted(0, myTableModel.getRowCount()-1);
             }
         });
-        //classlist.setModel(entries, headers);
-        classlist.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] { //Entries/ laman ng table
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {"Title 1", "Title 2", "Title 3", "Title 4"}));//Headers
         
-        jScrollPane1.setViewportView(classlist);
-        classlist.getColumnModel().getColumn(0).setResizable(false);
-        classlist.getColumnModel().getColumn(1).setResizable(false);
-        classlist.getColumnModel().getColumn(2).setResizable(false);
-        classlist.getColumnModel().getColumn(3).setResizable(false);
+        
+        gogobtn.setText("Generate");
+        gogobtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                //gogobtnActionPerformed(evt); TODO
+            }
+        });
+
+        absent.setBackground(new java.awt.Color(255, 0, 0));
+        absent.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        absent.setForeground(new java.awt.Color(255, 255, 255));
+        absent.setText("A");
+        absent.setActionCommand("Absent");
+        absent.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        absent.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        absent.setFocusable(false);
+        absent.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        absent.setMaximumSize(new java.awt.Dimension(40, 40));
+        absent.setMinimumSize(new java.awt.Dimension(40, 40));
+        absent.setPreferredSize(new java.awt.Dimension(40, 40));
+        absent.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        absent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	int	row = cl.getSelectedRow();
+            	String u = "UPDATE classlist "
+            				+ "SET Pstatus = 'absent'	"
+            				+ "WHERE course_ID = '" + classlist[row].getCourse_ID() + "'" 
+            				+ "AND teacher_ID = '" + classlist[row].getTeacher_ID() + "'";
+            	js.updateQuery(u);
+            	cla[row].setStatus("absent");
+            	tmpentries[row][5] = "absent";
+            	cl.setModel(new DefaultTableModel(tmpentries, tmpcolnames));
+            }
+        });
+
+        late.setBackground(new java.awt.Color(255, 204, 0));
+        late.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        late.setText("L");
+        late.setActionCommand("Late");
+        late.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        late.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        late.setFocusable(false);
+        late.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        late.setMargin(new java.awt.Insets(2, 20, 2, 14));
+        late.setMaximumSize(new java.awt.Dimension(40, 40));
+        late.setMinimumSize(new java.awt.Dimension(40, 40));
+        late.setPreferredSize(new java.awt.Dimension(40, 40));
+        late.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        late.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	int	row = cl.getSelectedRow();
+            	String u = "UPDATE classlist "
+            				+ "SET Pstatus = 'late'	"
+            				+ "WHERE course_ID = '" + classlist[row].getCourse_ID() + "'" 
+            				+ "AND teacher_ID = '" + classlist[row].getTeacher_ID() + "'";
+            	js.updateQuery(u);
+            	cla[row].setStatus("late");
+            	tmpentries[row][5] = "late";
+            	cl.setModel(new DefaultTableModel(tmpentries, tmpcolnames));
+            }
+        });
+
+        present.setBackground(new java.awt.Color(0, 204, 0));
+        present.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        present.setText("P");
+        present.setActionCommand("Present");
+        present.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        present.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        present.setFocusable(false);
+        present.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        present.setMargin(new java.awt.Insets(2, 20, 2, 14));
+        present.setMaximumSize(new java.awt.Dimension(40, 40));
+        present.setMinimumSize(new java.awt.Dimension(40, 40));
+        present.setPreferredSize(new java.awt.Dimension(40, 40));
+        present.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        present.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	int	row = cl.getSelectedRow();
+            	String u = "UPDATE classlist "
+            				+ "SET Pstatus = 'present'	"
+            				+ "WHERE course_ID = '" + classlist[row].getCourse_ID() + "'" 
+            				+ "AND teacher_ID = '" + classlist[row].getTeacher_ID() + "'";
+            	js.updateQuery(u);
+            	cla[row].setStatus("present");
+            	tmpentries[row][5] = "present";
+            	cl.setModel(new DefaultTableModel(tmpentries, tmpcolnames));
+            }
+        });
+
+        excused.setBackground(new java.awt.Color(153, 153, 255));
+        excused.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        excused.setText("E");
+        excused.setActionCommand("Excused");
+        excused.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        excused.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        excused.setFocusable(false);
+        excused.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        excused.setMargin(new java.awt.Insets(2, 20, 2, 14));
+        excused.setMaximumSize(new java.awt.Dimension(40, 40));
+        excused.setMinimumSize(new java.awt.Dimension(40, 40));
+        excused.setPreferredSize(new java.awt.Dimension(40, 40));
+        excused.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        excused.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	int	row = cl.getSelectedRow();
+            	String u = "UPDATE classlist "
+            				+ "SET Pstatus = 'excused'	"
+            				+ "WHERE course_ID = '" + classlist[row].getCourse_ID() + "'" 
+            				+ "AND teacher_ID = '" + classlist[row].getTeacher_ID() + "'";
+            	js.updateQuery(u);
+            	cla[row].setStatus("excused");
+            	tmpentries[row][5] = "excused";
+            	cl.setModel(new DefaultTableModel(tmpentries, tmpcolnames));
+            }
+        });
+        
+        cl.setModel(new DefaultTableModel(tmpentries, tmpcolnames));
+        
+        jScrollPane1.setViewportView(cl);
+        cl.getColumnModel().getColumn(0).setMinWidth(90);
+        cl.getColumnModel().getColumn(0).setPreferredWidth(90);
+        cl.getColumnModel().getColumn(0).setMaxWidth(90);
+        cl.getColumnModel().getColumn(1).setPreferredWidth(50);
+        cl.getColumnModel().getColumn(1).setMaxWidth(50);
+        cl.getColumnModel().getColumn(2).setMinWidth(130);
+        cl.getColumnModel().getColumn(2).setPreferredWidth(150);
+        cl.getColumnModel().getColumn(2).setMaxWidth(200);
+        cl.getColumnModel().getColumn(3).setMinWidth(80);
+        cl.getColumnModel().getColumn(3).setPreferredWidth(90);
+        cl.getColumnModel().getColumn(3).setMaxWidth(100);
+        cl.getColumnModel().getColumn(5).setMinWidth(80);
+        cl.getColumnModel().getColumn(5).setPreferredWidth(90);
+        cl.getColumnModel().getColumn(5).setMaxWidth(100);
         
         //LAYOUT
         GroupLayout layout = new GroupLayout(afterDateWindow.getContentPane());
@@ -508,60 +700,66 @@ public class teachAttendance extends JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(70, 70, 70)
-                        .addComponent(classLbl)
-                        .addGap(40, 40, 40)
-                        .addComponent(classCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(60, 60, 60)
-                        .addComponent(okBtn, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(cancelbtn))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 246, GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap()
+                .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 625, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(227, 227, 227)
+                .addComponent(backbtn)
+                .addGap(18, 18, 18)
+                .addComponent(gogobtn)
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(absent, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(late, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(present, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(excused, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addGap(243, 243, 243))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(classLbl)
-                    .addComponent(classCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                .addGap(9, 9, 9)
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(okBtn)
-                    .addComponent(cancelbtn))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                    .addComponent(excused, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(present, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(late, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(absent, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 125, GroupLayout.PREFERRED_SIZE)
-                .addGap(86, 86, 86))
-        );
-
+                .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 187, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(backbtn)
+                    .addComponent(gogobtn))
+                .addContainerGap())
+        );        
         afterDateWindow.pack();
     }
     
-    private static void dateButtonWindow(){ //TODO
+    private static void dateButtonWindow(){
     	//Creates the window
     	dateWindow = new JDialog();
     	dateWindow.setVisible(true);
 
     	//Variable Declaration
     	//UI Objects
-        JComboBox monthCombo = new JComboBox();
-        JComboBox dayCombo = new JComboBox();
-        JComboBox yearCombo = new JComboBox();
-        JLabel monthLbl = new JLabel();
-        JLabel dayLbl = new JLabel();
-        JLabel yearLbl = new JLabel();
-        JButton okBtn = new JButton();
-        JButton cancelbtn = new JButton();
+    	final JComboBox monthCombo = new JComboBox();
+        final JComboBox dayCombo = new JComboBox();
+        final JComboBox yearCombo = new JComboBox();
+        final JLabel monthLbl = new JLabel();
+        final JLabel dayLbl = new JLabel();
+        final JLabel yearLbl = new JLabel();
+        final JButton okBtn = new JButton();
+        final JButton cancelbtn = new JButton();
         //STring contstatns <-- combo box
-        String month[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-        String year[] = {"2013", "2014", "2015", "2016"};// Di ko alam kung kelangan to
-        String day[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"};
-        
+        final String month[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+        final String year[] = {"2013", "2014", "2015", "2016"};// Di ko alam kung kelangan to
+        final String day[] = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"};
+        final String[] moNum = { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"};        
         monthCombo.setModel(new DefaultComboBoxModel(month));
         dayCombo.setModel(new DefaultComboBoxModel(day));
         yearCombo.setModel(new DefaultComboBoxModel(year));
@@ -577,9 +775,10 @@ public class teachAttendance extends JFrame {
         okBtn.setText("Go!");
         okBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                //TODO
-            	afterDateWindow();//afterDateWindow('date')
-            	//Date = year + "-" + month + "-" + day
+            	String date = yearCombo.getItemAt(yearCombo.getSelectedIndex()).toString() + "-" + 
+							  moNum[monthCombo.getSelectedIndex()] + "-" +
+							  dayCombo.getItemAt(dayCombo.getSelectedIndex()).toString();
+            	afterDateWindow(date);
             }
         });
 
@@ -645,21 +844,11 @@ public class teachAttendance extends JFrame {
     private void dateButtonActionPerformed(ActionEvent evt) {//Button MM/DD/YYYY                                           
         dateButtonWindow();
     }                                          
-
-    private void searchBarActionPerformed(ActionEvent evt) { //No idea                                         
-        // TODO add your handling code here:
-    	System.out.println("search");
-    }                                         
-
+                                        
     private void schedButtonActionPerformed(ActionEvent evt) {//Button Add Schedule                                    
     	addSchedWindow();
     }                                           
 
-    private void genReportActionPerformed(ActionEvent evt) {//Button Generate Report
-        // TODO add your handling code here:
-    	System.out.println("genRep");
-    }                                         
-    
     private void searchButtonActionPerformed(ActionEvent evt) {//Go                        
         // TODO add your handling code here:
     	System.out.println("search B");
@@ -722,11 +911,9 @@ public class teachAttendance extends JFrame {
     	myTableRenderer = new MyTableCellRenderer();
     }
     
-
     private void initTableModel(){
     	myTableModel = new MyTableModel();
     }
-
 
     private void initComponents() {
 
@@ -741,7 +928,6 @@ public class teachAttendance extends JFrame {
         searchBar = new JTextField();
         searchButton = new JButton();
         schedButton = new JButton();
-        genReport = new JButton();
        
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         attSheet.setModel(myTableModel);
@@ -756,8 +942,8 @@ public class teachAttendance extends JFrame {
         attSheet.getColumnModel().getColumn(0).setMinWidth(90);
         attSheet.getColumnModel().getColumn(0).setPreferredWidth(90);
         attSheet.getColumnModel().getColumn(0).setMaxWidth(90);
-        attSheet.getColumnModel().getColumn(1).setPreferredWidth(50);
-        attSheet.getColumnModel().getColumn(1).setMaxWidth(50);
+        attSheet.getColumnModel().getColumn(1).setPreferredWidth(30);
+        attSheet.getColumnModel().getColumn(1).setMaxWidth(30);
         attSheet.getColumnModel().getColumn(2).setMinWidth(130);
         attSheet.getColumnModel().getColumn(2).setPreferredWidth(150);
         attSheet.getColumnModel().getColumn(2).setMaxWidth(200);
@@ -765,7 +951,7 @@ public class teachAttendance extends JFrame {
         attSheet.getColumnModel().getColumn(3).setPreferredWidth(90);
         attSheet.getColumnModel().getColumn(3).setMaxWidth(100);
         
-        dateButton.setText("MM/DD/YYYY");
+        dateButton.setText("Generate report");
         dateButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 dateButtonActionPerformed(evt);
@@ -855,12 +1041,7 @@ public class teachAttendance extends JFrame {
         attBar.add(excusedB);
 
         searchBar.setText("Search...");
-        searchBar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                searchBarActionPerformed(evt);
-            }
-        });
-
+        
         searchButton.setText("Go");
         searchButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -877,13 +1058,6 @@ public class teachAttendance extends JFrame {
             }
         });
 
-        genReport.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        genReport.setText("Generate Report");
-        genReport.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                genReportActionPerformed(evt);
-            }
-        });
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -895,9 +1069,8 @@ public class teachAttendance extends JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                             .addComponent(dateButton)
-                            .addComponent(schedButton)
-                            .addComponent(genReport))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 259, Short.MAX_VALUE)
+                            .addComponent(schedButton))
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 277, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                             .addComponent(attBar, GroupLayout.PREFERRED_SIZE, 180, GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
@@ -915,15 +1088,14 @@ public class teachAttendance extends JFrame {
                         .addComponent(dateButton)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(schedButton)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(genReport))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                             .addComponent(searchBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                             .addComponent(searchButton))
                         .addGap(18, 18, 18)
-                        .addComponent(attBar, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(attBar, GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE)))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 240, GroupLayout.PREFERRED_SIZE))
         );
@@ -1015,4 +1187,7 @@ public class teachAttendance extends JFrame {
 		}
 		
 	}
+    
+    //OTHER TABLES
+    
 }
