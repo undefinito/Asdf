@@ -5,12 +5,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.util.*;
-
 import javax.swing.*;
-
 import java.awt.Dialog.ModalityType;
 import java.awt.event.*;
-
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -37,7 +34,6 @@ public class teachAttendance extends JFrame {
     private JButton dateButton;
     private JButton excusedB;
     private JButton schedButton;
-    private JButton genReport;
     private JScrollPane jScrollPane1;
     private JButton lateB;
     private JButton presentB;
@@ -184,7 +180,9 @@ public class teachAttendance extends JFrame {
     	}
 	}
 
-    private static void addSched(String course, String sec, String Stime, String Etime, String room, String date){
+    
+    @SuppressWarnings("unused")
+	private static void addSched(String course, String sec, String Stime, String Etime, String room, String date){
     	//CONSTANTS
     	final int preCourseID = 0;
     	final int preCourseName = 1;
@@ -203,7 +201,7 @@ public class teachAttendance extends JFrame {
         
         String pretmp[][] = js.query(prequery);
         
-    	if(pretmp.length > 0){  //A regular class exists //TODO		
+    	if(pretmp.length > 0){		
     		final String q = "SELECT * "
     						+ "FROM classlist "
     						+ "WHERE course_ID = '" + pretmp[0][preCourseID] + "'"
