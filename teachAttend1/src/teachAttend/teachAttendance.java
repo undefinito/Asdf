@@ -48,6 +48,7 @@ public class teachAttendance extends JFrame {
     private static JDialog addSched;
     private static JDialog dateWindow;
     private static JDialog afterDateWindow;
+    private static JDialog searchWindow;
     
     //Functionalities
     private static classlist[] classlist;
@@ -56,9 +57,8 @@ public class teachAttendance extends JFrame {
     private static MyTableModel myTableModel;
     //custom table renderer (for colors)
     private static MyTableCellRenderer myTableRenderer;
-    //FOR MM/DD/YYYY
+    //FOR Gen rep and search
     private static classlist[] cla;
-    private static Object[][] tmpentries;
     
 	//Para sa atttable yun vars na to
     private static Object[][] entries;
@@ -468,7 +468,7 @@ public class teachAttendance extends JFrame {
     		}
     	}
     }
-    
+
     private static void afterDateWindow(final String chosen){
     	//Creates the window
     	afterDateWindow = new JDialog(); 
@@ -757,6 +757,301 @@ public class teachAttendance extends JFrame {
         );        
         afterDateWindow.pack();
     }
+
+    
+    private static void searchWindow(final String chosen){
+    	//Creates the window
+    	searchWindow = new JDialog(); 
+    	searchWindow.setVisible(true);
+    	
+    	
+    	//Population of list
+    	final String query = "SELECT DISTINCT teacher.teacher_ID, course_name, first_name, "
+				+ " last_name, middle_initial, sched_room, schedstart_time, schedend_time, sched_day, "
+				+ " class_type, Ptime_in, Ptime_out, Pstatus, course.course_ID, sched_date, class_section"
+				+ " FROM classlist, teacher, course "
+				+ " WHERE (classlist.teacher_ID = teacher.teacher_ID"
+				+ " AND classlist.course_ID = course.course_ID)"
+				+ " AND"
+				+ " (classlist.teacher_ID LIKE '%" + chosen + "%'"
+				+ " OR classlist.course_ID LIKE '%" + chosen + "%'"
+				+ " OR sched_date LIKE '%" + chosen + "%'"
+				+ " OR first_name LIKE '%" + chosen + "%'"
+				+ " OR last_name LIKE '%" + chosen + "%')";
+
+    	String tmp[][];   	
+    	tmp = js.query(query);
+    	cla = new classlist[tmp.length];
+    	System.out.printf("%d", tmp.length);
+    	
+    	for(int row = 0; row < tmp.length; row++ ){
+			final int ID = 0;
+			final int course = 1;
+			final int fName = 2;
+			final int lName = 3;
+			final int mi = 4;
+			final int room = 5;
+			final int Stime = 6;
+			final int Etime = 7;
+			final int day = 8;
+			final int classtype = 9;
+			final int ptime_in = 10;
+			final int ptime_out = 11;
+			final int pstatus = 12;
+			final int courseID = 13;
+			final int date = 14;
+			final int sec = 15;
+			cla[row] = new classlist(
+					tmp[row][ID], 
+					tmp[row][fName], 
+					tmp[row][lName], 
+					tmp[row][mi], 
+					tmp[row][course], 
+					tmp[row][room], 
+					tmp[row][Stime], 
+					tmp[row][Etime], 
+					tmp[row][day],
+					tmp[row][classtype],
+					tmp[row][ptime_in],
+					tmp[row][ptime_out],
+					tmp[row][pstatus],
+					tmp[row][courseID],
+					tmp[row][date],
+					tmp[row][sec]
+							);
+		}
+    	//END POPULATE
+    	
+    	//INSERT ENTRIES    	
+    	final Object[][] tmpentries = new Object[cla.length][6];
+    	
+    	for(int c = 0; c < cla.length; c++){
+    		String c_code = cla[c].getCoursecode();
+    		String Time = cla[c].getSched_Stime() + " - " + cla[c].getSched_Etime();
+    		String Room = cla[c].getSched_room();
+    		String Fac = cla[c].getFirst_name() + " " + cla[c].getLast_name();
+    		String pStat = cla[c].getStatus();
+    		String section = cla[c].getSection();
+    		tmpentries[c][0] = c_code;
+    		tmpentries[c][1] = section;
+    		tmpentries[c][2] = Time;
+    		tmpentries[c][3] = Room;
+    		tmpentries[c][4] = Fac;
+    		if(pStat.equals("na"))
+    			tmpentries[c][5] = "";
+    		else	
+    			tmpentries[c][5] = pStat;
+    	}
+    	//END INSERT
+
+    	//Variable Declaration of objects
+    	final JButton backbtn = new JButton();
+        final JButton gogobtn = new JButton();
+        final JScrollPane jScrollPane1 = new JScrollPane();
+        final JTable cl = new JTable();
+        final JButton absent = new javax.swing.JButton();
+        final JButton late = new javax.swing.JButton();
+        final JButton present = new javax.swing.JButton();
+        final JButton excused = new javax.swing.JButton();
+        final String[] tmpcolnames = {"Course","Section", "Time", "Room", "Faculty", "Status"};
+        searchWindow.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE); //Function for the 'x' button :D
+
+        backbtn.setText("back");
+        backbtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+            	populate(); //DI uupdate orignial table D:
+                searchWindow.dispose();
+                myTableModel.fireTableRowsDeleted(0, myTableModel.getRowCount()-1);
+            }
+        });
+        
+        
+        gogobtn.setText("Generate");
+        gogobtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                //gogobtnActionPerformed(evt); TODO
+            }
+        });
+
+        absent.setBackground(new java.awt.Color(255, 0, 0));
+        absent.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        absent.setForeground(new java.awt.Color(255, 255, 255));
+        absent.setText("A");
+        absent.setActionCommand("Absent");
+        absent.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        absent.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        absent.setFocusable(false);
+        absent.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        absent.setMaximumSize(new java.awt.Dimension(40, 40));
+        absent.setMinimumSize(new java.awt.Dimension(40, 40));
+        absent.setPreferredSize(new java.awt.Dimension(40, 40));
+        absent.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        absent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	int	row = cl.getSelectedRow();
+            	String u = "UPDATE classlist "
+        				+ "SET Pstatus = 'absent'	"
+        				+ "WHERE course_ID = '" + cla[row].getCourse_ID() + "'" 
+        				+ " AND teacher_ID = '" + cla[row].getTeacher_ID() + "'"
+                		+ " AND sched_date ='" + cla[row].getDate() + "'"
+                        + " AND class_type ='" + cla[row].getClasstype() + "'";
+            	js.updateQuery(u);
+            	setSearch(cla[row], "absent");
+            	tmpentries[row][5] = "absent";
+            	cl.setModel(new DefaultTableModel(tmpentries, tmpcolnames));
+            }
+        });
+
+        late.setBackground(new java.awt.Color(255, 204, 0));
+        late.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        late.setText("L");
+        late.setActionCommand("Late");
+        late.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        late.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        late.setFocusable(false);
+        late.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        late.setMargin(new java.awt.Insets(2, 20, 2, 14));
+        late.setMaximumSize(new java.awt.Dimension(40, 40));
+        late.setMinimumSize(new java.awt.Dimension(40, 40));
+        late.setPreferredSize(new java.awt.Dimension(40, 40));
+        late.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        late.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	int	row = cl.getSelectedRow();
+            	String u = "UPDATE classlist "
+        				+ "SET Pstatus = 'late'	"
+        				+ "WHERE course_ID = '" + cla[row].getCourse_ID() + "'" 
+        				+ " AND teacher_ID = '" + cla[row].getTeacher_ID() + "'"
+                		+ " AND sched_date ='" + cla[row].getDate() + "'"
+                        + " AND class_type ='" + cla[row].getClasstype() + "'";
+            	js.updateQuery(u);
+            	setSearch(cla[row], "late");
+            	tmpentries[row][5] = "late";
+            	cl.setModel(new DefaultTableModel(tmpentries, tmpcolnames));
+            }
+        });
+
+        present.setBackground(new java.awt.Color(0, 204, 0));
+        present.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        present.setText("P");
+        present.setActionCommand("Present");
+        present.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        present.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        present.setFocusable(false);
+        present.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        present.setMargin(new java.awt.Insets(2, 20, 2, 14));
+        present.setMaximumSize(new java.awt.Dimension(40, 40));
+        present.setMinimumSize(new java.awt.Dimension(40, 40));
+        present.setPreferredSize(new java.awt.Dimension(40, 40));
+        present.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        present.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	int	row = cl.getSelectedRow();
+            	String u = "UPDATE classlist "
+        				+ "SET Pstatus = 'present'	"
+        				+ "WHERE course_ID = '" + cla[row].getCourse_ID() + "'" 
+        				+ " AND teacher_ID = '" + cla[row].getTeacher_ID() + "'"
+                		+ " AND sched_date ='" + cla[row].getDate() + "'"
+                        + " AND class_type ='" + cla[row].getClasstype() + "'";
+            	js.updateQuery(u);
+            	setSearch(cla[row], "present");
+            	tmpentries[row][5] = "present";
+            	cl.setModel(new DefaultTableModel(tmpentries, tmpcolnames));
+            }
+        });
+
+        excused.setBackground(new java.awt.Color(153, 153, 255));
+        excused.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        excused.setText("E");
+        excused.setActionCommand("Excused");
+        excused.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        excused.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        excused.setFocusable(false);
+        excused.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        excused.setMargin(new java.awt.Insets(2, 20, 2, 14));
+        excused.setMaximumSize(new java.awt.Dimension(40, 40));
+        excused.setMinimumSize(new java.awt.Dimension(40, 40));
+        excused.setPreferredSize(new java.awt.Dimension(40, 40));
+        excused.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        excused.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	int	row = cl.getSelectedRow();
+            	String u = "UPDATE classlist "
+        				+ "SET Pstatus = 'excused'	"
+        				+ "WHERE course_ID = '" + cla[row].getCourse_ID() + "'" 
+        				+ " AND teacher_ID = '" + cla[row].getTeacher_ID() + "'"
+                		+ " AND sched_date ='" + cla[row].getDate() + "'"
+                        + " AND class_type ='" + cla[row].getClasstype() + "'";            	
+            	js.updateQuery(u);
+            	setSearch(cla[row], "excused");
+            	tmpentries[row][5] = "excused";
+            	cl.setModel(new DefaultTableModel(tmpentries, tmpcolnames));
+            }
+        });
+        
+        cl.setModel(new DefaultTableModel(tmpentries, tmpcolnames));
+        
+        jScrollPane1.setViewportView(cl);
+        cl.getColumnModel().getColumn(0).setMinWidth(90);
+        cl.getColumnModel().getColumn(0).setPreferredWidth(90);
+        cl.getColumnModel().getColumn(0).setMaxWidth(90);
+        cl.getColumnModel().getColumn(1).setPreferredWidth(50);
+        cl.getColumnModel().getColumn(1).setMaxWidth(50);
+        cl.getColumnModel().getColumn(2).setMinWidth(130);
+        cl.getColumnModel().getColumn(2).setPreferredWidth(150);
+        cl.getColumnModel().getColumn(2).setMaxWidth(200);
+        cl.getColumnModel().getColumn(3).setMinWidth(80);
+        cl.getColumnModel().getColumn(3).setPreferredWidth(90);
+        cl.getColumnModel().getColumn(3).setMaxWidth(100);
+        cl.getColumnModel().getColumn(5).setMinWidth(80);
+        cl.getColumnModel().getColumn(5).setPreferredWidth(90);
+        cl.getColumnModel().getColumn(5).setMaxWidth(100);
+        
+        //LAYOUT
+        GroupLayout layout = new GroupLayout(searchWindow.getContentPane());
+        searchWindow.getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 625, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(227, 227, 227)
+                .addComponent(backbtn)
+                .addGap(18, 18, 18)
+                .addComponent(gogobtn)
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(absent, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(late, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(present, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(excused, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addGap(243, 243, 243))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                    .addComponent(excused, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(present, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(late, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(absent, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 187, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(backbtn)
+                    .addComponent(gogobtn))
+                .addContainerGap())
+        );        
+        searchWindow.pack();
+    }
     
     private static void dateButtonWindow(){
     	//Creates the window
@@ -868,8 +1163,9 @@ public class teachAttendance extends JFrame {
     }                                           
 
     private void searchButtonActionPerformed(ActionEvent evt) {//Go                        
-        // TODO add your handling code here:
-    	System.out.println("search B");
+        String chosen;
+        chosen = searchBar.getText();
+        searchWindow(chosen);
     }                                            
     
     //ALPE
