@@ -485,7 +485,6 @@ public class teachAttendance extends JFrame {
     	String tmp[][];   	
     	tmp = js.query(query);
     	cla = new classlist[tmp.length];
-    	System.out.printf("%d", tmp.length);
     	
     	for(int row = 0; row < tmp.length; row++ ){
 			final int ID = 0;
@@ -758,6 +757,8 @@ public class teachAttendance extends JFrame {
 
     
     private static void searchWindow(final String chosen){
+    	//searchWindow x = new searchWindow(chosen); 
+    	
     	//Creates the window
     	searchWindow = new JDialog(); 
     	searchWindow.setVisible(true);
@@ -780,7 +781,8 @@ public class teachAttendance extends JFrame {
     	String tmp[][];   	
     	tmp = js.query(query);
     	cla = new classlist[tmp.length];
-    	System.out.printf("%d", tmp.length);
+    	
+    	if(tmp.length > 0){
     	
     	for(int row = 0; row < tmp.length; row++ ){
 			final int ID = 0;
@@ -1049,6 +1051,34 @@ public class teachAttendance extends JFrame {
                 .addContainerGap())
         );        
         searchWindow.pack();
+    	}
+    	else{
+    		final JDialog k = new JDialog();
+			k.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			k.setVisible(true);
+			k.setModalityType(ModalityType.APPLICATION_MODAL);
+			k.setBounds(250, 250, 181, 108);
+		
+			JPanel contentPanel1 = new JPanel();
+			k.getContentPane().setLayout(new BorderLayout());
+			contentPanel1.setBorder(new EmptyBorder(5, 5, 5, 5));
+			k.getContentPane().add(contentPanel1, BorderLayout.CENTER);
+			contentPanel1.setLayout(null);
+			JButton btn_Ok = new JButton("OK");	
+			    			
+			btn_Ok.addActionListener(new ActionListener() {						//actions for the OK button
+				public void actionPerformed(ActionEvent arg0) {
+						k.dispose();		
+						searchWindow.dispose();
+                }
+			});
+			btn_Ok.setBounds(30, 36, 89, 23);
+			contentPanel1.add(btn_Ok);
+			JLabel msg = new JLabel("Class does not exist");
+			msg.setBounds(10, 11, 200, 20);
+			contentPanel1.add(msg);
+    	}
+        
     }
     
     private static void dateButtonWindow(){
@@ -1423,7 +1453,7 @@ public class teachAttendance extends JFrame {
     }    
         
     //FROM ZE NED COLORING
-    private static class MyTableCellRenderer extends DefaultTableCellRenderer {
+    public static class MyTableCellRenderer extends DefaultTableCellRenderer {
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
@@ -1435,7 +1465,7 @@ public class teachAttendance extends JFrame {
     }
     
     //tabel model
-    private static class MyTableModel extends AbstractTableModel {
+    public static class MyTableModel extends AbstractTableModel {
 		
     	//default is white everywhere
     	List<Color> rowColours = Arrays.asList(
@@ -1507,7 +1537,5 @@ public class teachAttendance extends JFrame {
 		}
 		
 	}
-    
-    //OTHER TABLES
-    
+        
 }
