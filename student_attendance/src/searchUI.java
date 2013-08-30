@@ -15,9 +15,10 @@ public class searchUI extends javax.swing.JDialog {
 	
 	java_sql js = new java_sql();
 	
-    public searchUI(Object[][] results, String key) {
+    public searchUI(Object[][] results, String key, classlist[] sarch) {
     	tableEntries = results;
     	searchFor = key;
+    	sAtt = sarch;
     	initTableModel();
     	initTableRenderer();
         initComponents();
@@ -59,6 +60,7 @@ public class searchUI extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         sTable.setModel(myTableModel);
+        sTable.setDefaultRenderer(Object.class, myTableRenderer);
 
         jScrollPane1.setViewportView(sTable);
         sTable.getTableHeader().setReorderingAllowed(false);
@@ -79,7 +81,7 @@ public class searchUI extends javax.swing.JDialog {
 
         resBar.setFloatable(false);
         resBar.setRollover(true);
-        
+
         absentB.setBackground(new java.awt.Color(255, 0, 0));
         absentB.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         absentB.setForeground(new java.awt.Color(255, 255, 255));
@@ -170,6 +172,8 @@ public class searchUI extends javax.swing.JDialog {
         sKeyLabel.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         sKeyLabel.setText("'" + searchFor + "'");
 
+        setRowColorStats(sAtt);
+        
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -246,12 +250,28 @@ public class searchUI extends javax.swing.JDialog {
 		//debugging
 //		System.out.println(ID);
 		
-//		String q = "UPDATE classlist SET status='" + status + "' " +
-//					" WHERE student_id LIKE '" + sAtt[row].getStudID + "'"+
-//					" AND course_id LIKE '" + attendance.subjNow + "'";
-//		js.updateQuery(q);
+		String q = "UPDATE classlist SET status='" + status + "' " +
+		" WHERE student_id LIKE '" + sAtt[row].getStudID() + "'"+
+		" AND course_id LIKE '" + attendance.subjNow + "'" +
+		" AND class_type LIKE '" + attendance.subjNowType +"'";
+		js.updateQuery(q);
 		
 	}
+    
+  //set row colors according to status
+    private void setRowColorStats(classlist[] current)
+    {
+    	for(int x=0; x<current.length; x++)
+    	{
+    		switch(current[x].getStatus())
+    		{
+    			case "absent": myTableModel.setRowColour(x, Color.red); break;
+    			case "late": myTableModel.setRowColour(x, Color.yellow); break;
+    			case "excused": myTableModel.setRowColour(x, Color.blue); break;
+    			case "present": myTableModel.setRowColour(x, Color.green); break;
+    		}
+    	}
+    }
     
     // Variables declaration - do not modify                     
     private javax.swing.JButton absentB;
@@ -280,7 +300,7 @@ public class searchUI extends javax.swing.JDialog {
     //rows in the table
     private static Object[][] tableEntries;
 
-    private classlist sAtt;
+    private classlist[] sAtt;
     
     private MyTableModel myTableModel;
     private MyTableCellRenderer myTableRenderer;

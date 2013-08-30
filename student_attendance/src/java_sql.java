@@ -140,12 +140,12 @@ public class java_sql
 	//Testing of Queries
             try
             { 
+            	
             	statement = con.createStatement();// creates an object used for sending sql statements to the database
 			
 				statement.executeUpdate(q);
                                 
 				//Close connections
-				resultSet.close();
 				statement.close();
 				con.close();
 	             

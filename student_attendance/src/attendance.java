@@ -452,7 +452,7 @@ public class attendance extends javax.swing.JFrame {
 						break;
     				}
     			}
-    			System.out.println(found);
+//    			System.out.println(found);
     			
     		}//inner forloop
     	}//outer forloop
@@ -496,7 +496,7 @@ public class attendance extends javax.swing.JFrame {
     		}
     		
     		//duh read the method name
-    		viewSearchResults(newEntries, sKey);
+    		viewSearchResults(newEntries, sKey, resultSearch);
     		
     	}
     	else
@@ -554,12 +554,13 @@ public class attendance extends javax.swing.JFrame {
 		contentPanel1.add(msg);
     }
     
-    private void viewSearchResults(Object[][] results, String sKey)
+    private void viewSearchResults(Object[][] results, String sKey, classlist[] res)
     {
     	
     	//UI dialog box
-		searchUI search = new searchUI(results, sKey);
+		searchUI search = new searchUI(results, sKey, res);
 		search.setVisible(true);
+		search.setResizable(false);
     }
     
     //set row colors according to status
@@ -865,7 +866,7 @@ public class attendance extends javax.swing.JFrame {
     		};
     
     ////<editor-fold defaultstate="collapsed" desc="strings to be displayed">
-    private String subjNowType;				//class type of current subject
+    public static String subjNowType;				//class type of current subject
     private static String profNow;			//ID of current prof fetched from login
     public static String subjNow;     	//ID of current subject
     private String subjSec;			//section of current subject	
