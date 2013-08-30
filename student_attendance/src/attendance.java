@@ -14,6 +14,10 @@ import java.awt.Component;
 import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -24,6 +28,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -71,11 +77,11 @@ public class attendance extends javax.swing.JFrame {
         
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        setPreferredSize(new java.awt.Dimension(600, 300));
+        setPreferredSize(new java.awt.Dimension(700, 300));
         setResizable(false);
         
         attSheet.setAutoCreateRowSorter(true);
-        attSheet.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        attSheet.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         
        //TODO yung login shit
         profNow = "200717411111";	//dito ilalagay yung profID from login
@@ -84,14 +90,23 @@ public class attendance extends javax.swing.JFrame {
         acquireSubj(profNow);
         acquireProfName(profNow);
 
-		tableEntries = getClasslist(subjNow);
+		tableEntries = getClasslist();
      
+		//debug
+//		for(Object[] row : tableEntries)
+//		{
+//			for(Object col : row)
+//			{
+//				System.out.println(col.toString());
+//			}
+//		}
+		
     	attSheet.setModel( myTableModel );
      
     	attSheet.setDefaultRenderer(Object.class, myTableRenderer);
         
 //      set colors
-		setRowColorStats(tableEntries);
+		setRowColorStats(att);
         
         attSheet.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(attSheet);
@@ -211,6 +226,43 @@ public class attendance extends javax.swing.JFrame {
                 searchBarActionPerformed(evt);
             }
         });
+        
+		searchBar.createToolTip();
+		searchBar.setToolTipText("Type and then press ENTER or Click GO to search");
+		searchBar.addMouseListener(
+		new MouseListener() {
+			
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				searchBar.setText("");
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				searchBar.setText("Search Student...");
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		}
+		);
 
         searchButton.setText("Go");
         searchButton.addActionListener(new java.awt.event.ActionListener() {
@@ -321,7 +373,7 @@ public class attendance extends javax.swing.JFrame {
     }                                        
 
     private void searchBarActionPerformed(java.awt.event.ActionEvent evt)
-    {                                          
+    {
       executeSearch();
     }                                         
     
@@ -332,7 +384,6 @@ public class attendance extends javax.swing.JFrame {
     
     //</editor-fold>
     
-    //TODO ayusin ang colors
     private void initTableRenderer()
     {
     	myTableRenderer = new MyTableCellRenderer();
@@ -343,57 +394,87 @@ public class attendance extends javax.swing.JFrame {
     	myTableModel = new MyTableModel();
     }
     
-    //if late, absent, present, or excused
-//    only gets status regarding the row in classlist table
-    private static String getStatus(int row)
-	{
-    	//
-		String q = "SELECT status FROM classlist WHERE student_id LIKE " +
-				myTableModel.getValueAt(row, 2).toString() +
-				" AND teacher_id LIKE '" + profNow + "' " +
-				" AND course_id LIKE '" + subjNow + "'";
-    	String[][] result = js.query(q);
+    private classlist[] lookUpAttendance(String search)
+    {
+    	List<classlist> newAttendance = new ArrayList<>();
     	
-    	String stat = result[0][0].toString().toLowerCase();
-		
-		return stat;
-	}
+    	for(int x=0; x<att.length; x++)
+    	{
+    		//if row/s have been found
+    		boolean found = false;
+    		for(int c=0; c<6 && !found; c++)
+    		{
+    			switch(c)
+    			{
+    				case 0: //ID
+					{
+						if(att[x].getStudID().contains(search))
+						{
+							newAttendance.add(att[x]);
+							found = true;
+						}
+						break;
+					}
+    				case 1:	//last name
+    				{
+    					if(att[x].getLast_name().contains(search))
+						{
+							newAttendance.add(att[x]);
+							found = true;
+						}
+						break;
+    				}
+    				case 2:	//first name
+    				{
+    					if(att[x].getFirst_name().contains(search))
+						{
+							newAttendance.add(att[x]);
+							found = true;
+						}
+						break;
+    				}
+    				case 3:	//degree program
+    				{
+    					if(att[x].getDegProg().contains(search))
+						{
+							newAttendance.add(att[x]);
+							found = true;
+						}
+						break;
+    				}
+    				case 4:	//status
+    				{
+    					if(att[x].getStatus().contains(search))
+						{
+							newAttendance.add(att[x]);
+							found = true;
+						}
+						break;
+    				}
+    			}
+    			System.out.println(found);
+    			
+    		}//inner forloop
+    	}//outer forloop
+    	 
+    	 classlist[] newList = new classlist[newAttendance.size()];
+    	 
+    	 for(int x=0; x<newAttendance.size(); x++)
+    	 {
+    		 newList[x] = newAttendance.get(x);
+    	 }
+    	 
+    	 return newList;
+    }
     
     //TODO revert of values in table
-    //add search functionality for names and status
     private void executeSearch()
     {
     	//save what you where searching for
     	String sKey = searchBar.getText().toString();
     	
-//    	SELECT FROM TABLE WHERE somecolumn = search key
-    	String q =
-	"SELECT DISTINCT *" +
-	" FROM classlist L JOIN student S "+
-	"  ON L.student_id = S.student_id " +
-	" WHERE (L.teacher_id LIKE "+ profNow +
-	" AND COURSE_ID LIKE " + subjNow + ") " +
-	" AND (L.student_id LIKE '%"+ sKey +"%' OR S.deg_prog LIKE '%"+ sKey +"%' " +
-	"  OR S.first_name LIKE '%"+ sKey +"%' OR S.last_name LIKE '%"+ sKey +"%'" +
-	" OR L.status LIKE '%"+ sKey +"%')" ;
-    	
-    	String[][] resultSearch = null;
-    	
-    	try
-    	{
-    		resultSearch = js.query(q);
-    	}
-    	catch (Exception e) {
-
-		}
-    	
-//    	System.out.println(q);
-    	
-//    	debugging to check how many and waht are teh rows
-//    	for(int c=0; c<resultSearch.length; c++)
-//    	{
-//    		System.out.println(resultSearch[c]);
-//    	}
+    	//look up search terms in attendance
+    	classlist[] resultSearch = lookUpAttendance(sKey);
     	
     	if(resultSearch.length > 0)
     	{
@@ -402,48 +483,21 @@ public class attendance extends javax.swing.JFrame {
     		for(int x = 0; x < resultSearch.length; x++)
     		{
 		    	//    		row of result
-		    	String[] row = resultSearch[x];
-		    	String[] studDetails = getDetails(resultSearch[x][0]);
-		    	
 		    	//place into table entries
 		    	newEntries[x] = new Object[]
 	    				{
-	    						convertMiToSt(row[4], true),
-	    						convertMiToSt(row[6], true),
-	    						studDetails[0],
-	    						studDetails[1],
-	    						studDetails[2],
-	    						studDetails[3]
+	    					resultSearch[x].getTime_in(),
+	    					resultSearch[x].getTime_out(),
+	    					resultSearch[x].getStudID(),
+	    					resultSearch[x].getLast_name(),
+	    					resultSearch[x].getFirst_name(),
+	    					resultSearch[x].getDegProg()
 	    				};
     		}
     		
-    		viewSearchResults(newEntries);
+    		//duh read the method name
+    		viewSearchResults(newEntries, sKey);
     		
-//    	//    	repaint that shit
-//	    	for(int x=0; x < resultSearch.length; x++)
-//	    	{
-//	    		for(int y=0; y<columnNames.length; y++)
-//	    		{
-//	    			Object temp = newEntries[x][y];
-//	    			myTableModel.setValueAt(temp, x, y);
-//
-//	    		}
-//	    	}
-//	    	
-////	    	remove non results
-//	    	for(int c=resultSearch.length; c < tableEntries.length; c++)
-//	    	{
-//	    		for(int y=0; y<columnNames.length; y++)
-//	    		{
-//	    			myTableModel.setValueAt(null, c, y);
-//	    			myTableModel.setRowColour(c, Color.white);
-//	    		}
-//	    	}
-//	    	
-//	    	//color the rows according to results
-//	    	setRowColorStats(newEntries);
-//	    	
-//	    	attSheet.repaint();
     	}
     	else
     	{	//display a dialog box saying not found
@@ -471,6 +525,28 @@ public class attendance extends javax.swing.JFrame {
 					y.dispose();			
                }
 		});
+		
+		y.addKeyListener( new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 		btn_Ok.setBounds(30, 36, 89, 23);
 		contentPanel1.add(btn_Ok);
 		JLabel msg = new JLabel("'" + sKey + "' not found.");
@@ -478,62 +554,20 @@ public class attendance extends javax.swing.JFrame {
 		contentPanel1.add(msg);
     }
     
-    private void viewSearchResults(Object[][] results)
+    private void viewSearchResults(Object[][] results, String sKey)
     {
     	
     	//UI dialog box
-		final JDialog searchView = new JDialog();
-		searchView.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		searchView.setVisible(true);
-		searchView.setModalityType(ModalityType.APPLICATION_MODAL);
-		searchView.setBounds(100, 200, 400, 300);
-	
-		JPanel contentPanel1 = new JPanel();
-		searchView.getContentPane().setLayout(new BorderLayout());
-		contentPanel1.setBorder(new EmptyBorder(5, 5, 5, 5));
-		searchView.getContentPane().add(contentPanel1, BorderLayout.CENTER);
-		contentPanel1.setLayout(null);
-		JButton btn_Ok = new JButton("OK");	
-		
-		JTable searchTable = new JTable();
-		
-		searchTable.setDefaultRenderer(Object.class, myTableRenderer);
-		searchTable.setModel(myTableModel);
-				
-		searchTable.setAutoCreateRowSorter(true);
-        searchTable.setFont(new java.awt.Font("Tahoma", 0, 14));
-        
-        contentPanel1.add(searchTable);
-        
-		btn_Ok.addActionListener(new ActionListener() {						//actions for the OK button
-			public void actionPerformed(ActionEvent arg0) {
-					searchView.dispose();			
-               }
-		});
-		btn_Ok.setBounds(30, 36, 89, 23);
-		contentPanel1.add(btn_Ok);
-		JLabel msg = new JLabel("qwertyuiop[]\\azxcvbnm,./sdfghjkl;");
-		msg.setBounds(10, 11, 200, 14);
-		contentPanel1.add(msg);
-    	
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(searchView.getContentPane());
-        searchView.getContentPane().setLayout(layout);
-        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(layout.createSequentialGroup()
-            .addGap(21, 21, 21)
-            .addComponent(attBar)
-            .addGap(36, 36, 36)
-            );
-    
+		searchUI search = new searchUI(results, sKey);
+		search.setVisible(true);
     }
     
-    
     //set row colors according to status
-    private void setRowColorStats(Object[][] tabel)
+    private void setRowColorStats(classlist[] current)
     {
-    	for(int x=0; x<tabel.length; x++)
+    	for(int x=0; x<current.length; x++)
     	{
-    		switch(getStatus(x))
+    		switch(current[x].getStatus())
     		{
     			case "absent": myTableModel.setRowColour(x, Color.red); break;
     			case "late": myTableModel.setRowColour(x, Color.yellow); break;
@@ -550,21 +584,6 @@ public class attendance extends javax.swing.JFrame {
     	String[][] result = js.query(q);
     	
     	profNameNow = result[0][0] + ", " + result[0][1] + " " + result[0][2] + ".";
-    }
-
-    //for teh rows in tableEntries
-    private int countCurrentSubject(String cursubj)
-    {
-    	String q = "SELECT COUNT(course_id) FROM classlist WHERE course_id LIKE '" + cursubj + "'";
-    	String[][] attemp = js.query(q);
-        int count = 0;
-        
-        if(attemp.length == 1)
-        {
-        	count = Integer.parseInt(attemp[0][0]);
-        }
-        
-        return count;
     }
     
     //convert military timestamp to standard
@@ -652,37 +671,65 @@ public class attendance extends javax.swing.JFrame {
     }
     
     //gets classlist/attendance to be displayed in UI
-    private Object[][] getClasslist(String currentSubj)
+    private Object[][] getClasslist()
     {
     	//gets entries from classlist table
     	String[][] listClass = js.query(
-    			"SELECT time_in, time_out, student_id " +
+    			"SELECT time_in, time_out, student_id, status " +
     			" FROM classlist " +
     			" WHERE teacher_id LIKE '" + profNow + "'" +
     			" AND course_id LIKE '"+ subjNow + "'" +
     			" AND class_type LIKE '"+ subjNowType +"'"
     			);
     	
-    	//arranged 2D array classlist/attendance to be returned
-    	Object[][] actualAtt = new Object[countCurrentSubject(subjNow)][columnNames.length];	//actual attendance table to be displayed
+    	att = new classlist[listClass.length];
     	
-    	//according to how many rows of classlist table
-    	for(int x=0; x<listClass.length; x++)
+    	//save 
+    	for(int x = 0; x<att.length; x++)
     	{
-    		//details of student
+    		//get student details(ID, last name, first name, degree program, mi) 
     		String[] dets = getDetails(listClass[x][2]);
+    		//TODO bakit nagging null
+    		att[x] = new classlist(
+    				dets[0],
+    				dets[2], 
+    				dets[1], 
+    				dets[4], 
+    				dets[3], 
+    				convertMiToSt(listClass[x][0], true),
+    				convertMiToSt(listClass[x][1], true),
+    				listClass[x][3]
+    				);
     		
-//    		System.out.println(listClass[x][3]);
+    	}
+    	
+    	//arranged 2D array classlist/attendance to be returned
+    	Object[][] actualAtt = new Object[att.length][columnNames.length];	//actual attendance table to be displayed
+    	
+//    	//according to how many rows of classlist table
+    	for(int x=0; x<att.length; x++)
+    	{
+//    		System.out.println(listClass[x][2]);
     		
-    		actualAtt[x] = new Object[]
-    				{
-    					convertMiToSt(listClass[x][0], true),	//time in
-    					convertMiToSt(listClass[x][1], true),	//dapat time out to
-						dets[0],						//student ID
-						dets[1],						//last name
-						dets[2],						//first name
-						dets[3]							//degree program
-    				};
+    		//IN, OUT, ID, LAST, FIRST, DEG PROG 
+    		
+    		//time in
+    		actualAtt[x][0] = att[x].getTime_in();
+    		
+    		//time out
+    		actualAtt[x][1] = att[x].getTime_out();
+    		
+    		//stud ID
+    		actualAtt[x][2] = att[x].getStudID();
+    		
+    		//last name
+    		actualAtt[x][3] = att[x].getLast_name();
+    		
+    		//first name
+    		actualAtt[x][4] = att[x].getFirst_name();
+    		
+    		//degree program
+    		actualAtt[x][5] = att[x].getDegProg();
 		}
     	
     	return actualAtt;
@@ -696,7 +743,7 @@ public class attendance extends javax.swing.JFrame {
 		
 		//get row/tuple of whoever studID is from student table
 		String[][] studTabel = js.query(q); 		
-		String[] details = new String[4];
+		String[] details = new String[5];
 		
 		//queried result shoud only have 1 row
 		if(studTabel.length == 1)
@@ -705,6 +752,7 @@ public class attendance extends javax.swing.JFrame {
 			details[1] = studTabel[0][2];	//last name
 			details[2] = studTabel[0][1];	//first name
 			details[3] = studTabel[0][5];	//degree program
+			details[4] = studTabel[0][3];	//middle initial
 		}
 		
 		return details;
@@ -746,14 +794,13 @@ public class attendance extends javax.swing.JFrame {
 	//update the status of teh student in the attendance/classlist
 	private void updateClasslist(int row, String status)
 	{
-		String ID = myTableModel.getValueAt(row, 2).toString();
-		
 		//debugging
-		System.out.println(ID);
+//		System.out.println(ID);
 		
 		String q = "UPDATE classlist SET status='" + status + "' " +
-					" WHERE student_id LIKE '" + ID + "'"+
-					" AND course_id LIKE '" + subjNow + "'";
+					" WHERE student_id LIKE '" + att[row].getStudID() + "'"+
+					" AND course_id LIKE '" + subjNow + "'" +
+					" AND class_type LIKE '" + subjNowType +"'";
 		js.updateQuery(q);
 		
 	}
@@ -820,10 +867,12 @@ public class attendance extends javax.swing.JFrame {
     ////<editor-fold defaultstate="collapsed" desc="strings to be displayed">
     private String subjNowType;				//class type of current subject
     private static String profNow;			//ID of current prof fetched from login
-    private static String subjNow;     	//ID of current subject
+    public static String subjNow;     	//ID of current subject
     private String subjSec;			//section of current subject	
     private String profNameNow;		//name of current prof
     private String subjNameNow;		//name of current subject
+    
+    private classlist[] att;		//classlist of current ongoing class
     
     private javax.swing.JLabel courseCode;
     private javax.swing.JButton dateButton;
